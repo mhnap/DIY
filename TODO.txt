@@ -1,0 +1,10 @@
+- Add sorting example with invalid values
+- Add sort vs stable_sort example
+- Add Heterogenous Lookup example
+- Add vector vs set compration example
+- Add is_constructible vs is_convertible example
+- Add is_same with const value in structurd binding example
+- Emplace for struct
+- using rvalues with constructors without reference type
+- struct padding
+- false sharing
