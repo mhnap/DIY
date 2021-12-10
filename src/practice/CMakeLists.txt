@@ -1,6 +1,7 @@
 add_executable(move_semantics move_semantics.cpp)
 add_executable(why_emplace why_emplace.cpp)
 add_executable(noexcept_vector_type noexcept_vector_type.cpp)
+add_executable(struct_pagging struct_pagging.cpp)
 
 target_link_libraries(move_semantics PRIVATE common)
 target_link_libraries(why_emplace PRIVATE common)
