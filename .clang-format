@@ -4,4 +4,5 @@ BasedOnStyle: LLVM
 PointerAlignment: Left
 AlwaysBreakTemplateDeclarations: Yes
 ColumnLimit: 100
+AlignTrailingComments: false
 ...

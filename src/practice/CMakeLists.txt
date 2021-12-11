@@ -2,6 +2,7 @@ add_executable(practice_move_semantics move_semantics.cpp)
 add_executable(practice_why_emplace why_emplace.cpp)
 add_executable(practice_noexcept_vector_type noexcept_vector_type.cpp)
 add_executable(practice_struct_pagging struct_pagging.cpp)
+add_executable(practice_constexpr constexpr.cpp)
 
 target_link_libraries(practice_move_semantics PRIVATE common)
 target_link_libraries(practice_why_emplace PRIVATE common)
