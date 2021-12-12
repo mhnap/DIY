@@ -4,6 +4,7 @@ add_executable(noexcept_vector_type noexcept_vector_type.cpp)
 add_executable(struct_pagging struct_pagging.cpp)
 add_executable(constexpr constexpr.cpp)
 add_executable(special_members_generation special_members_generation.cpp)
+add_executable(global_initialization global_initialization.cpp)
 
 target_link_libraries(move_semantics PRIVATE common)
 target_link_libraries(why_emplace PRIVATE common)
