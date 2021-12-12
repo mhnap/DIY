@@ -59,10 +59,10 @@ void Object::clearCounts() {
 }
 
 std::string Object::flushStatistic() {
-  auto statistic = concatToString(
-      "def_ctors[", defaultConstructCount, "] user_ctors[", userConstructCount, "] copy_ctors[",
-      copyConstructCount, "] move_ctors[", moveConstructCount, "] copy_assigns[",
-      copyAssignmentCount, "] move_assigns[", moveAssignmentCount, "] dtors[", destructCount, "]");
+  auto statistic = concatToString("def_ctors[", defaultConstructCount, "] user_ctors[", userConstructCount,
+                                  "] copy_ctors[", copyConstructCount, "] move_ctors[", moveConstructCount,
+                                  "] copy_assigns[", copyAssignmentCount, "] move_assigns[",
+                                  moveAssignmentCount, "] dtors[", destructCount, "]");
   clearCounts();
   return statistic;
 }
@@ -70,7 +70,7 @@ std::string Object::flushStatistic() {
 std::ostream& operator<<(std::ostream& os, const Object& o) { return os << o.m_str; }
 
 void Object::printIfEnabledLogs(std::string_view log) {
-  if (Object::enabledLogs) {
+  if (enabledLogs) {
     print(log);
   }
 }

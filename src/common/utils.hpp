@@ -5,6 +5,8 @@
 #include <sstream>
 #include <string>
 
+namespace common {
+
 template <typename... Args>
 void print(Args&&... args) {
   (std::cout << ... << std::forward<Args>(args));
@@ -17,5 +19,7 @@ std::string concatToString(Args&&... args) {
   (ss << ... << std::forward<Args>(args));
   return ss.str();
 }
+
+} // namespace common
 
 #endif // SRC_COMMON_UTILS_HPP

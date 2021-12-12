@@ -3,6 +3,6 @@ Language: Cpp
 BasedOnStyle: LLVM
 PointerAlignment: Left
 AlwaysBreakTemplateDeclarations: Yes
-ColumnLimit: 100
+ColumnLimit: 110
 AlignTrailingComments: false
 ...

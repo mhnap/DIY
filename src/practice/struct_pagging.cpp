@@ -1,4 +1,4 @@
-#include <cstdio>
+#include "common/utils.hpp"
 
 struct NonPackedStruct {
   char c;
@@ -43,11 +43,11 @@ struct AlignedStruct {
 } __attribute__((aligned(64)));
 
 int main() {
-  std::printf("Size of non packed struct is %d\n", sizeof(NonPackedStruct));
-  std::printf("Size of packed struct is %d\n", sizeof(PackedStruct));
-  std::printf("Size of non packed right struct is %d\n", sizeof(NonPackedRightStruct));
-  std::printf("Size of packed right struct is %d\n", sizeof(PackedRightStruct));
-  std::printf("Size of non packed struct with big member is %d\n", sizeof(NonPackedStructWithBigMember));
-  std::printf("Size of packed struct with big member is %d\n", sizeof(PackedStructWithBigMember));
-  std::printf("Size of aligned struct is %d\n", sizeof(AlignedStruct));
+  common::print("Size of non packed struct is ", sizeof(NonPackedStruct));
+  common::print("Size of packed struct is ", sizeof(PackedStruct));
+  common::print("Size of non packed right struct is ", sizeof(NonPackedRightStruct));
+  common::print("Size of packed right struct is ", sizeof(PackedRightStruct));
+  common::print("Size of non packed struct with big member is ", sizeof(NonPackedStructWithBigMember));
+  common::print("Size of packed struct with big member is ", sizeof(PackedStructWithBigMember));
+  common::print("Size of aligned struct is ", sizeof(AlignedStruct));
 }

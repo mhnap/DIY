@@ -33,8 +33,8 @@ int main() {
   emplaceBackObjectStatistic = common::Object::flushStatistic();
 
   // No difference for already constructed objects
-  print("push_back for constructed Object statistic    : ", pushBackObjectStatistic);
-  print("emplace_back for constructed Object statistic : ", emplaceBackObjectStatistic);
+  common::print("push_back for constructed Object statistic    : ", pushBackObjectStatistic);
+  common::print("emplace_back for constructed Object statistic : ", emplaceBackObjectStatistic);
 
   // Using push_back
   {
@@ -56,6 +56,6 @@ int main() {
   emplaceBackObjectStatistic = common::Object::flushStatistic();
 
   // Object is already constructed for emplace_back case
-  print("push_back for no Object statistic    : ", pushBackObjectStatistic);
-  print("emplace_back for no Object statistic : ", emplaceBackObjectStatistic);
+  common::print("push_back for no Object statistic    : ", pushBackObjectStatistic);
+  common::print("emplace_back for no Object statistic : ", emplaceBackObjectStatistic);
 }

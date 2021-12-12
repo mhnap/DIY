@@ -13,8 +13,8 @@ int main() {
   // Construct another from xvalue
   common::Object object4(std::move(object1));
 
-  print("object1 - ", object1);
-  print("object2 - ", object2);
-  print("object3 - ", object3);
-  print("object4 - ", object4);
+  common::print("object1 - ", object1);
+  common::print("object2 - ", object2);
+  common::print("object3 - ", object3);
+  common::print("object4 - ", object4);
 }
