@@ -10,7 +10,7 @@ int main() {
   std::string withoutReserveExceptObjectStatistic;
   std::string withoutReserveNoexceptObjectStatistic;
 
-  // No need for logs in this practice
+  // No need for logs in this lesson
   common::Object::disableLogs();
 
   // Vector with reserve won't reallocate objects during growth
