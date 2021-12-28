@@ -20,6 +20,16 @@ std::string concatToString(Args&&... args) {
   return ss.str();
 }
 
+template <typename Matrix>
+void printMatrix(Matrix& matrix) {
+  for (const auto& rows : matrix) {
+    for (const auto& value : rows) {
+      std::cout << value << " ";
+    }
+    std::cout << std::endl;
+  }
+}
+
 } // namespace common
 
 #endif // SRC_COMMON_UTILS_HPP
