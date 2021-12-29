@@ -3,4 +3,6 @@ project(DIY)
 
 set(CMAKE_CXX_STANDARD 20)
 
+find_package(GTest REQUIRED)
+
 add_subdirectory(src)

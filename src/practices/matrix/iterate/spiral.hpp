@@ -1,14 +1,17 @@
-#include <iostream>
+#ifndef SRC_PRACTICES_MATRIX_ITERATE_SPIRAL_HPP
+#define SRC_PRACTICES_MATRIX_ITERATE_SPIRAL_HPP
+
 #include <vector>
 
-int main() {
-  std::vector<std::vector<int>> matrix = {{
-      {1, 2, 3, 4},
-      {14, 15, 16, 5},
-      {13, 20, 17, 6},
-      {12, 19, 18, 7},
-      {11, 10, 9, 8},
-  }};
+namespace matrix::iterate {
+
+template <typename T>
+auto spiral(const std::vector<std::vector<T>>& matrix) {
+  std::vector<T> values;
+
+  if (matrix.empty()) {
+    return values;
+  }
 
   int rowStart = 0;
   int columnStart = 0;
@@ -24,30 +27,34 @@ int main() {
     switch (directions[direction]) {
     case Direction::Right:
       for (int column = columnStart; column <= columnEnd; ++column) {
-        std::cout << matrix[rowStart][column] << std::endl;
-      };
+        values.push_back(matrix[rowStart][column]);
+      }
       ++rowStart;
       break;
     case Direction::Down:
       for (int row = rowStart; row <= rowEnd; ++row) {
-        std::cout << matrix[row][columnEnd] << std::endl;
-      };
+        values.push_back(matrix[row][columnEnd]);
+      }
       --columnEnd;
       break;
     case Direction::Left:
       for (int column = columnEnd; column >= columnStart; --column) {
-        std::cout << matrix[rowEnd][column] << std::endl;
-      };
+        values.push_back(matrix[rowEnd][column]);
+      }
       --rowEnd;
       break;
     case Direction::Up:
       for (int row = rowEnd; row >= rowStart; --row) {
-        std::cout << matrix[row][columnStart] << std::endl;
-      };
+        values.push_back(matrix[row][columnStart]);
+      }
       ++columnStart;
       break;
     }
   }
 
-  return 0;
+  return values;
 }
+
+} // namespace matrix::iterate
+
+#endif // SRC_PRACTICES_MATRIX_ITERATE_SPIRAL_HPP

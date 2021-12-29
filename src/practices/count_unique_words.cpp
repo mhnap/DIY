@@ -60,6 +60,4 @@ int main(int argc, char* argv[]) {
   // Count unique words
   auto count = countUniqueWords(content);
   std::cout << "Unique words count: " << count << std::endl;
-
-  return 0;
 }

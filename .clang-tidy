@@ -1,5 +1,5 @@
 ---
-Checks:          'clang-diagnostic-*,clang-analyzer-*,bugprone-*,clang-analyzer-*,concurrency-*,cppcoreguidelines-*,misc-*,modernize-*,performance-*,portability-*,readability-*,-modernize-use-trailing-return-type'
+Checks:          'clang-diagnostic-*,clang-analyzer-*,bugprone-*,clang-analyzer-*,concurrency-*,cppcoreguidelines-*,misc-*,modernize-*,performance-*,portability-*,readability-*,-modernize-use-trailing-return-type,-cppcoreguidelines-avoid-magic-numbers,-readability-magic-numbers'
 WarningsAsErrors: ''
 HeaderFilterRegex: ''
 AnalyzeTemporaryDtors: false
@@ -78,10 +78,6 @@ CheckOptions:
     value:           'L;LL;LU;LLU'
   - key:             cert-oop54-cpp.WarnOnlyIfThisHasSuspiciousField
     value:           '0'
-  - key:             cppcoreguidelines-avoid-magic-numbers.IgnoredFloatingPointValues
-    value:           '1.0;100.0;'
-  - key:             cppcoreguidelines-avoid-magic-numbers.IgnoredIntegerValues
-    value:           '1;2;3;4;'
   - key:             cppcoreguidelines-explicit-virtual-functions.AllowOverrideAndFinal
     value:           '0'
   - key:             cppcoreguidelines-explicit-virtual-functions.FinalSpelling
@@ -264,10 +260,6 @@ CheckOptions:
     value:           '1'
   - key:             readability-inconsistent-declaration-parameter-name.Strict
     value:           '0'
-  - key:             readability-magic-numbers.IgnoredFloatingPointValues
-    value:           '1.0;100.0;'
-  - key:             readability-magic-numbers.IgnoredIntegerValues
-    value:           '1;2;3;4;'
   - key:             readability-redundant-member-init.IgnoreBaseInCopyConstructors
     value:           '0'
   - key:             readability-redundant-smartptr-get.IgnoreMacros
@@ -287,3 +279,4 @@ CheckOptions:
   - key:             readability-uppercase-literal-suffix.NewSuffixes
     value:           ''
 ...
+
