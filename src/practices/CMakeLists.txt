@@ -2,3 +2,4 @@ add_executable(count_unique_words count_unique_words.cpp)
 target_link_libraries(count_unique_words PRIVATE pthread)
 
 add_subdirectory(matrix)
+add_subdirectory(trade_matching_engine)
