@@ -42,6 +42,8 @@ struct AlignedStruct {
   char h;
 } __attribute__((aligned(64)));
 
+struct EmptyStruct {};
+
 int main() {
   common::print("Size of non packed struct is ", sizeof(NonPackedStruct));
   common::print("Size of packed struct is ", sizeof(PackedStruct));
@@ -50,4 +52,5 @@ int main() {
   common::print("Size of non packed struct with big member is ", sizeof(NonPackedStructWithBigMember));
   common::print("Size of packed struct with big member is ", sizeof(PackedStructWithBigMember));
   common::print("Size of aligned struct is ", sizeof(AlignedStruct));
+  common::print("Size of empty struct is ", sizeof(EmptyStruct));
 }
