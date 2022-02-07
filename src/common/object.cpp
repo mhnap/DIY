@@ -67,6 +67,12 @@ std::string Object::flushStatistic() {
   return statistic;
 }
 
+std::size_t Object::Hash::operator()(const common::Object& o) const {
+  return std::hash<std::string>()(o.m_str);
+}
+
+bool Object::operator==(const Object& o) const { return m_str == o.m_str; }
+
 std::ostream& operator<<(std::ostream& os, const Object& o) { return os << o.m_str; }
 
 void Object::printIfEnabledLogs(std::string_view log) {

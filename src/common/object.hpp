@@ -22,6 +22,12 @@ public:
   static void clearCounts();
   static std::string flushStatistic();
 
+  struct Hash {
+    std::size_t operator()(const Object& o) const;
+  };
+
+  bool operator==(const Object& o) const;
+
   friend std::ostream& operator<<(std::ostream& os, const Object& o);
 
 private:
