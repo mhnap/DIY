@@ -112,4 +112,6 @@ int main() {
   testGeneratedMember<WithDestructor, GeneratedMember::MoveCtor>(); // used copy instead
   testGeneratedMember<WithDestructor, GeneratedMember::CopyAssign>();
   testGeneratedMember<WithDestructor, GeneratedMember::MoveAssign>(); // used copy instead
+
+  // Nice table can be found here - https://youtu.be/ECoLo17nG5c?t=1713
 }
