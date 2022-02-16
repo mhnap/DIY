@@ -42,6 +42,16 @@ common::Object returnObject(const common::Object& object) { return object; }
 
 common::Object strangeReturnObject(common::Object object) { return object; }
 
+template <typename T>
+T&& my_move(T&& x) {
+  return static_cast<T&&>(x);
+}
+
+template <typename T>
+std::remove_reference_t<T>&& correct_my_move(T&& x) {
+  return static_cast<std::remove_reference_t<T>&&>(x);
+}
+
 int main() {
   {
     // Construct object
@@ -93,5 +103,13 @@ int main() {
     // Object is copied as function parameter and then this new copy is moved by compiler as return value
     common::print("strangeReturnObject:");
     auto object3 = strangeReturnObject(object1);
+  }
+  {
+    // Mistake taken from https://youtu.be/ECoLo17nG5c?t=2419
+    auto object1 = getObject();
+    // Move won't work, because of reference collapsing rules
+    common::Object object2(my_move(object1));
+    // Need to use std::remove_reference to make it work as expected
+    common::Object object3(correct_my_move(object1));
   }
 }
