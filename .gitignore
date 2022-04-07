@@ -1,3 +1,5 @@
 /build/
 /.idea/
 /token.txt
+/cmake-build-debug/
+/cmake-build-release/
