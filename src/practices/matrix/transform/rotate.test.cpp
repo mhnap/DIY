@@ -3,8 +3,33 @@
 
 namespace {
 
-TEST(rotate, four_times) {
-  std::vector<std::vector<int>> inMatrix = {{
+template <typename Func>
+class RotateTest : public testing::Test {
+protected:
+  Func rotate;
+};
+
+class RotateFunctor {
+public:
+  template <typename T>
+  void operator()(T& matrix) const {
+    matrix::transform::rotate(matrix);
+  }
+};
+
+class RotateParallelFunctor {
+public:
+  template <typename T>
+  void operator()(T& matrix) const {
+    matrix::transform::rotateParallel(matrix);
+  }
+};
+
+using DataTypes = testing::Types<RotateFunctor, RotateParallelFunctor>;
+TYPED_TEST_SUITE(RotateTest, DataTypes);
+
+TYPED_TEST(RotateTest, four_times) {
+  std::vector<std::vector<float>> inMatrix = {{
       {1, 2, 3, 4, 5},
       {6, 7, 8, 9, 10},
       {11, 12, 13, 14, 15},
@@ -13,12 +38,12 @@ TEST(rotate, four_times) {
   }};
   auto outMatrix = inMatrix;
   for (int i = 0; i < 4; ++i) {
-    matrix::transform::rotate(outMatrix);
+    this->rotate(outMatrix);
   }
   EXPECT_EQ(inMatrix, outMatrix);
 }
 
-TEST(rotate, five_to_five) {
+TYPED_TEST(RotateTest, five_to_five) {
   std::vector<std::vector<int>> inMatrix = {{
       {1, 2, 3, 4, 5},
       {6, 7, 8, 9, 10},
@@ -26,7 +51,7 @@ TEST(rotate, five_to_five) {
       {16, 17, 18, 19, 20},
       {21, 22, 23, 24, 25},
   }};
-  matrix::transform::rotate(inMatrix);
+  this->rotate(inMatrix);
   std::vector<std::vector<int>> outMatrix = {{
       {21, 16, 11, 6, 1},
       {22, 17, 12, 7, 2},
@@ -37,15 +62,15 @@ TEST(rotate, five_to_five) {
   EXPECT_EQ(inMatrix, outMatrix);
 }
 
-TEST(rotate, four_to_four) {
-  std::vector<std::vector<int>> inMatrix = {{
+TYPED_TEST(RotateTest, four_to_four) {
+  std::vector<std::vector<long>> inMatrix = {{
       {1, 2, 3, 4},
       {5, 6, 7, 8},
       {9, 10, 11, 12},
       {13, 14, 15, 16},
   }};
-  matrix::transform::rotate(inMatrix);
-  std::vector<std::vector<int>> outMatrix = {{
+  this->rotate(inMatrix);
+  std::vector<std::vector<long>> outMatrix = {{
       {13, 9, 5, 1},
       {14, 10, 6, 2},
       {15, 11, 7, 3},
@@ -54,13 +79,13 @@ TEST(rotate, four_to_four) {
   EXPECT_EQ(inMatrix, outMatrix);
 }
 
-TEST(rotate, three_to_three) {
+TYPED_TEST(RotateTest, three_to_three) {
   std::vector<std::vector<int>> inMatrix = {{
       {1, 2, 3},
       {4, 5, 6},
       {7, 8, 9},
   }};
-  matrix::transform::rotate(inMatrix);
+  this->rotate(inMatrix);
   std::vector<std::vector<int>> outMatrix = {{
       {7, 4, 1},
       {8, 5, 2},
@@ -69,33 +94,33 @@ TEST(rotate, three_to_three) {
   EXPECT_EQ(inMatrix, outMatrix);
 }
 
-TEST(rotate, two_to_two) {
-  std::vector<std::vector<int>> inMatrix = {{
+TYPED_TEST(RotateTest, two_to_two) {
+  std::vector<std::vector<short>> inMatrix = {{
       {1, 2},
       {3, 4},
   }};
-  matrix::transform::rotate(inMatrix);
-  std::vector<std::vector<int>> outMatrix = {{
+  this->rotate(inMatrix);
+  std::vector<std::vector<short>> outMatrix = {{
       {3, 1},
       {4, 2},
   }};
   EXPECT_EQ(inMatrix, outMatrix);
 }
 
-TEST(rotate, one_to_one) {
-  std::vector<std::vector<int>> inMatrix = {{
+TYPED_TEST(RotateTest, one_to_one) {
+  std::vector<std::vector<char>> inMatrix = {{
       {{1}},
   }};
-  matrix::transform::rotate(inMatrix);
-  std::vector<std::vector<int>> outMatrix = {{
+  this->rotate(inMatrix);
+  std::vector<std::vector<char>> outMatrix = {{
       {{1}},
   }};
   EXPECT_EQ(inMatrix, outMatrix);
 }
 
-TEST(rotate, zero) {
+TYPED_TEST(RotateTest, zero) {
   std::vector<std::vector<int>> inMatrix;
-  matrix::transform::rotate(inMatrix);
+  this->rotate(inMatrix);
   std::vector<std::vector<int>> outMatrix;
   EXPECT_EQ(inMatrix, outMatrix);
 }

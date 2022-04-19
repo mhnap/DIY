@@ -1,6 +1,8 @@
 #ifndef SRC_PRACTICES_MATRIX_TRANSFORM_ROTATE_HPP
 #define SRC_PRACTICES_MATRIX_TRANSFORM_ROTATE_HPP
 
+#include "ocl/core/engine.hpp"
+#include "ocl/core/utils.hpp"
 #include <utility>
 #include <vector>
 
@@ -17,6 +19,25 @@ void rotate(std::vector<std::vector<T>>& matrix) {
       std::swap(matrix[start][start + index], value);
     }
   }
+}
+
+template <typename T>
+void rotateParallel(std::vector<std::vector<T>>& matrix) {
+  if (matrix.empty()) {
+    return;
+  }
+
+  // Convert to flat data
+  const auto SIZE = matrix.size();
+  auto flatData = ocl::convert2dTo1d(matrix);
+  decltype(flatData) flatResults(SIZE * SIZE);
+
+  // Rotate matrix by running OpenCL kernel
+  ocl::Engine engine("matrix_rotate", {SIZE, SIZE});
+  engine.setData(flatData.data(), flatResults.data(), SIZE * SIZE, ocl::dataTypeFromType<T>());
+  engine.addCompilerDefineOption("SIZE", std::to_string(SIZE));
+  engine.run();
+  ocl::convert1dTo2d(flatResults, matrix);
 }
 
 } // namespace matrix::transform
