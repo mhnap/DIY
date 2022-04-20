@@ -1,7 +1,6 @@
 #pragma once
 
 #include "data_types.hpp"
-#include <OpenCL/opencl.h>
 #include <optional>
 #include <string>
 #include <string_view>

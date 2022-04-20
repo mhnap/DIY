@@ -1,4 +1,11 @@
 #include "engine.hpp"
+
+#if defined(__APPLE__)
+#include <OpenCL/opencl.h>
+#else
+#include <CL/opencl.h>
+#endif
+
 #include <fstream>
 #include <sstream>
 #include <stdexcept>
