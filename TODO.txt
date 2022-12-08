@@ -8,3 +8,4 @@
 - using rvalues with constructors without reference type
 - struct padding
 - false sharing
+- constexpr functions vs macros
