@@ -19,9 +19,7 @@ std::size_t countUniqueWords(const std::string& content) {
         set.reserve(content.size() / threadCount);
         for (const auto& word : std::views::split(content, ' ')) {
           if ((word.front() % threadCount) == i) {
-            // Replace with next line when gcc will fix this bug
-            // set.emplace(word.begin(), word.end());
-            set.emplace(&*word.begin(), std::ranges::distance(word));
+            set.emplace(word.begin(), word.end());
           }
         }
         totalCount += set.size();
