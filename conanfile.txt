@@ -1,0 +1,7 @@
+[requires]
+gtest/1.12.1
+opencl-icd-loader/2022.09.30
+
+[generators]
+cmake_find_package
+cmake_paths
