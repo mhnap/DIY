@@ -62,13 +62,9 @@ int main() {
       delete fromVirtualDestructor;
     }
     common::print("b) Construct using shared ptr");
-    {
-      std::shared_ptr<VirtualDestructor> fromVirtualDestructor(new FromVirtualDestructor());
-    }
+    { std::shared_ptr<VirtualDestructor> fromVirtualDestructor(new FromVirtualDestructor()); }
     common::print("c) Construct using unique ptr");
-    {
-      std::unique_ptr<VirtualDestructor> fromVirtualDestructor(new FromVirtualDestructor());
-    }
+    { std::unique_ptr<VirtualDestructor> fromVirtualDestructor(new FromVirtualDestructor()); }
     common::print("d) Construct using shared ptr and previously created object ");
     {
       VirtualDestructor* fromVirtualDestructor(new FromVirtualDestructor());

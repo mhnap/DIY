@@ -1,5 +1,4 @@
-__kernel void print_info()
-{
+__kernel void print_info() {
   int globalId = get_global_id(0);
   int localId = get_local_id(0);
   int groupId = get_group_id(0);
@@ -10,6 +9,6 @@ __kernel void print_info()
   // globalId = groupId * localSize + localId
   // globalSize % localSize == 0
   // numGroups = globalSize / localSize
-  printf("globalId=%d;localId=%d;groupId=%d;globalSize=%d;localSize=%d;numGroups=%d;workDim=%d;\n",
-    globalId, localId, groupId, globalSize, localSize, numGroups, workDim);
- }
+  printf("globalId=%d;localId=%d;groupId=%d;globalSize=%d;localSize=%d;numGroups=%d;workDim=%d;\n", globalId,
+         localId, groupId, globalSize, localSize, numGroups, workDim);
+}

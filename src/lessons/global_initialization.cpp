@@ -1,7 +1,7 @@
 // https://stackoverflow.com/questions/8708539/order-of-initialization
 
 // If uncomment this, std::cout will be initialized before usage
-//#include <iostream>
+// #include <iostream>
 
 struct Foo {
   Foo();

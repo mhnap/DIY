@@ -7,7 +7,7 @@ int main() {
   // Deduced as int
   auto i2{5};
 
-  std::vector<bool> vec {true, true};
+  std::vector<bool> vec{true, true};
   // Deduced as bool
   auto first = static_cast<bool>(vec[0]);
   // Deduced as std::vector<bool>::reference
