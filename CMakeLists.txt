@@ -3,7 +3,10 @@ project(DIY)
 
 set(CMAKE_CXX_STANDARD 20)
 
-include(${CMAKE_BINARY_DIR}/conan_paths.cmake)
+if (EXISTS ${CMAKE_BINARY_DIR}/conan_paths.cmake)
+    include(${CMAKE_BINARY_DIR}/conan_paths.cmake)
+endif ()
+
 find_package(GTest REQUIRED)
 find_package(OpenCL REQUIRED)
 
