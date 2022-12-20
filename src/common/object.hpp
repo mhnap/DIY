@@ -1,5 +1,4 @@
-#ifndef SRC_COMMON_OBJECT_HPP
-#define SRC_COMMON_OBJECT_HPP
+#pragma once
 
 #include <string>
 #include <string_view>
@@ -48,5 +47,3 @@ private:
 };
 
 } // namespace common
-
-#endif // SRC_COMMON_OBJECT_HPP

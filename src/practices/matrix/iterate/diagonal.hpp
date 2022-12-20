@@ -1,5 +1,4 @@
-#ifndef SRC_PRACTICES_MATRIX_ITERATE_DIAGONAL_HPP
-#define SRC_PRACTICES_MATRIX_ITERATE_DIAGONAL_HPP
+#pragma once
 
 #include <vector>
 
@@ -25,5 +24,3 @@ auto diagonal(const std::vector<std::vector<T>>& matrix) {
 }
 
 } // namespace matrix::iterate
-
-#endif // SRC_PRACTICES_MATRIX_ITERATE_DIAGONAL_HPP

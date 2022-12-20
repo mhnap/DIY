@@ -1,5 +1,4 @@
-#ifndef SRC_COMMON_UTILS_HPP
-#define SRC_COMMON_UTILS_HPP
+#pragma once
 
 #include <iostream>
 #include <sstream>
@@ -21,5 +20,3 @@ std::string concatToString(Args&&... args) {
 }
 
 } // namespace common
-
-#endif // SRC_COMMON_UTILS_HPP

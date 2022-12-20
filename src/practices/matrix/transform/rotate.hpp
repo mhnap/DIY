@@ -1,5 +1,4 @@
-#ifndef SRC_PRACTICES_MATRIX_TRANSFORM_ROTATE_HPP
-#define SRC_PRACTICES_MATRIX_TRANSFORM_ROTATE_HPP
+#pragma once
 
 #include "ocl/core/engine.hpp"
 #include "ocl/core/utils.hpp"
@@ -41,5 +40,3 @@ void rotateParallel(std::vector<std::vector<T>>& matrix) {
 }
 
 } // namespace matrix::transform
-
-#endif // SRC_PRACTICES_MATRIX_TRANSFORM_ROTATE_HPP

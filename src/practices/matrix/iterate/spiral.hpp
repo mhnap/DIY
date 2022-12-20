@@ -1,5 +1,4 @@
-#ifndef SRC_PRACTICES_MATRIX_ITERATE_SPIRAL_HPP
-#define SRC_PRACTICES_MATRIX_ITERATE_SPIRAL_HPP
+#pragma once
 
 #include <vector>
 
@@ -56,5 +55,3 @@ auto spiral(const std::vector<std::vector<T>>& matrix) {
 }
 
 } // namespace matrix::iterate
-
-#endif // SRC_PRACTICES_MATRIX_ITERATE_SPIRAL_HPP

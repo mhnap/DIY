@@ -1,5 +1,4 @@
-#ifndef SRC_COMMON_EXCEPT_OBJECT_HPP
-#define SRC_COMMON_EXCEPT_OBJECT_HPP
+#pragma once
 
 #include "common/object.hpp"
 #include "common/utils.hpp"
@@ -14,5 +13,3 @@ public:
 };
 
 } // namespace common
-
-#endif // SRC_COMMON_EXCEPT_OBJECT_HPP
