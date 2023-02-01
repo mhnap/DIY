@@ -11,6 +11,7 @@ add_executable(smart_pointers smart_pointers.cpp)
 add_executable(sfinae sfinae.cpp)
 add_executable(lambdas lambdas.cpp)
 add_executable(virtual_destructor virtual_destructor.cpp)
+add_executable(standard_streams standard_streams.cpp)
 
 target_link_libraries(move_semantics PRIVATE common)
 target_link_libraries(why_emplace PRIVATE common)
