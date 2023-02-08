@@ -12,13 +12,13 @@ class Engine {
 public:
   Engine(std::string_view kernelName, std::vector<size_t> globalWorkSizes);
   void setLocalWorkSizes(std::vector<size_t> localWorkSizes);
-  void setData(void* input, void* output, size_t size, DataType type);
+  void setData(const void* input, void* output, size_t size, DataType type);
   void addCompilerOption(std::string_view option);
   void addCompilerDefineOption(std::string_view name, std::string_view definition);
   void run();
 
   struct Data {
-    void* input;
+    const void* input;
     void* output;
     size_t size;
     DataType type;

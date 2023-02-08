@@ -7,6 +7,7 @@
 
 namespace matrix::transform {
 
+// In-place algorithm
 template <typename T>
 void rotate(std::vector<std::vector<T>>& matrix) {
   for (int start = 0, end = matrix.size() - 1; start < end; ++start, --end) {

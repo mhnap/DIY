@@ -21,7 +21,7 @@ void Engine::setLocalWorkSizes(std::vector<size_t> localWorkSizes) {
   m_localWorkSizes = std::move(localWorkSizes);
 }
 
-void Engine::setData(void* input, void* output, size_t size, DataType type) {
+void Engine::setData(const void* input, void* output, size_t size, DataType type) {
   m_data = {input, output, size, type};
   addCompilerDefineOption("DATA_TYPE", dataTypeToString(type));
 }
