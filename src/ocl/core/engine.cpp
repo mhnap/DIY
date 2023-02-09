@@ -15,7 +15,9 @@
 namespace ocl {
 
 Engine::Engine(std::string_view kernelName, std::vector<size_t> globalWorkSizes)
-    : m_kernelName(kernelName), m_globalWorkSizes(std::move(globalWorkSizes)) {}
+    : m_kernelName(kernelName), m_globalWorkSizes(std::move(globalWorkSizes)) {
+  addCompilerOptionDefaultIncludeDirectories();
+}
 
 void Engine::setLocalWorkSizes(std::vector<size_t> localWorkSizes) {
   m_localWorkSizes = std::move(localWorkSizes);
@@ -23,7 +25,7 @@ void Engine::setLocalWorkSizes(std::vector<size_t> localWorkSizes) {
 
 void Engine::setData(const void* input, void* output, size_t size, DataType type) {
   m_data = {input, output, size, type};
-  addCompilerDefineOption("DATA_TYPE", dataTypeToString(type));
+  addCompilerOptionDefine("DATA_TYPE", dataTypeToString(type));
 }
 
 void Engine::addCompilerOption(std::string_view option) {
@@ -33,11 +35,23 @@ void Engine::addCompilerOption(std::string_view option) {
   m_compilerOptions += option;
 }
 
-void Engine::addCompilerDefineOption(std::string_view name, std::string_view definition) {
+void Engine::addCompilerOptionDefine(std::string_view name) {
+  std::string option = "-D ";
+  option += name;
+  addCompilerOption(option);
+}
+
+void Engine::addCompilerOptionDefine(std::string_view name, std::string_view definition) {
   std::string option = "-D ";
   option += name;
   option += '=';
   option += definition;
+  addCompilerOption(option);
+}
+
+void Engine::addCompilerOptionIncludeDirectory(std::string_view dir) {
+  std::string option = "-I ";
+  option += dir;
   addCompilerOption(option);
 }
 
@@ -82,10 +96,15 @@ void Engine::run() {
   // Build the program executable
   err = clBuildProgram(program, 0, NULL, m_compilerOptions.c_str(), NULL, NULL);
   if (err != CL_SUCCESS) {
-    size_t len;
-    char buffer[2048];
-    clGetProgramBuildInfo(program, deviceId, CL_PROGRAM_BUILD_LOG, sizeof(buffer), buffer, &len);
-    throw OpenCLError("Failed to build program executable: " + std::string(buffer), err);
+    // Determine the size of the log
+    size_t log_size;
+    clGetProgramBuildInfo(program, deviceId, CL_PROGRAM_BUILD_LOG, 0, NULL, &log_size);
+    // Allocate memory for the log
+    std::string log;
+    log.resize(log_size / sizeof(std::string::value_type));
+    // Get the log
+    clGetProgramBuildInfo(program, deviceId, CL_PROGRAM_BUILD_LOG, log_size, log.data(), NULL);
+    throw OpenCLError("Failed to build program executable:\n" + std::string(log), err);
   }
 
   // Create compute kernel in the program we wish to run
@@ -151,13 +170,7 @@ void Engine::run() {
   clReleaseContext(context);
 }
 
-std::string Engine::getKernelFilePath() const {
-  std::string sourceFile = __FILE__;
-  std::string kernelFilePath = sourceFile.substr(0, sourceFile.rfind('/'));
-  kernelFilePath = kernelFilePath.substr(0, kernelFilePath.rfind('/'));
-  kernelFilePath += "/kernels/" + m_kernelName + ".cl";
-  return kernelFilePath;
-}
+std::string Engine::getKernelFilePath() const { return getKernelsDirPath() + m_kernelName + ".cl"; }
 
 std::string Engine::loadKernelSource() const {
   // Open file
@@ -170,6 +183,20 @@ std::string Engine::loadKernelSource() const {
   std::ostringstream ss;
   ss << file.rdbuf();
   return ss.str();
+}
+
+void Engine::addCompilerOptionDefaultIncludeDirectories() {
+  for (const auto& dir : s_defaultIncludeDirectories) {
+    addCompilerOptionIncludeDirectory(getKernelsDirPath() + dir);
+  }
+}
+
+std::string Engine::getKernelsDirPath() {
+  const std::string sourceFile = __FILE__;
+  std::string kernelsDirPath = sourceFile.substr(0, sourceFile.rfind('/'));
+  kernelsDirPath = kernelsDirPath.substr(0, kernelsDirPath.rfind('/'));
+  kernelsDirPath += "/kernels/";
+  return kernelsDirPath;
 }
 
 } // namespace ocl

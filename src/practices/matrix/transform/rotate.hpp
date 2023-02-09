@@ -35,7 +35,7 @@ void rotateParallel(std::vector<std::vector<T>>& matrix) {
   // Rotate matrix by running OpenCL kernel
   ocl::Engine engine("matrix_rotate", {SIZE, SIZE});
   engine.setData(flatData.data(), flatResults.data(), SIZE * SIZE, ocl::dataTypeFromType<T>());
-  engine.addCompilerDefineOption("SIZE", std::to_string(SIZE));
+  engine.addCompilerOptionDefine("SIZE", std::to_string(SIZE));
   engine.run();
   ocl::convert1dTo2d(flatResults, matrix);
 }

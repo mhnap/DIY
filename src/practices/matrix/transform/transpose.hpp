@@ -42,8 +42,8 @@ template <typename T>
   // Transpose matrix by running OpenCL kernel
   ocl::Engine engine("matrix_transpose", {rowSize, columnSize});
   engine.setData(flatData.data(), flatResults.data(), totalSize, ocl::dataTypeFromType<T>());
-  engine.addCompilerDefineOption("ROW_SIZE", std::to_string(rowSize));
-  engine.addCompilerDefineOption("COLUMN_SIZE", std::to_string(columnSize));
+  engine.addCompilerOptionDefine("ROW_SIZE", std::to_string(rowSize));
+  engine.addCompilerOptionDefine("COLUMN_SIZE", std::to_string(columnSize));
   engine.run();
   return ocl::convert1dTo2d(flatResults, columnSize, rowSize);
 }
