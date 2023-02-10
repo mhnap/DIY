@@ -2,6 +2,7 @@
 
 #include "data_types.hpp"
 #include <array>
+#include <concepts>
 #include <optional>
 #include <string>
 #include <string_view>
@@ -17,6 +18,13 @@ public:
   void addCompilerOption(std::string_view option);
   void addCompilerOptionDefine(std::string_view name);
   void addCompilerOptionDefine(std::string_view name, std::string_view definition);
+
+  template <typename T>
+    requires(not std::convertible_to<T, std::string_view>)
+  void addCompilerOptionDefine(std::string_view name, T definition) {
+    addCompilerOptionDefine(name, std::to_string(definition));
+  }
+
   void addCompilerOptionIncludeDirectory(std::string_view dir);
   void run();
 
