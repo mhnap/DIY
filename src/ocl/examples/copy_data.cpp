@@ -4,10 +4,10 @@
 #include <numeric>
 
 int main() {
-  constexpr auto SIZE = 1024U;
+  constexpr auto SIZE = 1028U;
   constexpr std::array<int, SIZE> data = [&] {
     auto arr = decltype(data){};
-    std::iota(arr.begin(), arr.end(), 0);
+    std::iota(arr.begin(), arr.end(), 1);
     return arr;
   }();
 
