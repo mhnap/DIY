@@ -34,7 +34,7 @@ int main() {
 
   {
     // Copy data by running vectored OpenCL kernel
-    // Note, that need to correctly handle remainders using ceiling division
+    // Note, that need to correctly handle remainder using ceiling division
     constexpr auto vec_size = 16U;
     constexpr auto quotient = SIZE / vec_size;
     constexpr auto remainder = SIZE % vec_size;
@@ -45,7 +45,6 @@ int main() {
     engine.setData(&data, &results, SIZE, ocl::dataTypeFromType<decltype(data)::value_type>());
     engine.addCompilerOptionDefine("VEC_SIZE", vec_size);
     if (remainder != 0U) {
-      engine.addCompilerOptionDefine("REMAINDER_ITEM", quotient);
       engine.addCompilerOptionDefine("REMAINDER_SIZE", remainder);
     }
     engine.run();

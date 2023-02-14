@@ -5,26 +5,24 @@
 #define VSTORE CAT(vstore, VEC_SIZE)
 
 __kernel void copy_vectored(const __global DATA_TYPE* input, __global DATA_TYPE* output) {
-  size_t globalId = get_global_id(0);
-  size_t index = globalId * VEC_SIZE;
+  const uint globalId = get_global_id(0);
+  const uint index = globalId * VEC_SIZE;
 
-#ifndef REMAINDER_ITEM
+#ifndef REMAINDER_SIZE
   // Size is divided by vec_size without remainder
   VEC_TYPE v = VLOAD(0, input + index);
   VSTORE(v, 0, output + index);
 #else
-  if (globalId < REMAINDER_ITEM) {
+  const uint globalSize = get_global_size(0);
+  if (globalId < globalSize - 1) {
     // Can read vectored
     VEC_TYPE v = VLOAD(0, input + index);
     VSTORE(v, 0, output + index);
-  } else if (globalId == REMAINDER_ITEM) {
-    // Need to handle remainders, read one by one
+  } else { // globalId == globalSize - 1
+    // Need to handle remainder, read one by one
     for (uint i = 0; i < REMAINDER_SIZE; ++i) {
       output[index + i] = input[index + i];
     }
-  } else {
-    // Should never go here as globalId cannot be greater than REMAINDER_ITEM
-    printf("LOGIC ERROR!\n");
   }
 #endif
 }
