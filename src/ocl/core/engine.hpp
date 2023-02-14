@@ -2,6 +2,7 @@
 
 #include "data_types.hpp"
 #include <array>
+#include <chrono>
 #include <concepts>
 #include <optional>
 #include <string>
@@ -12,8 +13,8 @@ namespace ocl {
 
 class Engine {
 public:
-  Engine(std::string_view kernelName, std::vector<size_t> globalWorkSizes);
-  void setLocalWorkSizes(std::vector<size_t> localWorkSizes);
+  Engine(std::string_view kernelName, std::vector<size_t>&& globalWorkSizes);
+  void setLocalWorkSizes(std::vector<size_t>&& localWorkSizes);
   void setData(const void* input, void* output, size_t size, DataType type);
   void addCompilerOption(std::string_view option);
   void addCompilerOptionDefine(std::string_view name);
@@ -26,6 +27,8 @@ public:
   }
 
   void addCompilerOptionIncludeDirectory(std::string_view dir);
+  void enableProfiling();
+  [[nodiscard]] std::chrono::nanoseconds getExecutionTime() const;
   void run();
 
   struct Data {
@@ -45,6 +48,8 @@ private:
   std::vector<size_t> m_localWorkSizes;
   std::optional<Data> m_data;
   std::string m_compilerOptions;
+  bool m_isProfilingEnabled = false;
+  std::chrono::nanoseconds m_executionTime;
 
   [[nodiscard]] static std::string getKernelsDirPath();
   static constexpr std::array s_defaultIncludeDirectories = {"include"};

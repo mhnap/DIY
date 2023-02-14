@@ -14,12 +14,12 @@
 
 namespace ocl {
 
-Engine::Engine(std::string_view kernelName, std::vector<size_t> globalWorkSizes)
+Engine::Engine(std::string_view kernelName, std::vector<size_t>&& globalWorkSizes)
     : m_kernelName(kernelName), m_globalWorkSizes(std::move(globalWorkSizes)) {
   addCompilerOptionDefaultIncludeDirectories();
 }
 
-void Engine::setLocalWorkSizes(std::vector<size_t> localWorkSizes) {
+void Engine::setLocalWorkSizes(std::vector<size_t>&& localWorkSizes) {
   m_localWorkSizes = std::move(localWorkSizes);
 }
 
@@ -55,6 +55,15 @@ void Engine::addCompilerOptionIncludeDirectory(std::string_view dir) {
   addCompilerOption(option);
 }
 
+void Engine::enableProfiling() { m_isProfilingEnabled = true; }
+
+std::chrono::nanoseconds Engine::getExecutionTime() const {
+  if (!m_isProfilingEnabled) {
+    throw EngineError("Cannot get execution time as profiling was not enabled");
+  }
+  return m_executionTime;
+}
+
 void Engine::run() {
   // Get platform id
   auto platformId = std::make_unique<cl_platform_id>();
@@ -67,19 +76,23 @@ void Engine::run() {
   cl_device_id deviceId = nullptr;
   const bool gpu = true;
   err = clGetDeviceIDs(*platformId, gpu ? CL_DEVICE_TYPE_GPU : CL_DEVICE_TYPE_CPU, 1, &deviceId, nullptr);
-  if (err != CL_SUCCESS) {
+  if (deviceId == nullptr || err != CL_SUCCESS) {
     throw OpenCLError("Failed to create a device group", err);
   }
 
   // Create a compute context
   cl_context context = clCreateContext(nullptr, 1, &deviceId, nullptr, nullptr, &err);
-  if (context == nullptr) {
+  if (context == nullptr || err != CL_SUCCESS) {
     throw OpenCLError("Failed to create a compute context", err);
   }
 
   // Create a command queue
-  cl_command_queue commands = clCreateCommandQueue(context, deviceId, 0, &err);
-  if (commands == nullptr) {
+  cl_command_queue_properties command_queue_properties = 0;
+  if (m_isProfilingEnabled) {
+    command_queue_properties |= CL_QUEUE_PROFILING_ENABLE;
+  }
+  cl_command_queue commands = clCreateCommandQueue(context, deviceId, command_queue_properties, &err);
+  if (commands == nullptr || err != CL_SUCCESS) {
     throw OpenCLError("Failed to create a command queue", err);
   }
 
@@ -89,7 +102,7 @@ void Engine::run() {
 
   // Create compute program from the source buffer
   cl_program program = clCreateProgramWithSource(context, 1, (const char**)&kernelSourcePtr, nullptr, &err);
-  if (program == nullptr) {
+  if (program == nullptr || err != CL_SUCCESS) {
     throw OpenCLError("Failed to create compute program", err);
   }
 
@@ -109,7 +122,7 @@ void Engine::run() {
 
   // Create compute kernel in the program we wish to run
   cl_kernel kernel = clCreateKernel(program, m_kernelName.data(), &err);
-  if ((kernel == nullptr) || (err != CL_SUCCESS)) {
+  if (kernel == nullptr || err != CL_SUCCESS) {
     throw OpenCLError("Failed to create compute kernel", err);
   }
 
@@ -121,7 +134,7 @@ void Engine::run() {
     // Create the input and output arrays in device memory for our calculation
     inputMem = clCreateBuffer(context, CL_MEM_READ_ONLY, dataSize, nullptr, nullptr);
     outputMem = clCreateBuffer(context, CL_MEM_WRITE_ONLY, dataSize, nullptr, nullptr);
-    if ((inputMem == nullptr) || (outputMem == nullptr)) {
+    if (inputMem == nullptr || outputMem == nullptr) {
       throw OpenCLError("Failed to allocate device memory", err);
     }
 
@@ -142,15 +155,27 @@ void Engine::run() {
 
   // Execute the kernel over the entire range of our 1d inputMem data set
   // using the maximum number of work group items for this device
+  cl_event event = nullptr;
   err = clEnqueueNDRangeKernel(commands, kernel, m_globalWorkSizes.size(), nullptr, m_globalWorkSizes.data(),
                                m_localWorkSizes.empty() ? nullptr : m_localWorkSizes.data(), 0, nullptr,
-                               nullptr);
+                               &event);
   if (err != CL_SUCCESS) {
     throw OpenCLError("Failed to execute kernel", err);
   }
 
   // Wait for the command commands to get serviced before reading back results
   clFinish(commands);
+
+  if (m_isProfilingEnabled) {
+    cl_ulong start = 0;
+    cl_ulong end = 0;
+    err = clGetEventProfilingInfo(event, CL_PROFILING_COMMAND_START, sizeof(start), &start, nullptr);
+    err = clGetEventProfilingInfo(event, CL_PROFILING_COMMAND_END, sizeof(end), &end, nullptr);
+    if (err != CL_SUCCESS) {
+      throw OpenCLError("Failed to get event profiling info", err);
+    }
+    m_executionTime = std::chrono::nanoseconds(end - start);
+  }
 
   if (m_data) {
     const size_t dataSize = dataTypeToSize(m_data->type) * m_data->size;
@@ -165,10 +190,12 @@ void Engine::run() {
     clReleaseMemObject(outputMem);
   }
 
-  clReleaseProgram(program);
+  clReleaseEvent(event);
   clReleaseKernel(kernel);
+  clReleaseProgram(program);
   clReleaseCommandQueue(commands);
   clReleaseContext(context);
+  clReleaseDevice(deviceId);
 }
 
 std::string Engine::getKernelFilePath() const { return getKernelsDirPath() + m_kernelName + ".cl"; }
