@@ -2,7 +2,7 @@
 // globalSize % localSize == 0
 // numGroups = globalSize / localSize
 __kernel void print_info() {
-  uint workDim = get_work_dim();
+  const uint workDim = get_work_dim();
   if (workDim == 1) {
     printf("0:[globalId=%d;localId=%d;groupId=%d;globalSize=%d;localSize=%d;numGroups=%d]\n",
            get_global_id(0), get_local_id(0), get_group_id(0), get_global_size(0), get_local_size(0),

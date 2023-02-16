@@ -40,7 +40,7 @@ template <typename T>
   const auto columnSize = matrix[0].size();
 
   // Transpose matrix by running OpenCL kernel
-  ocl::Engine engine("matrix_transpose", {rowSize, columnSize});
+  ocl::Engine engine("matrix_transpose_naive", {rowSize, columnSize});
   engine.setData(flatData.data(), flatResults.data(), totalSize, ocl::dataTypeFromType<T>());
   engine.addCompilerOptionDefine("ROW_SIZE", rowSize);
   engine.addCompilerOptionDefine("COLUMN_SIZE", columnSize);
