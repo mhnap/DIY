@@ -52,7 +52,7 @@ int main() {
   const auto OCL_DATA_TYPE = ocl::dataTypeFromType<DATA_TYPE>();
   const std::vector<DATA_TYPE> data = [] {
     auto vec = decltype(data)(TOTAL_SIZE);
-    std::iota(vec.begin(), vec.end(), 1);
+    std::iota(vec.begin(), vec.end(), 0);
     return vec;
   }();
 
@@ -138,6 +138,23 @@ int main() {
   results.push_back({"transpose tiled on write", resultTiledOnWrite, engineTiledOnWrite});
 
   //
+  // MATRIX TRANSPOSE TILED VECTORED
+  //
+  auto resultTiledVectored = decltype(data)(TOTAL_SIZE);
+  ocl::Engine engineTiledVectored("matrix_transpose_tiled_vectored", {ROW_SIZE, COLUMN_SIZE / TILE_SIZE});
+  engineTiledVectored.setData(data.data(), resultTiledVectored.data(), TOTAL_SIZE, OCL_DATA_TYPE);
+  engineTiledVectored.setLocalWorkSizes({TILE_SIZE, 1});
+  engineTiledVectored.addCompilerOptionDefine("TILE_SIZE", TILE_SIZE);
+  engineTiledVectored.addCompilerOptionDefine("VEC_SIZE", TILE_SIZE);
+  engineTiledVectored.addCompilerOptionDefine("ROW_SIZE", ROW_SIZE);
+  engineTiledVectored.addCompilerOptionDefine("COLUMN_SIZE", COLUMN_SIZE);
+  if (IS_PROFILING) {
+    engineTiledVectored.enableProfiling();
+  }
+  engineTiledVectored.run();
+  results.push_back({"transpose tiled vectored", resultTiledVectored, engineTiledVectored});
+
+  //
   // FINAL RESULTS
   //
   printResults(results, ROW_SIZE, COLUMN_SIZE);
@@ -147,7 +164,8 @@ int main() {
     std::cout << "\nCopy matrices are equal: " << std::boolalpha << isAllCopyMatricesAreEqual;
   }
   const bool isAllTransposedMatricesAreEqual =
-      (resultNaive == resultTiledOnRead and resultNaive == resultTiledOnWrite);
+      (resultNaive == resultTiledOnRead and resultNaive == resultTiledOnWrite and
+       resultNaive == resultTiledVectored);
   if (not IS_PROFILING or not isAllTransposedMatricesAreEqual) {
     std::cout << "\nTransposed matrices are equal: " << std::boolalpha << isAllTransposedMatricesAreEqual;
   }
