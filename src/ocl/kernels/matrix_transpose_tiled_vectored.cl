@@ -17,9 +17,7 @@ __kernel void matrix_transpose_tiled_vectored(const __global DATA_TYPE* input, _
   const VEC_TYPE input_data = VLOAD(0, input + input_index);
 
   // Write transposed to tile column
-  for (uint j = 0; j < TILE_SIZE; ++j) {
-    tile[j][i_local] = input_data[j];
-  }
+  UNROLL for (uint j = 0; j < TILE_SIZE; ++j) { tile[j][i_local] = input_data[j]; }
 
   barrier(CLK_LOCAL_MEM_FENCE);
 

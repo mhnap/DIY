@@ -3,3 +3,5 @@
 
 #define _STRINGIFY(s) #s
 #define STRINGIFY(s) _STRINGIFY(s)
+
+#define UNROLL __attribute__((opencl_unroll_hint))
