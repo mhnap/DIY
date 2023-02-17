@@ -182,7 +182,7 @@ int main() {
   }
 
   //
-  // MATRIX TRANSPOSE TILED VECTORED
+  // MATRIX TRANSPOSE TILED VECTORED ON READ
   //
   {
     std::vector<DATA_TYPE> result(TOTAL_SIZE);
@@ -197,7 +197,30 @@ int main() {
       engine.enableProfiling();
     }
     engine.run();
-    results.emplace_back("transpose tiled vectored", result);
+    results.emplace_back("transpose tiled vectored on read", result);
+    if (IS_PROFILING) {
+      results.back().executionTime = engine.getExecutionTime();
+    }
+  }
+
+  //
+  // MATRIX TRANSPOSE TILED VECTORED ON WRITE
+  //
+  {
+    std::vector<DATA_TYPE> result(TOTAL_SIZE);
+    ocl::Engine engine("matrix_transpose_tiled_vectored", {ROW_SIZE, COLUMN_SIZE / TILE_SIZE});
+    engine.setData(data.data(), result.data(), TOTAL_SIZE, OCL_DATA_TYPE);
+    engine.setLocalWorkSizes({TILE_SIZE, 1});
+    engine.addCompilerOptionDefine("TILE_SIZE", TILE_SIZE);
+    engine.addCompilerOptionDefine("VEC_SIZE", TILE_SIZE);
+    engine.addCompilerOptionDefine("ROW_SIZE", ROW_SIZE);
+    engine.addCompilerOptionDefine("COLUMN_SIZE", COLUMN_SIZE);
+    engine.addCompilerOptionDefine("TRANSPOSE_ON_TILE_WRITE");
+    if (IS_PROFILING) {
+      engine.enableProfiling();
+    }
+    engine.run();
+    results.emplace_back("transpose tiled vectored on write", result);
     if (IS_PROFILING) {
       results.back().executionTime = engine.getExecutionTime();
     }

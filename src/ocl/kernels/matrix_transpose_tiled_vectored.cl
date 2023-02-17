@@ -14,14 +14,28 @@ __kernel void matrix_transpose_tiled_vectored(const __global DATA_TYPE* input, _
 
   // Read vectored from input row
   const uint input_index = i * COLUMN_SIZE + j_begin;
-  const VEC_TYPE input_data = VLOAD(0, input + input_index);
+  const VEC_TYPE input_vec = VLOAD(0, input + input_index);
 
+#ifdef TRANSPOSE_ON_TILE_WRITE
   // Write transposed to tile column
-  UNROLL for (uint j = 0; j < TILE_SIZE; ++j) { tile[j][i_local] = input_data[j]; }
+  UNROLL for (uint j = 0; j < TILE_SIZE; ++j) { tile[j][i_local] = input_vec[j]; }
+#else
+  // Write vectored to tile row
+  VSTORE(input_vec, 0, tile + i_local);
+#endif
 
   barrier(CLK_LOCAL_MEM_FENCE);
 
-  // Read vectored from tile row and write vectored to output row
+#ifdef TRANSPOSE_ON_TILE_WRITE
+  // Read vectored from tile row
+  const VEC_TYPE tile_vec = VLOAD(0, tile[i_local]);
+#else
+  // Read transposed from tile column
+  VEC_TYPE tile_vec;
+  UNROLL for (uint j = 0; j < TILE_SIZE; ++j) { tile_vec[j] = tile[j][i_local]; }
+#endif
+
+  // Write vectored to output row
   const uint output_index = (j_begin + i_local) * COLUMN_SIZE + group_id * TILE_SIZE;
-  VSTORE(VLOAD(0, tile[i_local]), 0, output + output_index);
+  VSTORE(tile_vec, 0, output + output_index);
 }
