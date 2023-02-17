@@ -2,7 +2,6 @@
 #include <iomanip>
 #include <iostream>
 #include <numeric>
-#include <span>
 #include <vector>
 
 namespace {
@@ -12,6 +11,9 @@ constexpr bool IS_PROFILING = true;
 #else
 constexpr bool IS_PROFILING = false;
 #endif
+
+using DATA_TYPE = int;
+using TIME_TYPE = std::result_of<decltype (&ocl::Engine::getExecutionTime)(ocl::Engine)>::type;
 
 void printAsMatrix(auto name, auto array, auto rowSize, auto colSize) {
   const auto maxNumAsStringSize = std::to_string(array.back()).size();
@@ -29,14 +31,31 @@ void printExecutionTime(auto name, auto targetTime, auto executionTime) {
             << targetTime * 100 / executionTime << "%\n";
 }
 
-void printResults(const auto& results, auto rowSize, auto colSize) {
+void printResults(const auto& results, auto rowSize, auto colSize, bool isProfiling) {
   for (const auto& result : results) {
-    if (IS_PROFILING) {
-      printExecutionTime(result.name, results.front().engine.getExecutionTime(),
-                         result.engine.getExecutionTime());
+    if (isProfiling) {
+      printExecutionTime(result.name, results.front().executionTime, result.executionTime);
     } else {
       printAsMatrix(result.name, result.data, rowSize, colSize);
     }
+  }
+}
+
+void compareResults(auto& results) {
+  bool isAllTransposedMatricesAreEqual = true;
+  std::vector<DATA_TYPE>* tmpData = nullptr;
+  for (auto& result : results) {
+    if (result.transpose) {
+      if (tmpData == nullptr) {
+        tmpData = &result.data;
+      } else if (*tmpData != result.data) {
+        isAllTransposedMatricesAreEqual = false;
+        break;
+      }
+    }
+  }
+  if (not IS_PROFILING or not isAllTransposedMatricesAreEqual) {
+    std::cout << "\nTransposed matrices are equal: " << std::boolalpha << isAllTransposedMatricesAreEqual;
   }
 }
 
@@ -48,18 +67,18 @@ int main() {
   constexpr auto TOTAL_SIZE = ROW_SIZE * COLUMN_SIZE;
   constexpr auto TILE_SIZE = IS_PROFILING ? 16U : 4U;
 
-  using DATA_TYPE = int;
   const auto OCL_DATA_TYPE = ocl::dataTypeFromType<DATA_TYPE>();
   const std::vector<DATA_TYPE> data = [] {
-    auto vec = decltype(data)(TOTAL_SIZE);
+    std::vector<DATA_TYPE> vec(TOTAL_SIZE);
     std::iota(vec.begin(), vec.end(), 0);
     return vec;
   }();
 
   struct Result {
-    std::string_view name;
-    std::span<DATA_TYPE> data;
-    ocl::Engine& engine;
+    std::string name;
+    std::vector<DATA_TYPE> data;
+    bool transpose = true;
+    TIME_TYPE executionTime;
   };
 
   std::vector<Result> results;
@@ -67,106 +86,126 @@ int main() {
   //
   // COPY NAIVE
   //
-  auto resultCopyNaive = decltype(data)(TOTAL_SIZE);
-  ocl::Engine engineCopyNaive("copy_naive", {TOTAL_SIZE});
-  engineCopyNaive.setData(data.data(), resultCopyNaive.data(), TOTAL_SIZE, OCL_DATA_TYPE);
-  if (IS_PROFILING) {
-    engineCopyNaive.enableProfiling();
+  {
+    std::vector<DATA_TYPE> result(TOTAL_SIZE);
+    ocl::Engine engine("copy_naive", {TOTAL_SIZE});
+    engine.setData(data.data(), result.data(), TOTAL_SIZE, OCL_DATA_TYPE);
+    if (IS_PROFILING) {
+      engine.enableProfiling();
+    }
+    engine.run();
+    results.emplace_back("copy naive", std::move(result), false);
+    if (IS_PROFILING) {
+      results.back().executionTime = engine.getExecutionTime();
+    }
   }
-  engineCopyNaive.run();
-  results.push_back({"copy naive", resultCopyNaive, engineCopyNaive});
 
   //
   // COPY VECTORED
   //
-  auto resultCopyVectored = decltype(data)(TOTAL_SIZE);
-  ocl::Engine engineCopyVectored("copy_vectored", {TOTAL_SIZE / TILE_SIZE});
-  engineCopyVectored.setData(data.data(), resultCopyVectored.data(), TOTAL_SIZE, OCL_DATA_TYPE);
-  engineCopyVectored.addCompilerOptionDefine("VEC_SIZE", TILE_SIZE);
-  if (IS_PROFILING) {
-    engineCopyVectored.enableProfiling();
+  {
+    std::vector<DATA_TYPE> result(TOTAL_SIZE);
+    ocl::Engine engine("copy_vectored", {TOTAL_SIZE / TILE_SIZE});
+    engine.setData(data.data(), result.data(), TOTAL_SIZE, OCL_DATA_TYPE);
+    engine.addCompilerOptionDefine("VEC_SIZE", TILE_SIZE);
+    if (IS_PROFILING) {
+      engine.enableProfiling();
+    }
+    engine.run();
+    results.emplace_back("copy vectored", std::move(result), false);
+    if (IS_PROFILING) {
+      results.back().executionTime = engine.getExecutionTime();
+    }
   }
-  engineCopyVectored.run();
-  results.push_back({"copy vectored", resultCopyVectored, engineCopyVectored});
 
   //
   // MATRIX TRANSPOSE NAIVE
   //
-  auto resultNaive = decltype(data)(TOTAL_SIZE);
-  ocl::Engine engineNaive("matrix_transpose_naive", {ROW_SIZE, COLUMN_SIZE});
-  engineNaive.setData(data.data(), resultNaive.data(), TOTAL_SIZE, OCL_DATA_TYPE);
-  engineNaive.addCompilerOptionDefine("ROW_SIZE", ROW_SIZE);
-  engineNaive.addCompilerOptionDefine("COLUMN_SIZE", COLUMN_SIZE);
-  if (IS_PROFILING) {
-    engineNaive.setLocalWorkSizes({TILE_SIZE, TILE_SIZE});
-    engineNaive.enableProfiling();
+  {
+    std::vector<DATA_TYPE> result(TOTAL_SIZE);
+    ocl::Engine engine("matrix_transpose_naive", {ROW_SIZE, COLUMN_SIZE});
+    engine.setData(data.data(), result.data(), TOTAL_SIZE, OCL_DATA_TYPE);
+    engine.addCompilerOptionDefine("ROW_SIZE", ROW_SIZE);
+    engine.addCompilerOptionDefine("COLUMN_SIZE", COLUMN_SIZE);
+    if (IS_PROFILING) {
+      engine.setLocalWorkSizes({TILE_SIZE, TILE_SIZE});
+      engine.enableProfiling();
+    }
+    engine.run();
+    results.emplace_back("transpose naive", result);
+    if (IS_PROFILING) {
+      results.back().executionTime = engine.getExecutionTime();
+    }
   }
-  engineNaive.run();
-  results.push_back({"transpose naive", resultNaive, engineNaive});
 
   //
   // MATRIX TRANSPOSE TILED ON READ
   //
-  auto resultTiledOnRead = decltype(data)(TOTAL_SIZE);
-  ocl::Engine engineTiledOnRead("matrix_transpose_tiled", {ROW_SIZE, COLUMN_SIZE / TILE_SIZE});
-  engineTiledOnRead.setData(data.data(), resultTiledOnRead.data(), TOTAL_SIZE, OCL_DATA_TYPE);
-  engineTiledOnRead.setLocalWorkSizes({TILE_SIZE, 1});
-  engineTiledOnRead.addCompilerOptionDefine("TILE_SIZE", TILE_SIZE);
-  engineTiledOnRead.addCompilerOptionDefine("ROW_SIZE", ROW_SIZE);
-  engineTiledOnRead.addCompilerOptionDefine("COLUMN_SIZE", COLUMN_SIZE);
-  if (IS_PROFILING) {
-    engineTiledOnRead.enableProfiling();
+  {
+    std::vector<DATA_TYPE> result(TOTAL_SIZE);
+    ocl::Engine engine("matrix_transpose_tiled", {ROW_SIZE, COLUMN_SIZE / TILE_SIZE});
+    engine.setData(data.data(), result.data(), TOTAL_SIZE, OCL_DATA_TYPE);
+    engine.setLocalWorkSizes({TILE_SIZE, 1});
+    engine.addCompilerOptionDefine("TILE_SIZE", TILE_SIZE);
+    engine.addCompilerOptionDefine("ROW_SIZE", ROW_SIZE);
+    engine.addCompilerOptionDefine("COLUMN_SIZE", COLUMN_SIZE);
+    if (IS_PROFILING) {
+      engine.enableProfiling();
+    }
+    engine.run();
+    results.emplace_back("transpose tiled on read", result);
+    if (IS_PROFILING) {
+      results.back().executionTime = engine.getExecutionTime();
+    }
   }
-  engineTiledOnRead.run();
-  results.push_back({"transpose tiled on read", resultTiledOnRead, engineTiledOnRead});
 
   //
   // MATRIX TRANSPOSE TILED ON WRITE
   //
-  auto resultTiledOnWrite = decltype(data)(TOTAL_SIZE);
-  ocl::Engine engineTiledOnWrite("matrix_transpose_tiled", {ROW_SIZE, COLUMN_SIZE / TILE_SIZE});
-  engineTiledOnWrite.setData(data.data(), resultTiledOnWrite.data(), TOTAL_SIZE, OCL_DATA_TYPE);
-  engineTiledOnWrite.setLocalWorkSizes({TILE_SIZE, 1});
-  engineTiledOnWrite.addCompilerOptionDefine("TILE_SIZE", TILE_SIZE);
-  engineTiledOnWrite.addCompilerOptionDefine("ROW_SIZE", ROW_SIZE);
-  engineTiledOnWrite.addCompilerOptionDefine("COLUMN_SIZE", COLUMN_SIZE);
-  engineTiledOnWrite.addCompilerOptionDefine("TRANSPOSE_ON_TILE_WRITE");
-  if (IS_PROFILING) {
-    engineTiledOnWrite.enableProfiling();
+  {
+    std::vector<DATA_TYPE> result(TOTAL_SIZE);
+    ocl::Engine engine("matrix_transpose_tiled", {ROW_SIZE, COLUMN_SIZE / TILE_SIZE});
+    engine.setData(data.data(), result.data(), TOTAL_SIZE, OCL_DATA_TYPE);
+    engine.setLocalWorkSizes({TILE_SIZE, 1});
+    engine.addCompilerOptionDefine("TILE_SIZE", TILE_SIZE);
+    engine.addCompilerOptionDefine("ROW_SIZE", ROW_SIZE);
+    engine.addCompilerOptionDefine("COLUMN_SIZE", COLUMN_SIZE);
+    engine.addCompilerOptionDefine("TRANSPOSE_ON_TILE_WRITE");
+    if (IS_PROFILING) {
+      engine.enableProfiling();
+    }
+    engine.run();
+    results.emplace_back("transpose tiled on write", result);
+    if (IS_PROFILING) {
+      results.back().executionTime = engine.getExecutionTime();
+    }
   }
-  engineTiledOnWrite.run();
-  results.push_back({"transpose tiled on write", resultTiledOnWrite, engineTiledOnWrite});
 
   //
   // MATRIX TRANSPOSE TILED VECTORED
   //
-  auto resultTiledVectored = decltype(data)(TOTAL_SIZE);
-  ocl::Engine engineTiledVectored("matrix_transpose_tiled_vectored", {ROW_SIZE, COLUMN_SIZE / TILE_SIZE});
-  engineTiledVectored.setData(data.data(), resultTiledVectored.data(), TOTAL_SIZE, OCL_DATA_TYPE);
-  engineTiledVectored.setLocalWorkSizes({TILE_SIZE, 1});
-  engineTiledVectored.addCompilerOptionDefine("TILE_SIZE", TILE_SIZE);
-  engineTiledVectored.addCompilerOptionDefine("VEC_SIZE", TILE_SIZE);
-  engineTiledVectored.addCompilerOptionDefine("ROW_SIZE", ROW_SIZE);
-  engineTiledVectored.addCompilerOptionDefine("COLUMN_SIZE", COLUMN_SIZE);
-  if (IS_PROFILING) {
-    engineTiledVectored.enableProfiling();
+  {
+    std::vector<DATA_TYPE> result(TOTAL_SIZE);
+    ocl::Engine engine("matrix_transpose_tiled_vectored", {ROW_SIZE, COLUMN_SIZE / TILE_SIZE});
+    engine.setData(data.data(), result.data(), TOTAL_SIZE, OCL_DATA_TYPE);
+    engine.setLocalWorkSizes({TILE_SIZE, 1});
+    engine.addCompilerOptionDefine("TILE_SIZE", TILE_SIZE);
+    engine.addCompilerOptionDefine("VEC_SIZE", TILE_SIZE);
+    engine.addCompilerOptionDefine("ROW_SIZE", ROW_SIZE);
+    engine.addCompilerOptionDefine("COLUMN_SIZE", COLUMN_SIZE);
+    if (IS_PROFILING) {
+      engine.enableProfiling();
+    }
+    engine.run();
+    results.emplace_back("transpose tiled vectored", result);
+    if (IS_PROFILING) {
+      results.back().executionTime = engine.getExecutionTime();
+    }
   }
-  engineTiledVectored.run();
-  results.push_back({"transpose tiled vectored", resultTiledVectored, engineTiledVectored});
 
   //
   // FINAL RESULTS
   //
-  printResults(results, ROW_SIZE, COLUMN_SIZE);
-
-  const bool isAllCopyMatricesAreEqual = (data == resultCopyNaive and data == resultCopyVectored);
-  if (not IS_PROFILING or not isAllCopyMatricesAreEqual) {
-    std::cout << "\nCopy matrices are equal: " << std::boolalpha << isAllCopyMatricesAreEqual;
-  }
-  const bool isAllTransposedMatricesAreEqual =
-      (resultNaive == resultTiledOnRead and resultNaive == resultTiledOnWrite and
-       resultNaive == resultTiledVectored);
-  if (not IS_PROFILING or not isAllTransposedMatricesAreEqual) {
-    std::cout << "\nTransposed matrices are equal: " << std::boolalpha << isAllTransposedMatricesAreEqual;
-  }
+  printResults(results, ROW_SIZE, COLUMN_SIZE, IS_PROFILING);
+  compareResults(results);
 }
