@@ -13,8 +13,8 @@ namespace ocl {
 
 class Engine {
 public:
-  Engine(std::string_view kernelName, std::vector<size_t>&& globalWorkSizes);
-  void setLocalWorkSizes(std::vector<size_t>&& localWorkSizes);
+  Engine(std::string_view kernelName, std::vector<size_t> globalWorkSizes);
+  void setLocalWorkSizes(std::vector<size_t> localWorkSizes);
   void setData(const void* input, void* output, size_t size, DataType type);
   void addCompilerOption(std::string_view option);
   void addCompilerOptionDefine(std::string_view name);

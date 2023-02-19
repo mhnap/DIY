@@ -14,12 +14,12 @@
 
 namespace ocl {
 
-Engine::Engine(std::string_view kernelName, std::vector<size_t>&& globalWorkSizes)
+Engine::Engine(std::string_view kernelName, std::vector<size_t> globalWorkSizes)
     : m_kernelName(kernelName), m_globalWorkSizes(std::move(globalWorkSizes)) {
   addCompilerOptionDefaultIncludeDirectories();
 }
 
-void Engine::setLocalWorkSizes(std::vector<size_t>&& localWorkSizes) {
+void Engine::setLocalWorkSizes(std::vector<size_t> localWorkSizes) {
   m_localWorkSizes = std::move(localWorkSizes);
 }
 

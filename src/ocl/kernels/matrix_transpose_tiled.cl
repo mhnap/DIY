@@ -39,7 +39,6 @@ __kernel void matrix_transpose_tiled(const __global DATA_TYPE* input, __global D
     // [get_group_id(0) * TILE_SIZE + j][j_begin + i_local]
     const uint output_index = (group_id * TILE_SIZE + j) * COLUMN_SIZE + j_begin + i_local;
 #endif
-
 #ifdef TRANSPOSE_ON_TILE_WRITE
     // Read sequentially from tile row
     output[output_index] = tile[i_local][j];
