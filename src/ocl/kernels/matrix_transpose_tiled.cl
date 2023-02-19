@@ -4,7 +4,7 @@ __kernel void matrix_transpose_tiled(const __global DATA_TYPE* input, __global D
   const uint i = get_global_id(0);
   const uint j_begin = (uint)get_global_id(1) * TILE_SIZE;
   const uint i_local = get_local_id(0);
-  const uint group_id = get_group_id(0);
+  const uint i_group = get_group_id(0);
 
   __local DATA_TYPE tile[TILE_SIZE][TILE_SIZE];
 
@@ -32,12 +32,12 @@ __kernel void matrix_transpose_tiled(const __global DATA_TYPE* input, __global D
   UNROLL for (uint j = 0; j < TILE_SIZE; ++j) {
 #ifdef ROW_WISE
     // Write sequentially to output row
-    // [j_begin + i_local][get_group_id(0) * TILE_SIZE + j]
-    const uint output_index = (j_begin + i_local) * COLUMN_SIZE + group_id * TILE_SIZE + j;
+    // [j_begin + i_local][i_group * TILE_SIZE + j]
+    const uint output_index = (j_begin + i_local) * COLUMN_SIZE + i_group * TILE_SIZE + j;
 #else
     // Write to output column
-    // [get_group_id(0) * TILE_SIZE + j][j_begin + i_local]
-    const uint output_index = (group_id * TILE_SIZE + j) * COLUMN_SIZE + j_begin + i_local;
+    // [i_group * TILE_SIZE + j][j_begin + i_local]
+    const uint output_index = (i_group * TILE_SIZE + j) * COLUMN_SIZE + j_begin + i_local;
 #endif
 #ifdef TRANSPOSE_ON_TILE_WRITE
     // Read sequentially from tile row
