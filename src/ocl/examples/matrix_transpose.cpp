@@ -166,8 +166,9 @@ int main() {
   runKernels(results, data, "matrix_transpose_naive", {ROW_SIZE, COLUMN_SIZE}, {TILE_SIZE, TILE_SIZE}, false);
   runKernels(results, data, "matrix_transpose_tiled_per_elem", {ROW_SIZE, COLUMN_SIZE},
              {TILE_SIZE, TILE_SIZE});
-  runKernels(results, data, "matrix_transpose_tiled", {ROW_SIZE, COLUMN_SIZE / TILE_SIZE}, {TILE_SIZE, 1});
-  runKernels(results, data, "matrix_transpose_tiled_vectored", {ROW_SIZE, COLUMN_SIZE / TILE_SIZE},
+  runKernels(results, data, "matrix_transpose_tiled_per_row", {ROW_SIZE, COLUMN_SIZE / TILE_SIZE},
+             {TILE_SIZE, 1});
+  runKernels(results, data, "matrix_transpose_tiled_per_row_vectored", {ROW_SIZE, COLUMN_SIZE / TILE_SIZE},
              {TILE_SIZE, 1}, true, true);
   runKernels(results, data, "matrix_transpose_tiled_per_column", {ROW_SIZE / TILE_SIZE, COLUMN_SIZE},
              {1, TILE_SIZE});

@@ -1,6 +1,6 @@
 #include "common.cl"
 
-__kernel void matrix_transpose_tiled(const __global DATA_TYPE* input, __global DATA_TYPE* output) {
+__kernel void matrix_transpose_tiled_per_row(const __global DATA_TYPE* input, __global DATA_TYPE* output) {
   const uint i = get_global_id(0);
   const uint j_begin = (uint)get_global_id(1) * TILE_SIZE;
   const uint i_local = get_local_id(0);
