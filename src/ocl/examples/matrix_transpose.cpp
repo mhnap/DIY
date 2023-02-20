@@ -172,6 +172,8 @@ int main() {
              {TILE_SIZE, 1}, true, true);
   runKernels(results, data, "matrix_transpose_tiled_per_column", {ROW_SIZE / TILE_SIZE, COLUMN_SIZE},
              {1, TILE_SIZE});
+  runKernels(results, data, "matrix_transpose_tiled_per_column_vectored", {ROW_SIZE / TILE_SIZE, COLUMN_SIZE},
+             {1, TILE_SIZE}, true, true);
 
   // FINAL RESULTS
   printResults(results, ROW_SIZE, COLUMN_SIZE, IS_PROFILING);

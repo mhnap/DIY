@@ -9,7 +9,7 @@ __kernel void matrix_transpose_tiled_per_row_vectored(const __global DATA_TYPE* 
   const uint i = get_global_id(0);
   const uint j_begin = (uint)get_global_id(1) * TILE_SIZE;
   const uint i_local = get_local_id(0);
-  const uint group_id = get_group_id(0);
+  const uint i_group = get_group_id(0);
 
   __local DATA_TYPE tile[TILE_SIZE][TILE_SIZE];
 
@@ -37,6 +37,6 @@ __kernel void matrix_transpose_tiled_per_row_vectored(const __global DATA_TYPE* 
 #endif
 
   // Write vectored to output row
-  const uint output_index = (j_begin + i_local) * COLUMN_SIZE + group_id * TILE_SIZE;
+  const uint output_index = (j_begin + i_local) * COLUMN_SIZE + i_group * TILE_SIZE;
   VSTORE(tile_vec, 0, output + output_index);
 }
