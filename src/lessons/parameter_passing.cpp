@@ -1,55 +1,54 @@
 #include "common/object.hpp"
 #include "common/utils.hpp"
+#include <array>
 #include <vector>
 
+template <typename T>
 class WithRef {
 public:
-  explicit WithRef(const std::vector<common::Object>& vec) : vec(vec) {}
+  explicit WithRef(const T& d) : data(d) {}
 
 private:
-  std::vector<common::Object> vec;
+  T data;
 };
 
+template <typename T>
 class WithMove {
 public:
-  explicit WithMove(std::vector<common::Object> vec) : vec(std::move(vec)) {}
+  explicit WithMove(T d) : data(std::move(d)) {}
 
 private:
-  std::vector<common::Object> vec;
+  T data;
 };
 
-int main() {
-  common::Object::disableLogs();
-
+template <typename T>
+void runTests(const T& d) {
+  common::Object::clearCounts();
   // Using with ref
   {
-    std::vector<common::Object> vec(10);
-    WithRef withRefL(vec);
-    WithRef withRefR(std::vector<common::Object>(10));
+    T data = d;
+    WithRef withRef(data);
   }
   const auto withRefStatistic = common::Object::flushStatistic();
 
   // Using with ref and move
   {
-    std::vector<common::Object> vec(10);
-    WithRef withRefL(std::move(vec));
-    WithRef withRefR(std::vector<common::Object>(10));
+    T data = d;
+    WithRef withRef(std::move(data));
   }
   const auto withRefAndMoveStatistic = common::Object::flushStatistic();
 
   // Using with move
   {
-    std::vector<common::Object> vec(10);
-    WithMove withMoveL(vec);
-    WithMove withMoveR(std::vector<common::Object>(10));
+    T data = d;
+    WithMove withMove(data);
   }
   const auto withMoveStatistic = common::Object::flushStatistic();
 
   // Using with move and move
   {
-    std::vector<common::Object> vec(10);
-    WithMove withMoveL(std::move(vec));
-    WithMove withMoveR(std::vector<common::Object>(10));
+    T data = d;
+    WithMove withMove(std::move(data));
   }
   const auto withMoveAndMoveStatistic = common::Object::flushStatistic();
 
@@ -58,4 +57,14 @@ int main() {
   common::print("withRefAndMoveStatistic  : ", withRefAndMoveStatistic);
   common::print("withMoveStatistic        : ", withMoveStatistic);
   common::print("withMoveAndMoveStatistic : ", withMoveAndMoveStatistic);
+}
+
+int main() {
+  common::Object::disableLogs();
+  common::print("----- Tests results for vector type -----");
+  const std::vector<common::Object> vec(10);
+  runTests(vec);
+  common::print("\n----- Tests results for array type -----");
+  const std::array<common::Object, 10> arr;
+  runTests(arr);
 }
