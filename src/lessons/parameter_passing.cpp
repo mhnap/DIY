@@ -61,10 +61,16 @@ void runTests(const T& d) {
 
 int main() {
   common::Object::disableLogs();
-  common::print("----- Tests results for vector type -----");
-  const std::vector<common::Object> vec(10);
+
+  common::print("\n----- Tests results for object type -----");
+  const common::Object obj;
+  runTests(obj);
+
+  common::print("\n----- Tests results for vector type -----");
+  const std::vector<common::Object> vec(1);
   runTests(vec);
+
   common::print("\n----- Tests results for array type -----");
-  const std::array<common::Object, 10> arr;
+  const std::array<common::Object, 1> arr;
   runTests(arr);
 }
