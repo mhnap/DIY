@@ -1,5 +1,10 @@
 #include "common/object.hpp"
 #include "common/utils.hpp"
+#include <utility>
+
+namespace {
+common::Object g_object("object");
+}
 
 struct Foo1 {
   Foo1(const common::Object& object) : m_object(object) {}
@@ -8,7 +13,9 @@ struct Foo1 {
 
 struct Foo2 {
   Foo2(const common::Object& object) : m_object(object) {}
-  Foo2(common::Object&& object) : m_object(std::move(object)) {} // `object` here is still lvalue, need move
+  Foo2(common::Object&& object)
+      : m_object(std::move(object)) {
+  } // `object` expression here is still lvalue, even that `object` object is a rvalue reference, so need move
   common::Object m_object;
 };
 
@@ -28,19 +35,22 @@ struct Foo5 {
   common::Object m_object;
 };
 
-common::Object getObject() {
-  common::Object object("object");
-  return object;
+template <typename T>
+void testConstructor() {
+  common::print("---------- ", typeid(T).name(), " ----------");
+  {
+    common::print("lvalue:");
+    T foo(g_object);
+  }
+  {
+    common::print("xvalue:");
+    T foo(std::move(g_object));
+  }
+  {
+    common::print("prvalue:");
+    T foo(common::Object{"object"});
+  }
 }
-
-common::Object strangeGetObject() {
-  common::Object object("object");
-  return std::move(object);
-}
-
-common::Object returnObject(const common::Object& object) { return object; }
-
-common::Object strangeReturnObject(common::Object object) { return object; }
 
 template <typename T>
 T&& my_move(T&& x) {
@@ -54,6 +64,7 @@ std::remove_reference_t<T>&& correct_my_move(T&& x) {
 
 int main() {
   {
+    common::print("---------- Construction ----------");
     // Construct object
     common::Object object1("object");
     // Construct another from lvalue
@@ -67,49 +78,22 @@ int main() {
     common::print("object3 - ", object3);
     common::print("object4 - ", object4);
   }
+
+  testConstructor<Foo1>();
+  testConstructor<Foo2>();
+  testConstructor<Foo3>();
+  testConstructor<Foo4>();
+  testConstructor<Foo5>();
+
   {
-    common::Object object("object");
-    common::print("Foo1 lvalue:");
-    Foo1 foo1l(object);
-    common::print("Foo1 rvalue:");
-    Foo1 foo1r({"object"});
-    common::print("Foo2 lvalue:");
-    Foo2 foo2l(object);
-    common::print("Foo2 rvalue:");
-    Foo2 foo2r({"object"});
-    common::print("Foo3 lvalue:");
-    Foo3 foo3l(object);
-    common::print("Foo3 rvalue:");
-    Foo3 foo3r({"object"});
-    common::print("Foo4 lvalue:");
-    Foo4 foo4l(object);
-    common::print("Foo4 rvalue:");
-    Foo4 foo4r({"object"});
-    common::print("Foo5 lvalue:");
-    Foo5 foo5l(object);
-    common::print("Foo5 rvalue:");
-    Foo5 foo5r({"object"});
-  }
-  {
-    // RVO, only constructor is called
-    common::print("getObject:");
-    auto object = getObject();
-    // Move inside prevents copy elision, so we have additional move here
-    common::print("strangeGetObject:");
-    auto object1 = strangeGetObject();
-    // Object is copied
-    common::print("returnObject:");
-    auto object2 = returnObject(object1);
-    // Object is copied as function parameter and then this new copy is moved by compiler as return value
-    common::print("strangeReturnObject:");
-    auto object3 = strangeReturnObject(object1);
-  }
-  {
+    common::print("---------- Move implementation ----------");
     // Mistake taken from https://youtu.be/ECoLo17nG5c?t=2419
-    auto object1 = getObject();
+    common::Object object1;
     // Move won't work, because of reference collapsing rules
+    common::print("my_move:");
     common::Object object2(my_move(object1));
     // Need to use std::remove_reference to make it work as expected
+    common::print("correct_my_move:");
     common::Object object3(correct_my_move(object1));
   }
 }
