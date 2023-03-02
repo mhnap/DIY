@@ -8,7 +8,7 @@ struct Foo1 {
 
 struct Foo2 {
   Foo2(const common::Object& object) : m_object(object) {}
-  Foo2(common::Object&& object) : m_object(std::move(object)) {}
+  Foo2(common::Object&& object) : m_object(std::move(object)) {} // `object` here is still lvalue, need move
   common::Object m_object;
 };
 
