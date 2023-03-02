@@ -25,6 +25,6 @@ int main() {
   }
   withAutoStatistic = common::Object::flushStatistic();
 
-  common::print("Without auto statistic : ", withoutAutoStatistic);
-  common::print("With auto statistic    : ", withAutoStatistic);
+  common::println("Without auto statistic : ", withoutAutoStatistic);
+  common::println("With auto statistic    : ", withAutoStatistic);
 }

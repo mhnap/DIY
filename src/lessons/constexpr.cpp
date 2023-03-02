@@ -21,11 +21,11 @@ int main() {
 
   // In this case myPow is computed at compile time
   std::array<int, myPow(base, exp)> arr{};
-  common::print("Array size: ", arr.size());
+  common::println("Array size: ", arr.size());
 
   // In this case myPow is computed at runtime
   auto randomForBase = getRandom(base);
   auto randomForExp = getRandom(exp);
   auto powResult = myPow(randomForBase, randomForExp);
-  common::print("Pow result for ", randomForBase, '^', randomForExp, ": ", powResult);
+  common::println("Pow result for ", randomForBase, '^', randomForExp, ": ", powResult);
 }

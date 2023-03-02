@@ -6,48 +6,48 @@ class Person1 : public common::Object {
 public:
   template <typename T>
   explicit Person1(T&& n) : Object(std::forward<T>(n)) {
-    common::print("Person1 user ctor");
+    common::println("Person1 user ctor");
   }
-  Person1(const Person1& p) : Object(p) { common::print("Person1 copy ctor"); }
+  Person1(const Person1& p) : Object(p) { common::println("Person1 copy ctor"); }
 };
 
 class Person2 : public common::Object {
 public:
   template <typename T, typename = std::enable_if_t<!std::is_same_v<Person2, T>>>
   explicit Person2(T&& n) : Object(std::forward<T>(n)) {
-    common::print("Person2 user ctor");
+    common::println("Person2 user ctor");
   }
-  Person2(const Person2& p) : Object(p) { common::print("Person2 copy ctor"); }
+  Person2(const Person2& p) : Object(p) { common::println("Person2 copy ctor"); }
 };
 
 class Person3 : public common::Object {
 public:
   template <typename T, typename = std::enable_if_t<!std::is_same_v<Person3, std::decay_t<T>>>>
   explicit Person3(T&& n) : Object(std::forward<T>(n)) {
-    common::print("Person3 user ctor");
+    common::println("Person3 user ctor");
   }
-  Person3(const Person3& p) : Object(p) { common::print("Person3 copy ctor"); }
+  Person3(const Person3& p) : Object(p) { common::println("Person3 copy ctor"); }
 };
 
 class Person4 : public common::Object {
 public:
   template <typename T, typename = std::enable_if_t<!std::is_base_of_v<Person4, std::decay_t<T>>>>
   explicit Person4(T&& n) : Object(std::forward<T>(n)) {
-    common::print("Person4 user ctor");
+    common::println("Person4 user ctor");
   }
-  Person4(const Person4& p) : Object(p) { common::print("Person4 copy ctor"); }
+  Person4(const Person4& p) : Object(p) { common::println("Person4 copy ctor"); }
 };
 
 class DerivedPerson1 : public Person3 {
 public:
-  explicit DerivedPerson1(std::string s) : Person3(s) { common::print("DerivedPerson1 user ctor"); }
-  DerivedPerson1(const DerivedPerson1& d) : Person3(d) { common::print("DerivedPerson1 copy ctor"); }
+  explicit DerivedPerson1(std::string s) : Person3(s) { common::println("DerivedPerson1 user ctor"); }
+  DerivedPerson1(const DerivedPerson1& d) : Person3(d) { common::println("DerivedPerson1 copy ctor"); }
 };
 
 class DerivedPerson2 : public Person4 {
 public:
-  explicit DerivedPerson2(std::string s) : Person4(s) { common::print("DerivedPerson2 user ctor"); }
-  DerivedPerson2(const DerivedPerson2& d) : Person4(d) { common::print("DerivedPerson2 copy ctor"); }
+  explicit DerivedPerson2(std::string s) : Person4(s) { common::println("DerivedPerson2 user ctor"); }
+  DerivedPerson2(const DerivedPerson2& d) : Person4(d) { common::println("DerivedPerson2 copy ctor"); }
 };
 
 int main() {

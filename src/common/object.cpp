@@ -77,7 +77,7 @@ std::ostream& operator<<(std::ostream& os, const Object& o) { return os << o.m_s
 
 void Object::printIfEnabledLogs(std::string_view log) {
   if (enabledLogs) {
-    print(log);
+    println(log);
   }
 }
 

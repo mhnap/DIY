@@ -57,56 +57,56 @@ void testGeneratedMember() {
 }
 
 int main() {
-  common::print("WithoutAny case:");
+  common::println("WithoutAny case:");
   testGeneratedMember<WithoutAny, GeneratedMember::DefCtor>();
   testGeneratedMember<WithoutAny, GeneratedMember::CopyCtor>();
   testGeneratedMember<WithoutAny, GeneratedMember::MoveCtor>();
   testGeneratedMember<WithoutAny, GeneratedMember::CopyAssign>();
   testGeneratedMember<WithoutAny, GeneratedMember::MoveAssign>();
 
-  common::print("WithDefaultConstructor case:");
+  common::println("WithDefaultConstructor case:");
   testGeneratedMember<WithDefaultConstructor, GeneratedMember::DefCtor>();
   testGeneratedMember<WithDefaultConstructor, GeneratedMember::CopyCtor>();
   testGeneratedMember<WithDefaultConstructor, GeneratedMember::MoveCtor>();
   testGeneratedMember<WithDefaultConstructor, GeneratedMember::CopyAssign>();
   testGeneratedMember<WithDefaultConstructor, GeneratedMember::MoveAssign>();
 
-  common::print("WithUserDefinedConstructor case:");
+  common::println("WithUserDefinedConstructor case:");
   //  testGeneratedMember<WithUserDefinedConstructor, GeneratedMember::DefCtor>();
   testGeneratedMember<WithUserDefinedConstructor, GeneratedMember::CopyCtor>();
   testGeneratedMember<WithUserDefinedConstructor, GeneratedMember::MoveCtor>();
   testGeneratedMember<WithUserDefinedConstructor, GeneratedMember::CopyAssign>();
   testGeneratedMember<WithUserDefinedConstructor, GeneratedMember::MoveAssign>();
 
-  common::print("WithCopyConstructor case:");
+  common::println("WithCopyConstructor case:");
   //  testGeneratedMember<WithCopyConstructor, GeneratedMember::DefCtor>();
   testGeneratedMember<WithCopyConstructor, GeneratedMember::CopyCtor>();
   testGeneratedMember<WithCopyConstructor, GeneratedMember::MoveCtor>(); // used copy instead
   testGeneratedMember<WithCopyConstructor, GeneratedMember::CopyAssign>();
   testGeneratedMember<WithCopyConstructor, GeneratedMember::MoveAssign>(); // used copy instead
 
-  common::print("WithMoveConstructor case:");
+  common::println("WithMoveConstructor case:");
   //  testGeneratedMember<WithMoveConstructor, GeneratedMember::DefCtor>();
   //  testGeneratedMember<WithMoveConstructor, GeneratedMember::CopyCtor>();
   testGeneratedMember<WithMoveConstructor, GeneratedMember::MoveCtor>();
   //  testGeneratedMember<WithMoveConstructor, GeneratedMember::CopyAssign>();
   //  testGeneratedMember<WithMoveConstructor, GeneratedMember::MoveAssign>();
 
-  common::print("WithCopyAssignment case:");
+  common::println("WithCopyAssignment case:");
   testGeneratedMember<WithCopyAssignment, GeneratedMember::DefCtor>();
   testGeneratedMember<WithCopyAssignment, GeneratedMember::CopyCtor>();
   testGeneratedMember<WithCopyAssignment, GeneratedMember::MoveCtor>(); // used copy instead
   testGeneratedMember<WithCopyAssignment, GeneratedMember::CopyAssign>();
   testGeneratedMember<WithCopyAssignment, GeneratedMember::MoveAssign>(); // used copy instead
 
-  common::print("WithMoveAssignment case:");
+  common::println("WithMoveAssignment case:");
   testGeneratedMember<WithMoveAssignment, GeneratedMember::DefCtor>();
   //  testGeneratedMember<WithMoveAssignment, GeneratedMember::CopyCtor>();
   //  testGeneratedMember<WithMoveAssignment, GeneratedMember::MoveCtor>();
   //  testGeneratedMember<WithMoveAssignment, GeneratedMember::CopyAssign>();
   testGeneratedMember<WithMoveAssignment, GeneratedMember::MoveAssign>();
 
-  common::print("WithDestructor case:");
+  common::println("WithDestructor case:");
   testGeneratedMember<WithDestructor, GeneratedMember::DefCtor>();
   testGeneratedMember<WithDestructor, GeneratedMember::CopyCtor>();
   testGeneratedMember<WithDestructor, GeneratedMember::MoveCtor>(); // used copy instead

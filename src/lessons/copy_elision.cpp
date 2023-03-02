@@ -15,23 +15,23 @@ common::Object wrongNRVO() {
   return std::move(obj); // cannot do NRVO
 }
 
-void printObjectAddress(common::Object obj) { common::print("&obj=", &obj); }
+void printObjectAddress(common::Object obj) { common::println("&obj=", &obj); }
 
 int main() {
   {
-    common::print("----- RVO -----");
+    common::println("----- RVO -----");
     common::Object obj = RVO(); // prvalue, copy elision
     printObjectAddress(std::move(obj)); // xvalue, no copy elision
     printObjectAddress(RVO()); // prvalue, copy elision
   }
   {
-    common::print("----- Correct NRVO -----");
+    common::println("----- Correct NRVO -----");
     common::Object obj = correctNRVO(); // prvalue, copy elision
     printObjectAddress(std::move(obj)); // xvalue, no copy elision
     printObjectAddress(correctNRVO()); // prvalue, copy elision
   }
   {
-    common::print("----- Wrong NRVO -----");
+    common::println("----- Wrong NRVO -----");
     common::Object obj = wrongNRVO(); // prvalue, copy elision
     printObjectAddress(std::move(obj)); // xvalue, no copy elision
     printObjectAddress(wrongNRVO()); // prvalue, copy elision

@@ -45,7 +45,7 @@ int main() {
   }
   withoutReserveNoexceptObjectStatistic = common::Object::flushStatistic();
 
-  common::print("With reserve Object statistic             : ", withReserveObjectStatistic);
-  common::print("Without reserve Except Object statistic   : ", withoutReserveExceptObjectStatistic);
-  common::print("Without reserve Noexcept Object statistic : ", withoutReserveNoexceptObjectStatistic);
+  common::println("With reserve Object statistic             : ", withReserveObjectStatistic);
+  common::println("Without reserve Except Object statistic   : ", withoutReserveExceptObjectStatistic);
+  common::println("Without reserve Noexcept Object statistic : ", withoutReserveNoexceptObjectStatistic);
 }

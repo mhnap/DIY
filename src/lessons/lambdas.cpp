@@ -81,18 +81,18 @@ int main() {
   }
   {
     common::Object object("lvalue");
-    common::print("nonGenericLambda:");
+    common::println("nonGenericLambda:");
     auto nonGenericLambda = [](auto x) {
       common::Object x2(x);
-      common::print(x2);
+      common::println(x2);
     };
     nonGenericLambda(object);
     nonGenericLambda(common::Object("rvalue"));
     // We need to use auto&& and std::forward<decltype(x)> together
-    common::print("genericLambda:");
+    common::println("genericLambda:");
     auto genericLambda = [](auto&& x) {
       common::Object x2(std::forward<decltype(x)>(x));
-      common::print(x2);
+      common::println(x2);
     };
     genericLambda(object);
     genericLambda(common::Object("rvalue"));

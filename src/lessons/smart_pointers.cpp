@@ -33,48 +33,48 @@ struct Child : common::Object {
 
 int main() {
   {
-    common::print("-------- unique_ptr part");
+    common::println("-------- unique_ptr part");
     std::unique_ptr<common::Object> ptr1;
     if (ptr1) {
-      common::print("Valid ptr1");
+      common::println("Valid ptr1");
     }
     std::unique_ptr<common::Object> ptr2(new common::Object());
     if (ptr2) {
-      common::print("Valid ptr2");
+      common::println("Valid ptr2");
     }
     auto ptr3 = std::make_unique<common::Object>();
     if (ptr3) {
-      common::print("Valid ptr3");
+      common::println("Valid ptr3");
     }
     // Cannot be copied
     //    ptr3 = ptr2;
     //    auto ptr4 = ptr3;
     auto ptr4 = std::move(ptr3);
     if (ptr3) {
-      common::print("Valid ptr3");
+      common::println("Valid ptr3");
     }
     if (ptr4) {
-      common::print("Valid ptr4");
+      common::println("Valid ptr4");
     }
     ptr4.reset();
     if (ptr4) {
-      common::print("Valid ptr4");
+      common::println("Valid ptr4");
     }
     auto customDeleter = [](common::Object* object) {
-      common::print("Delete ptr5");
+      common::println("Delete ptr5");
       delete object;
     };
     std::unique_ptr<common::Object, decltype(customDeleter)> ptr5(new common::Object());
     { std::unique_ptr<common::Object[]> ptr6(new common::Object[10]); }
 
-    common::print("unique_ptr size: ", sizeof(ptr2));
-    common::print("raw ptr size: ", sizeof(ptr2.get()));
-    common::print("unique_ptr with deleter size: ", sizeof(ptr5));
-    common::print("unique_ptr address: ", &ptr2);
-    common::print("raw ptr address: ", ptr2.get());
+    common::println("unique_ptr size: ", sizeof(ptr2));
+    common::println("raw ptr size: ", sizeof(ptr2.get()));
+    common::println("unique_ptr with deleter size: ", sizeof(ptr5));
+    common::println("unique_ptr address: ", &ptr2);
+    common::println("raw ptr address: ", ptr2.get());
   }
   {
-    common::print("-------- shared_ptr part");
+    common::println("-------- shared_ptr part");
     auto object = new common::Object();
     std::shared_ptr<common::Object> ptr1(object);
     // double free
@@ -108,15 +108,15 @@ int main() {
     {
       auto shared_ptr = std::make_shared<SharedFoo>();
       ptr7 = shared_ptr;
-      common::print("use count: ", shared_ptr.use_count());
+      common::println("use count: ", shared_ptr.use_count());
     }
-    common::print("use count: ", ptr7.use_count());
-    common::print("shared_ptr size: ", sizeof(ptr7));
+    common::println("use count: ", ptr7.use_count());
+    common::println("shared_ptr size: ", sizeof(ptr7));
   }
   {
-    common::print("-------- weak_ptr part");
+    common::println("-------- weak_ptr part");
     {
-      common::print("cycle with shared_ptr");
+      common::println("cycle with shared_ptr");
       auto parent = std::make_shared<Parent>();
       auto child = std::make_shared<Child>();
       parent->child = child;
@@ -125,7 +125,7 @@ int main() {
       // Destructors are not called
     }
     {
-      common::print("cycle with weak_ptr");
+      common::println("cycle with weak_ptr");
       auto parent = std::make_shared<Parent>();
       auto child = std::make_shared<Child>();
       parent->child = child;
@@ -143,7 +143,7 @@ int main() {
     }
     // Expired
     //    std::shared_ptr<common::Object> ptr(wptr);
-    common::print("weak_ptr size: ", sizeof(wptr));
+    common::println("weak_ptr size: ", sizeof(wptr));
   }
-  common::print("-------- END");
+  common::println("-------- END");
 }

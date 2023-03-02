@@ -2,49 +2,49 @@
 #include "memory"
 
 struct NonVirtualDestructor {
-  NonVirtualDestructor() { common::print("NonVirtualDestructor default ctor"); }
-  ~NonVirtualDestructor() { common::print("NonVirtualDestructor dtor"); }
+  NonVirtualDestructor() { common::println("NonVirtualDestructor default ctor"); }
+  ~NonVirtualDestructor() { common::println("NonVirtualDestructor dtor"); }
 };
 
 struct FromNonVirtualDestructor : NonVirtualDestructor {
-  FromNonVirtualDestructor() { common::print("FromNonVirtualDestructor default ctor"); }
-  ~FromNonVirtualDestructor() { common::print("FromNonVirtualDestructor dtor"); }
+  FromNonVirtualDestructor() { common::println("FromNonVirtualDestructor default ctor"); }
+  ~FromNonVirtualDestructor() { common::println("FromNonVirtualDestructor dtor"); }
 };
 
 struct VirtualDestructor {
-  VirtualDestructor() { common::print("VirtualDestructor default ctor"); }
-  virtual ~VirtualDestructor() { common::print("VirtualDestructor dtor"); }
+  VirtualDestructor() { common::println("VirtualDestructor default ctor"); }
+  virtual ~VirtualDestructor() { common::println("VirtualDestructor dtor"); }
 };
 
 struct FromVirtualDestructor : VirtualDestructor {
-  FromVirtualDestructor() { common::print("FromVirtualDestructor default ctor"); }
-  ~FromVirtualDestructor() override { common::print("FromVirtualDestructor dtor"); }
+  FromVirtualDestructor() { common::println("FromVirtualDestructor default ctor"); }
+  ~FromVirtualDestructor() override { common::println("FromVirtualDestructor dtor"); }
 };
 
 int main() {
-  common::print("Non virtual destructor case:");
+  common::println("Non virtual destructor case:");
   {
-    common::print("a) Construct using raw ptr and new");
+    common::println("a) Construct using raw ptr and new");
     {
       NonVirtualDestructor* fromNonVirtualDestructor(new FromNonVirtualDestructor());
       delete fromNonVirtualDestructor;
       // No call of ~FromNonVirtualDestructor(), because our class is derived
       // from base that does not have destructor marked as virtual, BAD
     }
-    common::print("b) Construct using shared ptr");
+    common::println("b) Construct using shared ptr");
     {
       std::shared_ptr<NonVirtualDestructor> fromNonVirtualDestructor(new FromNonVirtualDestructor());
       // There is call of ~FromNonVirtualDestructor(), because internal pointer type in shared_ptr
       // (in control block) is type that was passed to constructor - derived type (FromNonVirtualDestructor)
       // and thus ~FromNonVirtualDestructor (and ~NonVirtualDestructor) are called, GOOD
     }
-    common::print("c) Construct using unique ptr");
+    common::println("c) Construct using unique ptr");
     {
       std::unique_ptr<NonVirtualDestructor> fromNonVirtualDestructor(new FromNonVirtualDestructor());
       // No call of ~FromNonVirtualDestructor(), because internal pointer type in unique_ptr
       // is base type (NonVirtualDestructor) and only base destructor is called, BAD
     }
-    common::print("d) Construct using shared ptr and previously created object ");
+    common::println("d) Construct using shared ptr and previously created object ");
     {
       NonVirtualDestructor* fromNonVirtualDestructor(new FromNonVirtualDestructor());
       std::shared_ptr<NonVirtualDestructor> p(fromNonVirtualDestructor);
@@ -53,19 +53,19 @@ int main() {
       // and only base destructor is called, BAD
     }
   }
-  common::print();
-  common::print("Virtual destructor case:");
+  common::println();
+  common::println("Virtual destructor case:");
   {
-    common::print("a) Construct using raw ptr and new");
+    common::println("a) Construct using raw ptr and new");
     {
       VirtualDestructor* fromVirtualDestructor(new FromVirtualDestructor());
       delete fromVirtualDestructor;
     }
-    common::print("b) Construct using shared ptr");
+    common::println("b) Construct using shared ptr");
     { std::shared_ptr<VirtualDestructor> fromVirtualDestructor(new FromVirtualDestructor()); }
-    common::print("c) Construct using unique ptr");
+    common::println("c) Construct using unique ptr");
     { std::unique_ptr<VirtualDestructor> fromVirtualDestructor(new FromVirtualDestructor()); }
-    common::print("d) Construct using shared ptr and previously created object ");
+    common::println("d) Construct using shared ptr and previously created object ");
     {
       VirtualDestructor* fromVirtualDestructor(new FromVirtualDestructor());
       std::shared_ptr<VirtualDestructor> p(fromVirtualDestructor);

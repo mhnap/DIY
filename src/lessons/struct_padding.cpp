@@ -45,12 +45,12 @@ struct AlignedStruct {
 struct EmptyStruct {};
 
 int main() {
-  common::print("Size of non packed struct is ", sizeof(NonPackedStruct));
-  common::print("Size of packed struct is ", sizeof(PackedStruct));
-  common::print("Size of non packed right struct is ", sizeof(NonPackedRightStruct));
-  common::print("Size of packed right struct is ", sizeof(PackedRightStruct));
-  common::print("Size of non packed struct with big member is ", sizeof(NonPackedStructWithBigMember));
-  common::print("Size of packed struct with big member is ", sizeof(PackedStructWithBigMember));
-  common::print("Size of aligned struct is ", sizeof(AlignedStruct));
-  common::print("Size of empty struct is ", sizeof(EmptyStruct));
+  common::println("Size of non packed struct is ", sizeof(NonPackedStruct));
+  common::println("Size of packed struct is ", sizeof(PackedStruct));
+  common::println("Size of non packed right struct is ", sizeof(NonPackedRightStruct));
+  common::println("Size of packed right struct is ", sizeof(PackedRightStruct));
+  common::println("Size of non packed struct with big member is ", sizeof(NonPackedStructWithBigMember));
+  common::println("Size of packed struct with big member is ", sizeof(PackedStructWithBigMember));
+  common::println("Size of aligned struct is ", sizeof(AlignedStruct));
+  common::println("Size of empty struct is ", sizeof(EmptyStruct));
 }

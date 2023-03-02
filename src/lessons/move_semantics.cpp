@@ -37,17 +37,17 @@ struct Foo5 {
 
 template <typename T>
 void testConstructor() {
-  common::print("---------- ", typeid(T).name(), " ----------");
+  common::println("---------- ", typeid(T).name(), " ----------");
   {
-    common::print("lvalue:");
+    common::println("lvalue:");
     T foo(g_object);
   }
   {
-    common::print("xvalue:");
+    common::println("xvalue:");
     T foo(std::move(g_object));
   }
   {
-    common::print("prvalue:");
+    common::println("prvalue:");
     T foo(common::Object{"object"});
   }
 }
@@ -64,7 +64,7 @@ std::remove_reference_t<T>&& correct_my_move(T&& x) {
 
 int main() {
   {
-    common::print("---------- Construction ----------");
+    common::println("---------- Construction ----------");
     // Construct object
     common::Object object1("object");
     // Construct another from lvalue
@@ -73,10 +73,10 @@ int main() {
     common::Object object3(common::Object{"prvalue"});
     // Construct another from xvalue
     common::Object object4(std::move(object1));
-    common::print("object1 - ", object1);
-    common::print("object2 - ", object2);
-    common::print("object3 - ", object3);
-    common::print("object4 - ", object4);
+    common::println("object1 - ", object1);
+    common::println("object2 - ", object2);
+    common::println("object3 - ", object3);
+    common::println("object4 - ", object4);
   }
 
   testConstructor<Foo1>();
@@ -86,14 +86,14 @@ int main() {
   testConstructor<Foo5>();
 
   {
-    common::print("---------- Move implementation ----------");
+    common::println("---------- Move implementation ----------");
     // Mistake taken from https://youtu.be/ECoLo17nG5c?t=2419
     common::Object object1;
     // Move won't work, because of reference collapsing rules
-    common::print("my_move:");
+    common::println("my_move:");
     common::Object object2(my_move(object1));
     // Need to use std::remove_reference to make it work as expected
-    common::print("correct_my_move:");
+    common::println("correct_my_move:");
     common::Object object3(correct_my_move(object1));
   }
 }

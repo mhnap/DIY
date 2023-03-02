@@ -53,24 +53,24 @@ void runTests(const T& d) {
   const auto withMoveAndMoveStatistic = common::Object::flushStatistic();
 
   // Print results
-  common::print("withRefStatistic         : ", withRefStatistic);
-  common::print("withRefAndMoveStatistic  : ", withRefAndMoveStatistic);
-  common::print("withMoveStatistic        : ", withMoveStatistic);
-  common::print("withMoveAndMoveStatistic : ", withMoveAndMoveStatistic);
+  common::println("withRefStatistic         : ", withRefStatistic);
+  common::println("withRefAndMoveStatistic  : ", withRefAndMoveStatistic);
+  common::println("withMoveStatistic        : ", withMoveStatistic);
+  common::println("withMoveAndMoveStatistic : ", withMoveAndMoveStatistic);
 }
 
 int main() {
   common::Object::disableLogs();
 
-  common::print("\n----- Tests results for object type -----");
+  common::println("\n----- Tests results for object type -----");
   const common::Object obj;
   runTests(obj);
 
-  common::print("\n----- Tests results for vector type -----");
+  common::println("\n----- Tests results for vector type -----");
   const std::vector<common::Object> vec(1);
   runTests(vec);
 
-  common::print("\n----- Tests results for array type -----");
+  common::println("\n----- Tests results for array type -----");
   const std::array<common::Object, 1> arr;
   runTests(arr);
 }
