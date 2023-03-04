@@ -22,33 +22,49 @@ private:
 };
 
 template <typename T>
+class WithRvalueAndMove {
+public:
+  explicit WithRvalueAndMove(T&& d) : data(std::move(d)) {}
+
+private:
+  T data;
+};
+
+template <typename T>
 void runTests(const T& d) {
   {
     T data = d;
     common::Object::clearCounts();
     WithRef withRef(data);
-    common::println("withRefStatistic         : ", common::Object::flushStatistic());
+    common::println("withRefStatistic           : ", common::Object::flushStatistic());
   }
 
   {
     T data = d;
     common::Object::clearCounts();
     WithRef withRef(std::move(data));
-    common::println("withRefAndMoveStatistic  : ", common::Object::flushStatistic());
+    common::println("withRefAndMoveStatistic    : ", common::Object::flushStatistic());
   }
 
   {
     T data = d;
     common::Object::clearCounts();
     WithMove withMove(data);
-    common::println("withMoveStatistic        : ", common::Object::flushStatistic());
+    common::println("withMoveStatistic          : ", common::Object::flushStatistic());
   }
 
   {
     T data = d;
     common::Object::clearCounts();
     WithMove withMove(std::move(data));
-    common::println("withMoveAndMoveStatistic : ", common::Object::flushStatistic());
+    common::println("withMoveAndMoveStatistic   : ", common::Object::flushStatistic());
+  }
+
+  {
+    T data = d;
+    common::Object::clearCounts();
+    WithRvalueAndMove withRvalueAndMove(std::move(data));
+    common::println("withRvalueAndMoveStatistic : ", common::Object::flushStatistic());
   }
 }
 
