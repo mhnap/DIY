@@ -23,40 +23,33 @@ private:
 
 template <typename T>
 void runTests(const T& d) {
-  common::Object::clearCounts();
-  // Using with ref
   {
     T data = d;
+    common::Object::clearCounts();
     WithRef withRef(data);
+    common::println("withRefStatistic         : ", common::Object::flushStatistic());
   }
-  const auto withRefStatistic = common::Object::flushStatistic();
 
-  // Using with ref and move
   {
     T data = d;
+    common::Object::clearCounts();
     WithRef withRef(std::move(data));
+    common::println("withRefAndMoveStatistic  : ", common::Object::flushStatistic());
   }
-  const auto withRefAndMoveStatistic = common::Object::flushStatistic();
 
-  // Using with move
   {
     T data = d;
+    common::Object::clearCounts();
     WithMove withMove(data);
+    common::println("withMoveStatistic        : ", common::Object::flushStatistic());
   }
-  const auto withMoveStatistic = common::Object::flushStatistic();
 
-  // Using with move and move
   {
     T data = d;
+    common::Object::clearCounts();
     WithMove withMove(std::move(data));
+    common::println("withMoveAndMoveStatistic : ", common::Object::flushStatistic());
   }
-  const auto withMoveAndMoveStatistic = common::Object::flushStatistic();
-
-  // Print results
-  common::println("withRefStatistic         : ", withRefStatistic);
-  common::println("withRefAndMoveStatistic  : ", withRefAndMoveStatistic);
-  common::println("withMoveStatistic        : ", withMoveStatistic);
-  common::println("withMoveAndMoveStatistic : ", withMoveAndMoveStatistic);
 }
 
 int main() {
