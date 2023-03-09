@@ -25,8 +25,8 @@ struct Result {
   TIME_TYPE executionTime;
 };
 
-constexpr auto ROW_SIZE = IS_PROFILING ? 1024 * 16U : 8U;
-constexpr auto COLUMN_SIZE = IS_PROFILING ? 1024 * 16U : 8U;
+constexpr auto ROW_SIZE = IS_PROFILING ? 1024 * 8U : 8U;
+constexpr auto COLUMN_SIZE = IS_PROFILING ? 1024 * 8U : 8U;
 constexpr auto TOTAL_SIZE = ROW_SIZE * COLUMN_SIZE;
 constexpr auto TILE_SIZE = IS_PROFILING ? 16U : 4U;
 constexpr auto VEC_SIZE = TILE_SIZE;
