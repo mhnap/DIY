@@ -82,6 +82,7 @@ void runKernels(auto& results, const auto& input, auto kernelName, std::vector<s
   std::vector iterationTypes{IterationType::ROW_WISE, IterationType::COLUMN_WISE};
   if (not isTiled) {
     transposeTypes = {TransposeType::ON_TILE_WRITE};
+    iterationTypes = {IterationType::ROW_WISE};
   }
   if (isVectored) {
     iterationTypes = {IterationType::ROW_WISE};
