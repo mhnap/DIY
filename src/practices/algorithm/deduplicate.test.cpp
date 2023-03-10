@@ -33,4 +33,9 @@ TEST(deduplicate, 6) {
   EXPECT_EQ(algorithm::deduplicateStd(inVec), algorithm::deduplicate(inVec));
 }
 
+TEST(deduplicate, 7) {
+  const std::vector<float> inVec = {3.1, -3.2, 3.2, -3.1, 1.5, 1.6, 1.6, -2.0, -2.0, 3.1};
+  EXPECT_EQ(algorithm::deduplicateStd(inVec), algorithm::deduplicate(inVec));
+}
+
 } // namespace
