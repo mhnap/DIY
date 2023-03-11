@@ -66,4 +66,31 @@ TEST(deduplicate, 7) {
   EXPECT_EQ(result, outVec);
 }
 
+TEST(deduplicate, 8) {
+  const std::vector<float> inVec = {1, 1};
+  const std::vector<float> outVec = {1};
+  const auto resultStd = algorithm::deduplicateStd(inVec);
+  const auto result = algorithm::deduplicate(inVec);
+  EXPECT_EQ(resultStd, outVec);
+  EXPECT_EQ(result, outVec);
+}
+
+TEST(deduplicate, 9) {
+  const std::vector<float> inVec = {1};
+  const std::vector<float> outVec = {1};
+  const auto resultStd = algorithm::deduplicateStd(inVec);
+  const auto result = algorithm::deduplicate(inVec);
+  EXPECT_EQ(resultStd, outVec);
+  EXPECT_EQ(result, outVec);
+}
+
+TEST(deduplicate, 10) {
+  const std::vector<float> inVec;
+  const std::vector<float> outVec;
+  const auto resultStd = algorithm::deduplicateStd(inVec);
+  const auto result = algorithm::deduplicate(inVec);
+  EXPECT_EQ(resultStd, outVec);
+  EXPECT_EQ(result, outVec);
+}
+
 } // namespace
