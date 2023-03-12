@@ -1,5 +1,6 @@
 #pragma once
 
+#include <functional>
 #include <iostream>
 #include <sstream>
 #include <string>
@@ -23,5 +24,13 @@ std::string concatToString(Args&&... args) {
   (ss << ... << std::forward<Args>(args));
   return ss.str();
 }
+
+template <auto F>
+struct Functor {
+  template <typename... Args>
+  auto operator()(Args&&... args) const {
+    return std::invoke(F, std::forward<Args>(args)...);
+  }
+};
 
 } // namespace common
