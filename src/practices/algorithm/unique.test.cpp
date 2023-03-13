@@ -11,7 +11,8 @@ struct Test : testing::Test {
 
 using DataType = float;
 using AlgorithmTypes = testing::Types<common::Functor<algorithm::unique::v1<DataType>>,
-                                      common::Functor<algorithm::unique::v2<DataType>>>;
+                                      common::Functor<algorithm::unique::v2<DataType>>,
+                                      common::Functor<algorithm::unique::v3<DataType>>>;
 TYPED_TEST_SUITE(Test, AlgorithmTypes);
 
 TYPED_TEST(Test, 1) {
