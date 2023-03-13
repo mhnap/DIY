@@ -1,6 +1,7 @@
 #pragma once
 
 #include <algorithm>
+#include <tuple>
 #include <vector>
 
 namespace algorithm::deduplicate {
@@ -17,7 +18,7 @@ template <typename T>
 [[nodiscard]] auto v2(const std::vector<T>& vec) {
   auto result = vec;
 
-  const auto adjacent_find = [](auto first, auto last) {
+  const auto adjacent_find = [](auto first, const auto last) {
     if (first == last) {
       return last;
     }
@@ -31,7 +32,7 @@ template <typename T>
     return last;
   };
 
-  const auto unique = [adjacent_find](auto first, auto last) {
+  const auto deduplicate = [adjacent_find](auto first, const auto last) {
     // Skip the beginning, if already unique.
     first = adjacent_find(first, last);
     if (first == last) {
@@ -48,7 +49,7 @@ template <typename T>
     return ++dest;
   };
 
-  result.erase(unique(result.begin(), result.end()), result.end());
+  result.erase(deduplicate(result.begin(), result.end()), result.end());
   return result;
 }
 
@@ -60,7 +61,7 @@ template <typename T>
   const auto last = result.size();
   decltype(last) first = 0;
 
-  const auto unique = [&result, &vec](auto first, auto last) {
+  const auto deduplicate = [&result, &vec](auto first, const auto last) {
     if (first == last) {
       return last;
     }
@@ -74,8 +75,47 @@ template <typename T>
     return ++dest;
   };
 
-  result.resize(unique(first, last));
+  result.resize(deduplicate(first, last));
   return result;
+}
+
+// Using empty vector and save metadata
+template <typename T>
+[[nodiscard]] auto v4(const std::vector<T>& vec) {
+  std::vector<T> result(vec.size());
+  std::vector<size_t> indices(vec.size());
+  std::vector<size_t> revIndices(vec.size());
+  std::vector<size_t> occurrences(vec.size());
+
+  const auto last = result.size();
+  decltype(last) first = 0;
+
+  const auto deduplicate = [&](auto first, const auto last) {
+    if (first == last) {
+      return last;
+    }
+    auto dest = first;
+    result[dest] = vec[first];
+    indices[dest] = first;
+    revIndices[first] = dest;
+    ++occurrences[dest];
+    while (++first != last) {
+      if (result[dest] != vec[first]) {
+        result[++dest] = vec[first];
+        indices[dest] = first;
+      }
+      revIndices[first] = dest;
+      ++occurrences[dest];
+    }
+    return ++dest;
+  };
+
+  auto end = deduplicate(first, last);
+
+  result.resize(end);
+  indices.resize(end);
+  occurrences.resize(end);
+  return std::tuple(result, indices, revIndices, occurrences);
 }
 
 } // namespace algorithm::deduplicate

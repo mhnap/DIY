@@ -75,4 +75,17 @@ TYPED_TEST(Test, 10) {
   EXPECT_EQ(this->func(inVec), outVec);
 }
 
+TEST(MetadataTest, 1) {
+  const std::vector<DataType> inVec = {1, 3, 3, 5, 2, 2, 4};
+  const std::vector<DataType> refResult = {1, 3, 5, 2, 4};
+  const std::vector<size_t> refIndices = {0, 1, 3, 4, 6};
+  const std::vector<size_t> refRevIndices = {0, 1, 1, 2, 3, 3, 4};
+  const std::vector<size_t> refOccurrences = {1, 2, 1, 2, 1};
+  auto [result, indices, revIndices, occurrences] = algorithm::deduplicate::v4(inVec);
+  EXPECT_EQ(result, refResult);
+  EXPECT_EQ(indices, refIndices);
+  EXPECT_EQ(revIndices, refRevIndices);
+  EXPECT_EQ(occurrences, refOccurrences);
+}
+
 } // namespace
