@@ -92,4 +92,23 @@ template <typename T>
   return result;
 }
 
+template <typename T>
+[[nodiscard]] auto v4(const std::vector<T>& vec) {
+  std::vector<T> result;
+
+  for (auto val : vec) {
+    bool unique = true;
+    for (auto res : result) {
+      if (val == res) {
+        unique = false;
+      }
+    }
+    if (unique) {
+      result.emplace_back(val);
+    }
+  }
+
+  return result;
+}
+
 } // namespace algorithm::unique
