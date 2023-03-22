@@ -20,3 +20,7 @@ path = "src/cpp_comparison/use_after_free.rs"
 [[bin]]
 name = "data_race"
 path = "src/cpp_comparison/data_race.rs"
+
+[[bin]]
+name = "move_semantics"
+path = "src/cpp_comparison/move_semantics.rs"
