@@ -12,7 +12,8 @@ struct Test : testing::Test {
 using DataType = float;
 using AlgorithmTypes = testing::Types<common::Functor<algorithm::deduplicate::v1<DataType>>,
                                       common::Functor<algorithm::deduplicate::v2<DataType>>,
-                                      common::Functor<algorithm::deduplicate::v3<DataType>>>;
+                                      common::Functor<algorithm::deduplicate::v3<DataType>>,
+                                      common::Functor<algorithm::deduplicate::v4<DataType>>>;
 TYPED_TEST_SUITE(Test, AlgorithmTypes);
 
 TYPED_TEST(Test, 1) {
@@ -81,7 +82,7 @@ TEST(MetadataTest, 1) {
   const std::vector<size_t> refIndices = {0, 1, 3, 4, 6};
   const std::vector<size_t> refRevIndices = {0, 1, 1, 2, 3, 3, 4};
   const std::vector<size_t> refOccurrences = {1, 2, 1, 2, 1};
-  auto [result, indices, revIndices, occurrences] = algorithm::deduplicate::v4(inVec);
+  auto [result, indices, revIndices, occurrences] = algorithm::deduplicate::v5(inVec);
   EXPECT_EQ(result, refResult);
   EXPECT_EQ(indices, refIndices);
   EXPECT_EQ(revIndices, refRevIndices);

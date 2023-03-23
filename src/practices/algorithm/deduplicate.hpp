@@ -53,9 +53,32 @@ template <typename T>
   return result;
 }
 
-// Using empty vector
+// Using vector with already filled data, but without adjacent_find
 template <typename T>
 [[nodiscard]] auto v3(const std::vector<T>& vec) {
+  auto result = vec;
+
+  const auto deduplicate = [](auto first, const auto last) {
+    if (first == last) {
+      return last;
+    }
+    // Do the real copy work.
+    auto dest = first;
+    while (++first != last) {
+      if (*dest != *first) {
+        *++dest = *first;
+      }
+    }
+    return ++dest;
+  };
+
+  result.erase(deduplicate(result.begin(), result.end()), result.end());
+  return result;
+}
+
+// Using empty vector
+template <typename T>
+[[nodiscard]] auto v4(const std::vector<T>& vec) {
   std::vector<T> result(vec.size());
 
   const auto last = result.size();
@@ -81,7 +104,7 @@ template <typename T>
 
 // Using empty vector and save metadata
 template <typename T>
-[[nodiscard]] auto v4(const std::vector<T>& vec) {
+[[nodiscard]] auto v5(const std::vector<T>& vec) {
   std::vector<T> result(vec.size());
   std::vector<size_t> indices(vec.size());
   std::vector<size_t> revIndices(vec.size());
