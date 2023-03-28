@@ -111,4 +111,89 @@ template <typename T>
   return result;
 }
 
+// Sorted with metadata
+template <typename T>
+[[nodiscard]] auto v5(const std::vector<T>& vec) {
+  std::vector<T> result = vec;
+  std::vector<size_t> indices(vec.size());
+  std::iota(indices.begin(), indices.end(), 0);
+  std::vector<size_t> revIndices(vec.size());
+  std::vector<size_t> occurrences(vec.size());
+
+  std::stable_sort(result.begin(), result.end(), [](auto a, auto b) { return a < b; });
+  std::stable_sort(indices.begin(), indices.end(), [&vec](auto a, auto b) { return vec[a] < vec[b]; });
+
+  const auto deduplicate = [&](auto first, const auto last) {
+    if (first == last) {
+      return last;
+    }
+    auto dest = first;
+    revIndices[indices[first]] = dest;
+    ++occurrences[dest];
+    while (++first != last) {
+      if (result[dest] != result[first]) {
+        result[++dest] = result[first];
+        indices[dest] = indices[first];
+      }
+      revIndices[indices[first]] = dest;
+      ++occurrences[dest];
+    }
+    return ++dest;
+  };
+
+  const auto last = result.size();
+  decltype(last) first = 0;
+  auto end = deduplicate(first, last);
+
+  result.resize(end);
+  indices.resize(end);
+  occurrences.resize(end);
+
+  return std::tuple(result, indices, revIndices, occurrences);
+}
+
+// Unsorted with metadata
+template <typename T>
+[[nodiscard]] auto v6(const std::vector<T>& vec) {
+  std::vector<T> result(vec.size());
+  std::vector<size_t> indices(vec.size());
+  std::vector<size_t> revIndices(vec.size());
+  std::vector<size_t> occurrences(vec.size());
+
+  const auto unique = [&](auto first, const auto last) {
+    auto unique_length = 0U;
+    for (; first != last; ++first) {
+      const auto& val = vec[first];
+      bool unique = true;
+      for (auto unique_idx = 0U; unique_idx < unique_length; ++unique_idx) {
+        const auto& unique_val = result[unique_idx];
+        if (val == unique_val) {
+          unique = false;
+          revIndices[first] = unique_idx;
+          ++occurrences[unique_idx];
+          break;
+        }
+      }
+      if (unique) {
+        result[unique_length] = val;
+        indices[unique_length] = first;
+        revIndices[first] = unique_length;
+        ++occurrences[unique_length];
+        ++unique_length;
+      }
+    }
+    return unique_length;
+  };
+
+  const auto last = result.size();
+  decltype(last) first = 0;
+  auto end = unique(first, last);
+
+  result.resize(end);
+  indices.resize(end);
+  occurrences.resize(end);
+
+  return std::tuple(result, indices, revIndices, occurrences);
+}
+
 } // namespace algorithm::unique
