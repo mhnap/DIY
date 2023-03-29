@@ -62,6 +62,13 @@ int main() {
     std::cout << "a:" << *a << "; b:" << *b << std::endl;
     // Process finished with exit code 139 (interrupted by signal 11: SIGSEGV)
   }
+
+  {
+    // References are implicitly created
+    std::string a = "42";
+    std::string& b = a;
+    std::cout << "a:" << a << "; b:" << b << std::endl;
+  }
 }
 
 // Cons:
@@ -71,5 +78,7 @@ int main() {
 // - types need to handle empty but valid states (unique_ptr can have nullptr)
 // - need to make correct destructor for types that support move
 // - destructors are run for moved-from object, but there are no need for this
+// - implicit deep copy
+// - implicit references
 //
-// Seems that almost all of cons can be fixed with "destructive move"
+// Many of cons can be fixed with "destructive move"

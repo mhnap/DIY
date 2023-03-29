@@ -112,6 +112,23 @@ fn main() {
         //    |                               ++++++++
         println!("a:moved; b:{b}");
     }
+
+    {
+        // Cause of move by default, need to explicitly create reference
+        let a: String = "42".to_string();
+        // let b: &String = a;
+        // error[E0308]: mismatched types
+        //    --> src/cpp_comparison/move_semantics.rs:119:26
+        //     |
+        // 119 |         let b: &String = a;
+        //     |                -------   ^
+        //     |                |         |
+        //     |                |         expected `&String`, found struct `String`
+        //     |                |         help: consider borrowing here: `&a`
+        //     |                expected due to this
+        let b: &String = &a;
+        println!("a:{a}; b:{b}");
+    }
 }
 
 // Pros:
@@ -123,3 +140,4 @@ fn main() {
 //                     thus no need to handle empty but valid states for types
 //                     thus cannot use moved-from object
 // - explicit "clone" call needed to make deep copies, thus more cleaner intentions
+// - explicit references
