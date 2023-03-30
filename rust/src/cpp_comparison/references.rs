@@ -1,3 +1,5 @@
+use std::mem::size_of;
+
 fn main() {
     {
         // Need to explicitly create reference
@@ -92,6 +94,14 @@ fn main() {
         let sb: S = S { r: &b };
         sa = sb;
         println!("sa:{}; sb:{}", sa.r, sb.r);
+    }
+
+    {
+        println!(
+            "sizeof bool: {}; sizeof &bool: {}",
+            size_of::<bool>(),
+            size_of::<&bool>()
+        );
     }
 }
 

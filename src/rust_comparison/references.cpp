@@ -85,6 +85,10 @@ int main() {
     // assignment operator of 'S' is implicitly deleted because field 'r' is of reference type 'int &'
     std::cout << "sa:" << sa.r << "; sb:" << sb.r << std::endl;
   }
+
+  {
+    std::cout << "sizeof bool: " << sizeof(bool) << "; sizeof bool&: " << sizeof(bool&) << std::endl;
+  }
 }
 
 // Differences:
