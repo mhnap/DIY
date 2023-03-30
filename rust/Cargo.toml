@@ -24,3 +24,7 @@ path = "src/cpp_comparison/data_race.rs"
 [[bin]]
 name = "move_semantics"
 path = "src/cpp_comparison/move_semantics.rs"
+
+[[bin]]
+name = "references"
+path = "src/cpp_comparison/references.rs"
