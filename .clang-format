@@ -5,4 +5,5 @@ PointerAlignment: Left
 AlwaysBreakTemplateDeclarations: Yes
 ColumnLimit: 110
 AlignTrailingComments: false
+ReflowComments: false
 ...
