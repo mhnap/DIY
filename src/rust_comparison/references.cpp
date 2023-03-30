@@ -72,6 +72,14 @@ int main() {
   }
 
   {
+    // Need to explicitly get referred object from std::reference_wrapper to use its methods
+    std::string s = "42";
+    std::reference_wrapper<std::string> r = s;
+    // std::cout << "s:" << s.front() << " r:" << r.front(); // error
+    std::cout << "s:" << s.front() << "; r:" << r.get().front() << std::endl;
+  }
+
+  {
     // Reference member makes a class non-assignable
     struct S {
       int& r;
@@ -86,9 +94,7 @@ int main() {
     std::cout << "sa:" << sa.r << "; sb:" << sb.r << std::endl;
   }
 
-  {
-    std::cout << "sizeof bool: " << sizeof(bool) << "; sizeof bool&: " << sizeof(bool&) << std::endl;
-  }
+  { std::cout << "sizeof bool:" << sizeof(bool) << "; sizeof bool&:" << sizeof(bool&) << std::endl; }
 }
 
 // Differences:

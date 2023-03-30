@@ -60,7 +60,7 @@ fn main() {
         //    |
         // 49 |         let mut a: i32 = 42;
         //    |             +++
-        println!("a:{a};");
+        println!("a:{a}");
     }
 
     {
@@ -68,7 +68,7 @@ fn main() {
         let a: i32 = 42;
         let mut vec: Vec<&i32> = Vec::new();
         vec.push(&a);
-        println!("a:{};", vec[0]);
+        println!("a:{}", vec[0]);
     }
 
     {
@@ -78,7 +78,18 @@ fn main() {
             let b: &mut i32 = &mut a;
             *b = 41;
         }
-        println!("a:{a};");
+        println!("a:{a}");
+    }
+
+    {
+        // No need to explicitly dereference a reference to use object methods
+        let s: String = "42".to_string();
+        let r: &String = &s;
+        println!(
+            "s:{}; r:{}",
+            s.chars().next().unwrap(),
+            r.chars().next().unwrap()
+        );
     }
 
     {
@@ -98,7 +109,7 @@ fn main() {
 
     {
         println!(
-            "sizeof bool: {}; sizeof &bool: {}",
+            "sizeof bool:{}; sizeof &bool:{}",
             size_of::<bool>(),
             size_of::<&bool>()
         );
@@ -114,6 +125,7 @@ fn main() {
 // Similarities:
 // - can create immutable reference what refer to mutable data
 // - cannot create mutable reference what refer to immutable data
+// - references can be implicitly dereferenced
 //
 // Pros:
 // - need to explicitly create reference
