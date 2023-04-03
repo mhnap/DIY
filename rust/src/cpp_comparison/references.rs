@@ -108,6 +108,30 @@ fn main() {
     }
 
     {
+        // Reference can be uninitialized
+        let b: &i32;
+        let a: i32 = 42;
+        // But cannot be read if its uninitialized
+        // println!("a:{a}; b:{b}");
+        // error[E0381]: used binding `b` isn't initialized
+        //    --> src/cpp_comparison/references.rs:115:29
+        //     |
+        // 112 |         let b: &i32;
+        //     |             - binding declared here but left uninitialized
+        // ...
+        // 115 |         println!("a:{a}; b:{b}");
+        //     |                             ^ `b` used here but it isn't initialized
+        //     |
+        //     = note: this error originates in the macro `$crate::format_args_nl` which comes from the expansion of the macro `println` (in Nightly builds, run with -Z macro-backtrace for more info)
+        // help: consider assigning a value
+        //     |
+        // 112 |         let b: &i32 = todo!();
+        //     |                     +++++++++
+        b = &a;
+        println!("a:{a}; b:{b}");
+    }
+
+    {
         println!(
             "sizeof bool:{}; sizeof &bool:{}",
             size_of::<bool>(),
@@ -117,12 +141,14 @@ fn main() {
 }
 
 // Differences:
+// - references can be declared uninitialized, but cannot be used uninitialized
 // - can change what reference refers
 // - can have vector with references
 // - need to dereference a reference to change referred value
 // - can assign struct with reference member
 //
 // Similarities:
+// - references are non-nullable
 // - can create immutable reference what refer to mutable data
 // - cannot create mutable reference what refer to immutable data
 // - references can be implicitly dereferenced

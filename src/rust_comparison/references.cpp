@@ -94,16 +94,29 @@ int main() {
     std::cout << "sa:" << sa.r << "; sb:" << sb.r << std::endl;
   }
 
+  {
+    // References cannot be uninitialized
+    // int& b;
+    // error: ‘b’ declared as reference but not initialized
+    // Even reference_wrapper too
+    // std::reference_wrapper<int> b;
+    int a = 42;
+    int& b = a;
+    std::cout << "a:" << a << "; b:" << b << std::endl;
+  }
+
   { std::cout << "sizeof bool:" << sizeof(bool) << "; sizeof bool&:" << sizeof(bool&) << std::endl; }
 }
 
 // Differences:
+// - references cannot be uninitialized
 // - cannot change what reference refers
 // - cannot have vector with regular references
 // - no dereference operator for reference, thus no need to dereference a reference to change referred value
 // - reference member makes a class non-assignable
 //
 // Similarities:
+// - references are non-nullable
 // - can create immutable reference what refer to mutable data
 // - cannot create mutable reference what refer to immutable data
 //
