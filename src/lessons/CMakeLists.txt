@@ -16,6 +16,7 @@ add_executable(namespaces namespaces.cpp)
 add_executable(parameter_passing parameter_passing.cpp)
 add_executable(copy_elision copy_elision.cpp)
 add_executable(unfair_const unfair_const.cpp)
+add_executable(static_constexpr static_constexpr.cpp)
 
 target_link_libraries(move_semantics PRIVATE common)
 target_link_libraries(why_emplace PRIVATE common)
