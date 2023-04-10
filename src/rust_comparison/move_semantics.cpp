@@ -39,7 +39,8 @@ int main() {
   }
 
   {
-    std::string str("42");
+    // Move don't work on const objects
+    const std::string str("42");
     std::vector<std::string> vec = getVecWithString(std::move(str));
     std::cout << "vec:" << vec[0] << std::endl;
     std::cout << "str:" << str << std::endl;
@@ -65,12 +66,13 @@ int main() {
 }
 
 // Cons:
-// - need to explicitly use std::move to turn on move semantics
-// - need to remember not to use moved-from object (or add static check for this)
 // - need to implement custom functions (move ctor, assignment, etc.) to "move" data
-// - types need to handle empty but valid states (unique_ptr can have nullptr)
-// - need to make correct destructor for types that support move
-// - destructors are run for moved-from object, but there are no need for this
+// - need to explicitly use std::move to turn on move semantics
+// - non-destructive move, thus destructors are run for moved-from object, but there are no need for this
+//                         thus need to make correct destructor for types that support move
+//                         thus types need to handle empty but valid states (unique_ptr can have nullptr)
+//                         thus need to remember not to use moved-from object (or add static check for this)
+// - move don't work on const objects
 // - implicit deep copy
 //
-// Many of cons can be fixed with "destructive move"
+// Many of cons can be fixed with "destructive move", but not all

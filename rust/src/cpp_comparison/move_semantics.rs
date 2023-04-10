@@ -51,6 +51,7 @@ fn main() {
     }
 
     {
+        // Move works also for immutable objects
         let str: String = "42".to_string();
         let vec: Vec<String> = get_vec_with_string(str);
         println!("vec:{}", vec[0]);
@@ -122,4 +123,5 @@ fn main() {
 // - destructive move, thus no destructor calls
 //                     thus no need to handle empty but valid states for types
 //                     thus cannot use moved-from object
+// - move works also for immutable objects
 // - explicit "clone" call needed to make deep copies, thus more cleaner intentions
