@@ -83,6 +83,28 @@ fn main() {
     }
 
     {
+        // Object cannot be moved using reference
+        let str: String = "42".to_string();
+        let str_ref: &String = &str;
+        // let new_str: String = *str_ref;
+        // error[E0507]: cannot move out of `*str_ref` which is behind a shared reference
+        //   --> src/cpp_comparison/move_semantics.rs:89:31
+        //    |
+        // 89 |         let new_str: String = *str_ref;
+        //    |                               ^^^^^^^^ move occurs because `*str_ref` has type `String`, which does not implement the `Copy` trait
+        //    |
+        // help: consider removing the dereference here
+        //    |
+        // 89 -         let new_str: String = *str_ref;
+        // 89 +         let new_str: String = str_ref;
+        //    |
+        let new_str: String = str_ref.clone();
+        println!("str:{str}");
+        println!("str_ref:{str_ref}");
+        println!("new_str:{new_str}");
+    }
+
+    {
         let a: Box<String> = Box::new(String::from("42"));
         // Copy (deep copy)
         // Rust use move by default, so it's save to make Box copyable because explicit clone call is needed
@@ -117,6 +139,7 @@ fn main() {
 
 // Pros:
 // - move works as simple memcpy, thus no need for customs functions (move ctor, assigment, etc.)
+//                                thus simpler logic (no need to use rvalue cast)
 // - implicit move by default, thus no need to write moves manually everywhere
 //                             thus better performance is also by default
 //                             thus more cleaner parameter passing
@@ -124,4 +147,5 @@ fn main() {
 //                     thus no need to handle empty but valid states for types
 //                     thus cannot use moved-from object
 // - move works also for immutable objects
+// - object cannot be moved using reference
 // - explicit "clone" call needed to make deep copies, thus more cleaner intentions

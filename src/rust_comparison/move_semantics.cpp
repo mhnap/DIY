@@ -47,6 +47,16 @@ int main() {
   }
 
   {
+    // Object can be moved also using reference
+    std::string str("42");
+    std::string& str_ref = str;
+    std::string new_str = std::move(str_ref);
+    std::cout << "str:" << str << std::endl;
+    std::cout << "str_ref:" << str_ref << std::endl;
+    std::cout << "new_str:" << new_str << std::endl;
+  }
+
+  {
     std::unique_ptr<std::string> a = std::make_unique<std::string>("42");
     // unique_ptr cannot be copied (deep copied)
     // C++ use copy by default, so it would be confusing to implicitly make a deep copy when copying a pointer
@@ -66,13 +76,15 @@ int main() {
 }
 
 // Cons:
-// - need to implement custom functions (move ctor, assignment, etc.) to "move" data
+// - move is implemented with rvalue overloading, thus need to implement custom functions (move ctor, assignment, etc.) to "move" data
+//                                                not so simple logic (rvalue references, casts, etc.)
 // - need to explicitly use std::move to turn on move semantics
 // - non-destructive move, thus destructors are run for moved-from object, but there are no need for this
 //                         thus need to make correct destructor for types that support move
 //                         thus types need to handle empty but valid states (unique_ptr can have nullptr)
 //                         thus need to remember not to use moved-from object (or add static check for this)
 // - move don't work on const objects
+// - object can be moved also using reference
 // - implicit deep copy
 //
 // Many of cons can be fixed with "destructive move", but not all
