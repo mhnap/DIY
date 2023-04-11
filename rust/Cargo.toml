@@ -1,7 +1,7 @@
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [package]
-name = "rust"
+name = "DIY"
 version = "0.1.0"
 edition = "2021"
 
@@ -28,3 +28,10 @@ path = "src/cpp_comparison/move_semantics.rs"
 [[bin]]
 name = "references"
 path = "src/cpp_comparison/references.rs"
+
+[[bin]]
+name = "guessing_game"
+path = "src/practices/guessing_game.rs"
+
+[dependencies]
+rand = "0.8.5"

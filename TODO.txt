@@ -9,3 +9,8 @@
 - struct padding
 - false sharing
 - constexpr functions vs macros
+
+Rust:
+- shadowing
+- enums
+- type inference and turbofish
