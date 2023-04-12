@@ -107,7 +107,7 @@ fn main() {
     {
         let a: Box<String> = Box::new(String::from("42"));
         // Copy (deep copy)
-        // Rust use move by default, so it's save to make Box copyable because explicit clone call is needed
+        // Rust use move by default, so it was save to implement Box as copyable because explicit clone call is needed
         let b: Box<String> = a.clone();
         println!("a:{a}; b:{b}");
     }

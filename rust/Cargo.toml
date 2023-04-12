@@ -30,6 +30,10 @@ name = "references"
 path = "src/cpp_comparison/references.rs"
 
 [[bin]]
+name = "variable_shadowing"
+path = "src/cpp_comparison/variable_shadowing.rs"
+
+[[bin]]
 name = "guessing_game"
 path = "src/practices/guessing_game.rs"
 

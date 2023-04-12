@@ -10,7 +10,11 @@
 - false sharing
 - constexpr functions vs macros
 
-Rust:
-- shadowing
+Rust vs C++:
+- move semantics +
+- references +
+- shadowing +
 - enums
 - type inference and turbofish
+- data sizes
+- object slicing
