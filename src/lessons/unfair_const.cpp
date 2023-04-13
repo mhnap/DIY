@@ -42,10 +42,28 @@ void bar(const int& i) {
 
 void test_global() { bar(g_i); }
 
+void mutate_value(int& value, const int& how_much) {
+  const int check = how_much;
+  assert(check == how_much);
+
+  value += how_much;
+
+  assert(check == how_much);
+}
+
+void test_parameters() {
+  int value = 42;
+  mutate_value(value, 1); // Good :)
+  mutate_value(value, value); // Bad :(
+}
+
 int main() {
   // Problem with concurrent access
   test_concurrent();
 
   // The same problem with global object
   test_global();
+
+  // The same problem with function parameters
+  test_parameters();
 }
