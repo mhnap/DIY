@@ -38,6 +38,10 @@ name = "constants"
 path = "src/lessons/constants.rs"
 
 [[bin]]
+name = "type_infer"
+path = "src/lessons/type_infer.rs"
+
+[[bin]]
 name = "guessing_game"
 path = "src/practices/guessing_game.rs"
 

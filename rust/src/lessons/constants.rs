@@ -43,3 +43,5 @@ fn main() {
 
 // https://users.rust-lang.org/t/why-is-type-declaration-necessary-in-constants/14200
 // https://stackoverflow.com/questions/55531587/why-do-i-have-to-specify-the-type-for-const-variables-but-not-for-let-variab
+// https://web.mit.edu/rust-lang_v1.25/arch/amd64_ubuntu1404/share/doc/rust/html/book/first-edition/const-and-static.html
+// https://users.rust-lang.org/t/const-vs-static/52951
