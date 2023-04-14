@@ -42,6 +42,10 @@ name = "type_infer"
 path = "src/lessons/type_infer.rs"
 
 [[bin]]
+name = "data_types"
+path = "src/lessons/data_types.rs"
+
+[[bin]]
 name = "guessing_game"
 path = "src/practices/guessing_game.rs"
 

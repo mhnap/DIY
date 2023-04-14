@@ -15,9 +15,9 @@ Rust:
 - references +
 - variable shadowing +
 - constants +
+- data types and sizes +
 - enums
 - type inference and turbofish
-- data sizes
 - object slicing
 - fair const?
 - error handing
