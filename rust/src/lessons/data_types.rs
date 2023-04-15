@@ -86,6 +86,9 @@ fn main() {
     let arr: [i32; 5] = [1, 2, 3, 4, 5];
     dbg!(arr, size_of_val(&arr));
 
+    // Array slice
+    dbg!(&arr[1..=3]);
+
     // You can also initialize an array to contain the same value for each element by specifying the initial value, followed by a semicolon, and then the length of the array in square brackets
     let arr = [3; 2];
     dbg!(arr, size_of_val(&arr));
