@@ -30,8 +30,18 @@ fn main() {
     dbg!(e, size_of_val(&e));
 
     // Just bool
-    let f = true;
+    let mut f = true;
     dbg!(f, size_of_val(&f));
+
+    // Bool don't have operations support
+    // f += 1;
+    // error[E0368]: binary assignment operation `+=` cannot be applied to type `bool`
+    //   --> src/lessons/data_types.rs:37:5
+    //    |
+    // 37 |     f += 1;
+    //    |     -^^^^^
+    //    |     |
+    //    |     cannot use `+=` on type `bool`
 
     // Char represents a Unicode Scalar Value
     let g = '😻';
@@ -57,9 +67,56 @@ fn main() {
     // 53 |     dbg!(size_of_val(&tup.3));
     //    |                           ^
 
+    // Print addresses
+    dbg!(&tup as *const (i32, f64, i32));
+    dbg!(&tup.0 as *const i32);
+    dbg!(&tup.1 as *const f64);
+    dbg!(&tup.2 as *const i32);
+    dbg!(&i as *const i32);
+    dbg!(&j as *const f64);
+
     // Unit type (empty type). Expressions implicitly return the unit value if they don’t return any other value.
     let unit = ();
     dbg!(unit, size_of_val(&unit));
+
+    // Because the unit type has a size of 0 bytes, its memory address is not particularly useful or meaningful. (according to ChatGPT)
+    println!("unit address = {:p}", &unit);
+
+    // Array
+    let arr: [i32; 5] = [1, 2, 3, 4, 5];
+    dbg!(arr, size_of_val(&arr));
+
+    // You can also initialize an array to contain the same value for each element by specifying the initial value, followed by a semicolon, and then the length of the array in square brackets
+    let arr = [3; 2];
+    dbg!(arr, size_of_val(&arr));
+
+    let first = arr[0];
+    let second = arr[1];
+    // Compiler error if index is past the end of the array and is known at compile time
+    // let third = arr[2];
+    // error: this operation will panic at runtime
+    //   --> src/lessons/data_types.rs:94:17
+    //    |
+    // 94 |     let third = arr[2];
+    //    |                 ^^^^^^ index out of bounds: the length is 2 but the index is 2
+    //    |
+    //    = note: `#[deny(unconditional_panic)]` on by default
+    dbg!(first, second);
+
+    {
+        // Panic if index is past the end of the array and is not known at compile time
+        println!("Please enter an array index.");
+        let mut index = String::new();
+        std::io::stdin()
+            .read_line(&mut index)
+            .expect("Failed to read line");
+        let index: usize = index
+            .trim()
+            .parse()
+            .expect("Index entered was not a number");
+        let element = arr[index];
+        println!("The value of the element at index {index} is: {element}");
+    }
 
     // Overflow will cause panic in debug and two’s complement wrapping in release
     b += 1;
