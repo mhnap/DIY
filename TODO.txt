@@ -16,6 +16,7 @@ Rust:
 - variable shadowing +
 - constants +
 - data types and sizes +
+- functions +
 - enums
 - type inference and turbofish
 - object slicing
