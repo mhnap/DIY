@@ -17,6 +17,7 @@ Rust:
 - constants +
 - data types and sizes +
 - functions +
+- control_flow +
 - enums
 - type inference and turbofish
 - object slicing

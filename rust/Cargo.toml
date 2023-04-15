@@ -50,6 +50,10 @@ name = "functions"
 path = "src/lessons/functions.rs"
 
 [[bin]]
+name = "control_flow"
+path = "src/lessons/control_flow.rs"
+
+[[bin]]
 name = "guessing_game"
 path = "src/practices/guessing_game.rs"
 
