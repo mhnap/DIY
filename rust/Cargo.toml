@@ -61,5 +61,9 @@ path = "src/practices/guessing_game.rs"
 name = "fibonacci"
 path = "src/practices/fibonacci.rs"
 
+[[bin]]
+name = "temperature_conversions"
+path = "src/practices/temperature_conversions.rs"
+
 [dependencies]
 rand = "0.8.5"
