@@ -13,4 +13,14 @@ fn main() {
 
     let guess: u8 = "42".parse().expect("Not a number!");
     dbg!(guess);
+
+    // Rust does not infer function signatures for a reasons
+    let i = foo(1);
+    dbg!(i);
 }
+
+fn foo(x: i32) -> i32 {
+    x
+}
+
+// https://steveklabnik.com/writing/rusts-golden-rule
