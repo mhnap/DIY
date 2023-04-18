@@ -57,5 +57,9 @@ path = "src/lessons/control_flow.rs"
 name = "guessing_game"
 path = "src/practices/guessing_game.rs"
 
+[[bin]]
+name = "fibonacci"
+path = "src/practices/fibonacci.rs"
+
 [dependencies]
 rand = "0.8.5"
