@@ -125,7 +125,19 @@ fn main() {
         println!("The value of the element at index {index} is: {element}");
     }
 
+    // Floating-point types cannot be overflowed, as their range is from -inf to +inf
+    let mut d: f32 = f32::MAX;
+    dbg!(d);
+    d += f32::MAX;
+    dbg!(d);
+
     // Overflow will cause panic in debug and two’s complement wrapping in release
     b += 1;
     dbg!(b);
+
+    // Essentially, "overflow-checks" flag can be set in the profile to disable checks in debug, or enable in release
+    // https://doc.rust-lang.org/cargo/reference/profiles.html
+
+    // Note, that integer overflow does not consider unsafe, it is a defined behavior
+    // https://doc.rust-lang.org/reference/behavior-not-considered-unsafe.html#integer-overflow
 }
