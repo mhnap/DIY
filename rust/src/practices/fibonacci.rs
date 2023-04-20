@@ -1,12 +1,12 @@
-fn fibonacci_recursive(n: u8) -> usize {
+fn fibonacci_number_recursive(n: u8) -> usize {
     if n < 2 {
         n as usize
     } else {
-        fibonacci_recursive(n - 1) + fibonacci_recursive(n - 2)
+        fibonacci_number_recursive(n - 1) + fibonacci_number_recursive(n - 2)
     }
 }
 
-fn fibonacci_iterative(n: u8) -> usize {
+fn fibonacci_number_iterative(n: u8) -> usize {
     let mut prev_number = 0;
     let mut number = if n == 0 { 0 } else { 1 };
     for _ in 1..n {
@@ -32,12 +32,12 @@ fn fibonacci_sequence(n: u8) -> Vec<usize> {
 fn main() {
     let n: u8 = 12;
     println!(
-        "Fibonacci recursive of {n}th number = {}",
-        fibonacci_recursive(n)
+        "Fibonacci {n}th number (recursive) = {}",
+        fibonacci_number_recursive(n)
     );
     println!(
-        "Fibonacci iterative of {n}th number = {}",
-        fibonacci_iterative(n)
+        "Fibonacci {n}th number (iterative) = {}",
+        fibonacci_number_iterative(n)
     );
     println!(
         "Fibonacci sequence to {n}th number = {:?}",
