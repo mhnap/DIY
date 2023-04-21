@@ -135,6 +135,40 @@ fn main() {
         //    |                               ++++++++
         println!("a:moved; b:{b}");
     }
+
+    {
+        fn takes_and_gives_back(str: String) -> String {
+            str
+        }
+        let mut str1: String = "42".to_string();
+        // takes_and_gives_back(str1);
+        // error[E0382]: borrow of moved value: `str1`
+        //    --> src/cpp_comparison/move_semantics.rs:146:20
+        //     |
+        // 144 |         let mut str1: String = "42".to_string();
+        //     |             -------- move occurs because `str1` has type `String`, which does not implement the `Copy` trait
+        // 145 |         takes_and_gives_back(str1);
+        //     |                              ---- value moved here
+        // 146 |         println!("{str1}");
+        //     |                    ^^^^ value borrowed here after move
+        //     |
+        // note: consider changing this parameter type in function `takes_and_gives_back` to borrow instead if owning the value isn't necessary
+        //    --> src/cpp_comparison/move_semantics.rs:141:38
+        //     |
+        // 141 |         fn takes_and_gives_back(str: String) -> String {
+        //     |            --------------------      ^^^^^^ this parameter takes ownership of the value
+        //     |            |
+        //     |            in this function
+        //     = note: this error originates in the macro `$crate::format_args_nl` which comes from the expansion of the macro `println` (in Nightly builds, run with -Z macro-backtrace for more info)
+        // help: consider cloning the value if the performance cost is acceptable
+        //     |
+        // 145 |         takes_and_gives_back(str1.clone());
+        //     |                                  ++++++++
+
+        // str1 is valid because we take and give ownership back to it
+        str1 = takes_and_gives_back(str1);
+        println!("{str1}");
+    }
 }
 
 // Pros:
