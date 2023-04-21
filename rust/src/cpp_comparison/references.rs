@@ -132,6 +132,103 @@ fn main() {
     }
 
     {
+        // Borrowing rules
+        let mut s = String::from("hello");
+        {
+            // We call the action of creating a reference borrowing.
+            let r1 = &s;
+            // Can have two immutable references
+            let r2 = &s;
+            // Mutable references have one big restriction: if you have a mutable reference to a value, you can have no other references to that value.
+            // let r3 = &mut s;
+            // error[E0502]: cannot borrow `s` as mutable because it is also borrowed as immutable
+            //    --> src/cpp_comparison/references.rs:143:22
+            //     |
+            // 138 |             let r1 = &s;
+            //     |                      -- immutable borrow occurs here
+            // ...
+            // 143 |             let r3 = &mut s;
+            //     |                      ^^^^^^ mutable borrow occurs here
+            // ...
+            // 155 |             println!("r1:{r1}; r2:{r2}; r3:{r3}");
+            //     |                           -- immutable borrow later used here
+            // println!("r1:{r1}; r2:{r2}; r3:{r3}");
+        }
+        // Can borrow as mutable because no other references
+        let r1 = &mut s;
+        // let r2 = &mut s;
+        // error[E0499]: cannot borrow `s` as mutable more than once at a time
+        //    --> src/cpp_comparison/references.rs:158:18
+        //     |
+        // 157 |         let r1 = &mut s;
+        //     |                  ------ first mutable borrow occurs here
+        // 158 |         let r2 = &mut s;
+        //     |                  ^^^^^^ second mutable borrow occurs here
+        // 159 |         println!("r1:{r1}; r2:{r2}");
+        //     |                       -- first borrow later used here
+        // println!("r1:{r1}; r2:{r2}");
+
+        // Note that a reference’s scope starts from where it is introduced and continues through the last time that reference is used.
+        let r1 = &s; // no problem
+        let r2 = &s; // no problem
+        println!("r1:{r1}; r2:{r2}");
+        // variables r1 and r2 will not be used after this point
+
+        let r3 = &mut s; // no problem
+        println!("r3:{r3}");
+
+        // Even though borrowing errors may be frustrating at times, remember that it’s the Rust compiler pointing out a potential bug early (at compile time rather than at runtime) and showing you exactly where the problem is.
+        // Then you don’t have to track down why your data isn’t what you thought it was.
+    }
+
+    {
+        // Cannot create dangling reference from value that does not live long enough
+        let s1 = String::from("hello");
+        let mut r1 = &s1;
+        {
+            let s2 = String::from("hello");
+            // r1 = &s2;
+            // error[E0597]: `s2` does not live long enough
+            //    --> src/cpp_comparison/references.rs:188:18
+            //     |
+            // 187 |             let s2 = String::from("hello");
+            //     |                 -- binding `s2` declared here
+            // 188 |             r1 = &s2;
+            //     |                  ^^^ borrowed value does not live long enough
+            // 189 |         }
+            //     |         - `s2` dropped here while still borrowed
+            // 190 |         println!("r1:{r1}");
+            //     |                       -- borrow later used here
+        }
+        println!("r1:{r1}");
+
+        // Cannot create dangling reference from function local data
+        // let reference_to_nothing = dangle();
+        // fn dangle() -> &String {
+        //     let s = String::from("hello");
+        //     &s
+        // }
+        // error[E0106]: missing lifetime specifier
+        //    --> src/cpp_comparison/references.rs:206:24
+        //     |
+        // 206 |         fn dangle() -> &String {
+        //     |                        ^ expected named lifetime parameter
+        //     |
+        //     = help: this function's return type contains a borrowed value, but there is no value for it to be borrowed from
+        // help: consider using the `'static` lifetime
+        //     |
+        // 206 |         fn dangle() -> &'static String {
+        //     |                         +++++++
+
+        // Move ownership out from a function to s
+        let s = no_dangle();
+        fn no_dangle() -> String {
+            let s = String::from("hello");
+            s
+        }
+    }
+
+    {
         println!(
             "sizeof bool:{}; sizeof &bool:{}",
             size_of::<bool>(),
@@ -146,6 +243,8 @@ fn main() {
 // - can have vector with references
 // - need to dereference a reference to change referred value
 // - can assign struct with reference member
+// - guarantees at compile time that no data race (by checking borrowing rules)
+// - guarantees at compile time that no dangling references
 //
 // Similarities:
 // - references are non-nullable
