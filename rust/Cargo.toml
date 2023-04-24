@@ -73,5 +73,9 @@ path = "src/practices/temperature_conversions.rs"
 name = "the_twelve_days_of_christmas"
 path = "src/practices/the_twelve_days_of_christmas.rs"
 
+[[bin]]
+name = "fizzbuzz"
+path = "src/practices/fizzbuzz.rs"
+
 [dependencies]
 rand = "0.8.5"
