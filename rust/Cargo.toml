@@ -81,5 +81,9 @@ path = "src/practices/the_twelve_days_of_christmas.rs"
 name = "fizzbuzz"
 path = "src/practices/fizzbuzz.rs"
 
+[[bin]]
+name = "rectangle_area"
+path = "src/practices/rectangle_area.rs"
+
 [dependencies]
 rand = "0.8.5"
