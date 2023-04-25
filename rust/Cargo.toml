@@ -58,6 +58,10 @@ name = "slice_type"
 path = "src/lessons/slice_type.rs"
 
 [[bin]]
+name = "structs"
+path = "src/lessons/structs.rs"
+
+[[bin]]
 name = "guessing_game"
 path = "src/practices/guessing_game.rs"
 
