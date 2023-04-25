@@ -62,6 +62,10 @@ name = "structs"
 path = "src/lessons/structs.rs"
 
 [[bin]]
+name = "methods"
+path = "src/lessons/methods.rs"
+
+[[bin]]
 name = "guessing_game"
 path = "src/practices/guessing_game.rs"
 
@@ -81,9 +85,6 @@ path = "src/practices/the_twelve_days_of_christmas.rs"
 name = "fizzbuzz"
 path = "src/practices/fizzbuzz.rs"
 
-[[bin]]
-name = "rectangle_area"
-path = "src/practices/rectangle_area.rs"
 
 [dependencies]
 rand = "0.8.5"

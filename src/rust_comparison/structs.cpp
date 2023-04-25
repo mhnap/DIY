@@ -54,4 +54,13 @@ int main() {
     X x = {.a = 1};
     std::cout << x.a << x.b << x.c << std::endl;
   }
+
+  {
+    // Cannot have fields and methods have the same identifiers
+    struct X {
+      int a;
+      // void a() {}
+      // Redefinition of 'a' as different kind of symbol
+    };
+  }
 }
