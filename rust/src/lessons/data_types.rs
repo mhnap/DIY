@@ -141,3 +141,5 @@ fn main() {
     // Note, that integer overflow does not consider unsafe, it is a defined behavior
     // https://doc.rust-lang.org/reference/behavior-not-considered-unsafe.html#integer-overflow
 }
+
+// https://stackoverflow.com/questions/68612328/did-the-designers-of-rust-ever-publicly-say-why-the-syntax-of-indexing-an-array
