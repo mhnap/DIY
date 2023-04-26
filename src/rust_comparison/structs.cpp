@@ -35,13 +35,13 @@ int main() {
   }
   {
     // Bad, not guaranteed to be initialized
-    // Can be seen by -Wuninitialized option
     struct X {
       int a;
       int b;
       int c;
     };
     X x;
+    // error: ‘x.main()::X::a’ is used uninitialized [-Werror=uninitialized]
     std::cout << x.a << x.b << x.c << std::endl;
   }
   {
@@ -51,6 +51,7 @@ int main() {
       int b;
       int c;
     };
+    // error: missing initializer for member ‘main()::X::b’ [-Werror=missing-field-initializers]
     X x = {.a = 1};
     std::cout << x.a << x.b << x.c << std::endl;
   }
