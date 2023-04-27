@@ -146,6 +146,26 @@ fn main() {
         let sq = Rectangle::square(3);
         dbg!(&sq);
     }
+
+    {
+        // impl i8 {}
+        // error[E0390]: cannot define inherent `impl` for primitive types
+        //    --> src/lessons/methods.rs:151:9
+        //     |
+        // 151 |         impl i8 {}
+        //     |         ^^^^^^^
+        //     |
+        //     = help: consider using an extension trait instead
+
+        // impl String {}
+        // error[E0116]: cannot define inherent `impl` for a type outside of the crate where the type is defined
+        //    --> src/lessons/methods.rs:160:9
+        //     |
+        // 160 |         impl String {}
+        //     |         ^^^^^^^^^^^ impl for type defined outside of crate.
+        //     |
+        //     = note: define and implement a trait or new type instead
+    }
 }
 
 // https://www.reddit.com/r/rust/comments/285rfb/what_was_the_design_rationale_for_explicit_self/
