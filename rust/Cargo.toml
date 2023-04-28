@@ -66,6 +66,10 @@ name = "methods"
 path = "src/lessons/methods.rs"
 
 [[bin]]
+name = "enums"
+path = "src/lessons/enums.rs"
+
+[[bin]]
 name = "guessing_game"
 path = "src/practices/guessing_game.rs"
 
