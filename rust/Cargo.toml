@@ -70,6 +70,10 @@ name = "enums"
 path = "src/lessons/enums.rs"
 
 [[bin]]
+name = "pattern_matching"
+path = "src/lessons/pattern_matching.rs"
+
+[[bin]]
 name = "guessing_game"
 path = "src/practices/guessing_game.rs"
 
