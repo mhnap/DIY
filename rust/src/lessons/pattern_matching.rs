@@ -1,4 +1,5 @@
 // https://doc.rust-lang.org/stable/book/ch06-02-match.html
+// https://doc.rust-lang.org/stable/book/ch06-03-if-let.html
 
 fn main() {
     // Rust has an extremely powerful control flow construct called match that allows you to compare a value against a series of patterns and then execute code based on which pattern matches.
@@ -162,5 +163,35 @@ fn main() {
             7 => remove_fancy_hat(),
             _ => (),
         }
+    }
+
+    //
+
+    {
+        // We don’t want to do anything with the None value.
+        // To satisfy the match expression, we have to add _ => () after processing just one variant, which is annoying boilerplate code to add.
+        let config_max = Some(3u8);
+        match config_max {
+            Some(max) => println!("The maximum is configured to be {}", max),
+            _ => (),
+        }
+
+        // The if let syntax lets you combine if and let into a less verbose way to handle values that match one pattern while ignoring the rest.
+        let config_max = Some(3u8);
+        if let Some(max) = config_max {
+            println!("The maximum is configured to be {}", max);
+        }
+
+        // Or we could use an if let and else expression
+        let config_max: Option<u8> = None;
+        if let Some(max) = config_max {
+            println!("The maximum is configured to be {}", max);
+        } else {
+            println!("No configured maximum");
+        }
+
+        // Can use the same syntax with regular variable initialization
+        let Some(value) = Some(3.5) else {panic!()};
+        dbg!(value);
     }
 }
