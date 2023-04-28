@@ -1,3 +1,5 @@
+// https://doc.rust-lang.org/stable/book/ch04-02-references-and-borrowing.html
+
 use std::mem::size_of;
 
 fn main() {

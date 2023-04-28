@@ -1,3 +1,5 @@
+// https://doc.rust-lang.org/stable/book/ch05-03-method-syntax.html
+
 fn main() {
     {
         fn area(width: u32, height: u32) -> u32 {

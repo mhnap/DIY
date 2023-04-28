@@ -1,4 +1,3 @@
-add_executable(test test.cpp)
 add_executable(move_semantics move_semantics.cpp)
 add_executable(why_emplace why_emplace.cpp)
 add_executable(noexcept_vector_type noexcept_vector_type.cpp)

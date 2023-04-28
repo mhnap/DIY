@@ -1,3 +1,5 @@
+// https://doc.rust-lang.org/stable/book/ch02-00-guessing-game-tutorial.html
+
 use std::cmp::Ordering;
 use std::io;
 use std::io::Write;

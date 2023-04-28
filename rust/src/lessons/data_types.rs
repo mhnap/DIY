@@ -1,7 +1,10 @@
+// https://doc.rust-lang.org/stable/book/ch03-02-data-types.html
+
 use std::mem::size_of_val;
 
 fn main() {
-    let a: u8 = 255;
+    // Using type suffix to specify the type
+    let a = 255f32;
     dbg!(a, size_of_val(&a));
 
     // let b: i8 = -255;
@@ -28,6 +31,20 @@ fn main() {
     // Default is f64 for float
     let e = 0.0;
     dbg!(e, size_of_val(&e));
+
+    // No pre/post increment/decrement operation
+    // https://users.rust-lang.org/t/why-cant-i-increment-a-variable-like-this/18287/30
+    // let i = ++0;
+    // error: Rust has no prefix increment operator
+    //   --> src/lessons/data_types.rs:35:13
+    //    |
+    // 35 |     let i = ++0;
+    //    |             ^^ not a valid prefix operator
+    //    |
+    // help: use `+= 1` instead
+    //    |
+    // 35 |     let i = { 0 += 1; 0 };
+    //    |             ~   +++++++++
 
     // Just bool
     let mut f = true;
@@ -74,6 +91,9 @@ fn main() {
     dbg!(&tup.2 as *const i32);
     dbg!(&i as *const i32);
     dbg!(&j as *const f64);
+
+    // More on tuple indexing
+    // https://stackoverflow.com/questions/68612328/did-the-designers-of-rust-ever-publicly-say-why-the-syntax-of-indexing-an-array
 
     // Unit type (empty type). Expressions implicitly return the unit value if they don’t return any other value.
     let unit = ();
@@ -141,5 +161,3 @@ fn main() {
     // Note, that integer overflow does not consider unsafe, it is a defined behavior
     // https://doc.rust-lang.org/reference/behavior-not-considered-unsafe.html#integer-overflow
 }
-
-// https://stackoverflow.com/questions/68612328/did-the-designers-of-rust-ever-publicly-say-why-the-syntax-of-indexing-an-array

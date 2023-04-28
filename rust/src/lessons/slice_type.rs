@@ -1,3 +1,5 @@
+// https://doc.rust-lang.org/stable/book/ch04-03-slices.html
+
 fn first_word_index(s: &String) -> usize {
     let bytes = s.as_bytes();
     for (i, &item) in bytes.iter().enumerate() {

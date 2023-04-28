@@ -1,3 +1,5 @@
+// https://doc.rust-lang.org/stable/book/ch03-01-variables-and-mutability.html
+
 // Cannot create global variable with let
 // let PI = 3.14;
 // error: expected item, found keyword `let`

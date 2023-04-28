@@ -1,3 +1,5 @@
+// https://doc.rust-lang.org/stable/book/ch05-01-defining-structs.html
+
 fn main() {
     // Structs are similar to tuples, in that both hold multiple related values.
     // Like tuples, the pieces of a struct can be different types. Unlike with tuples, in a struct you’ll name each piece of data so it’s clear what the values mean.

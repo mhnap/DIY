@@ -1,3 +1,5 @@
+// https://doc.rust-lang.org/stable/book/ch04-01-what-is-ownership.html
+
 fn get_vec_with_string(str: String) -> Vec<String> {
     let mut vec: Vec<String> = vec![];
     vec.push(str);
