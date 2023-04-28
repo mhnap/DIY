@@ -9,7 +9,6 @@ fn main() {
             V4,
             V6,
         }
-
         // Should be explicitly named
         // let ip = V4;
         // error[E0425]: cannot find value `V4` in this scope
@@ -18,7 +17,6 @@ fn main() {
         // 11 |     let ip = V4;
         //    |              ^^ not found in this scope
         //    |
-
         let ip = IpAddrKind::V4;
         dbg!(&ip);
     }
@@ -60,7 +58,6 @@ fn main() {
         dbg!(&home);
         let loopback = IpAddr::V6(String::from("::1"));
         dbg!(&loopback);
-
         // Here, it’s also easier to see another detail of how enums work:
         // the name of each enum variant that we define also becomes a function that constructs an instance of the enum.
     }
@@ -79,10 +76,6 @@ fn main() {
         dbg!(&home);
         let loopback = IpAddr::V6(String::from("::1"));
         dbg!(&loopback);
-
-        // Can have an array of enum variants even if they store different data types inside.
-        let arr = [home, loopback];
-        dbg!(&arr);
     }
 
     //
@@ -101,10 +94,16 @@ fn main() {
                 dbg!(&self);
             }
         }
-        let quit_msg: Message = Message::Quit;
-        quit_msg.call();
-        let move_msg: Message = Message::Move { x: 1, y: 2 };
-        move_msg.call();
+        // Can have an array of enum variants even if they store different data types inside.
+        let arr = [
+            Message::Quit,
+            Message::Move { x: 1, y: 2 },
+            Message::Write(String::from("Hi")),
+            Message::ChangeColor(0, 1, 2),
+        ];
+        for msg in arr {
+            msg.call();
+        }
     }
 }
 

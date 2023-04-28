@@ -1,4 +1,5 @@
 #include <iostream>
+#include <variant>
 
 int main() {
   // Regular union
@@ -23,9 +24,9 @@ int main() {
     un.s = (char*)"Hello";
     std::cout << "s: " << un.s << std::endl;
 
-    // Bad, got SIGSEGV, need to remember that union value we set previously
+    // Bad, UB, got SIGSEGV, need to remember that union value we set previously
     un.n = 43;
-    std::cout << "s: " << un.s << std::endl;
+    // std::cout << "s: " << un.s << std::endl;
   }
 
   // Tagged union
@@ -77,6 +78,21 @@ int main() {
     un.num_or_str.s = (char*)"Hello";
     un.kind = tagged_num_or_str::kind::str;
     std::cout << "s: " << un.num_or_str.s << std::endl;
+  }
+
+  // C++ safe version of tagged union - std::variant
+  {
+    std::variant<int, std::string> v;
+    v = "Hello";
+    std::cout << "v size: " << sizeof(v) << " " << v.index() << std::endl;
+    v = 42;
+    std::cout << "v size: " << sizeof(v) << " " << v.index() << std::endl;
+    // Good
+    if (std::holds_alternative<int>(v)) {
+      std::cout << get<int>(v);
+    }
+    // Almost good
+    std::cout << get<std::string>(v);
   }
 }
 
