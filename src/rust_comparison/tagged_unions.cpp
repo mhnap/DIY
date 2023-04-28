@@ -89,10 +89,18 @@ int main() {
     std::cout << "v size: " << sizeof(v) << " " << v.index() << std::endl;
     // Good
     if (std::holds_alternative<int>(v)) {
-      std::cout << get<int>(v);
+      std::cout << get<int>(v) << std::endl;
     }
+    // Good
+    struct Visitor {
+      void operator()(int i) const { std::cout << "int: " << i << std::endl; }
+      void operator()(const std::string& s) const { std::cout << "string: " << s << std::endl; }
+    };
+    std::visit(Visitor{}, v);
+    v = "Hello";
+    std::visit(Visitor{}, v);
     // Almost good
-    std::cout << get<std::string>(v);
+    std::cout << get<int>(v);
   }
 }
 
