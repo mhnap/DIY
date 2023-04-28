@@ -1,5 +1,7 @@
 // https://doc.rust-lang.org/stable/book/ch05-01-defining-structs.html
 
+use std::mem::size_of_val;
+
 fn main() {
     // Structs are similar to tuples, in that both hold multiple related values.
     // Like tuples, the pieces of a struct can be different types. Unlike with tuples, in a struct you’ll name each piece of data so it’s clear what the values mean.
@@ -11,7 +13,7 @@ fn main() {
         1,
     );
     user1.2 = String::from("anotheremail@example.com");
-    dbg!(&user1);
+    dbg!(&user1, size_of_val(&user1));
 
     #[derive(Debug)]
     struct User {
@@ -31,7 +33,7 @@ fn main() {
     // To change a value, the entire instance must be mutable.
     // Rust doesn’t allow us to mark only certain fields as mutable.
     user1.email = String::from("anotheremail@example.com");
-    dbg!(&user1);
+    dbg!(&user1, size_of_val(&user1));
 
     // As with any expression, we can construct a new instance of the struct as the last expression in the function body to implicitly return that new instance.
     fn build_user_v1(email: String, username: String) -> User {
@@ -103,8 +105,8 @@ fn main() {
     struct Point(i32, i32, i32);
     let black = Color(0, 0, 0);
     let mut origin = Point(0, 0, 0);
-    dbg!(&black);
-    dbg!(&origin);
+    dbg!(&black, size_of_val(&black));
+    dbg!(&origin, size_of_val(&origin));
 
     // Tuple struct instances are similar to tuples in that you can destructure them into their individual pieces, and you can use a . followed by the index to access an individual value.
     origin.2 += 1;
@@ -122,7 +124,7 @@ fn main() {
 
     // Constructor syntax is designed to be symmetric with pattern syntax. So, tuple struct destructuring looks like this.
     let Point(a, b, c) = origin;
-    dbg!(c);
+    dbg!(c, size_of_val(&c));
 
     //
 
@@ -132,7 +134,7 @@ fn main() {
     #[derive(Debug)]
     struct AlwaysEqual;
     let subject = AlwaysEqual;
-    dbg!(&subject);
+    dbg!(&subject, size_of_val(&subject));
 
     //
 

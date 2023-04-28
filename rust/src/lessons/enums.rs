@@ -1,5 +1,7 @@
 // https://doc.rust-lang.org/stable/book/ch06-01-defining-an-enum.html
 
+use std::mem::size_of_val;
+
 fn main() {
     {
         // Where structs give you a way of grouping together related fields and data, like a Rectangle with its width and height,
@@ -18,7 +20,7 @@ fn main() {
         //    |              ^^ not found in this scope
         //    |
         let ip = IpAddrKind::V4;
-        dbg!(&ip);
+        dbg!(&ip, size_of_val(&ip));
     }
 
     //
@@ -39,12 +41,12 @@ fn main() {
             kind: IpAddrKind::V4,
             address: String::from("127.0.0.1"),
         };
-        dbg!(&home);
+        dbg!(&home, size_of_val(&home));
         let loopback = IpAddr {
             kind: IpAddrKind::V6,
             address: String::from("::1"),
         };
-        dbg!(&loopback);
+        dbg!(&loopback, size_of_val(&loopback));
     }
 
     // Add address using enum
@@ -55,9 +57,9 @@ fn main() {
             V6(String),
         }
         let home = IpAddr::V4(String::from("127.0.0.1"));
-        dbg!(&home);
+        dbg!(&home, size_of_val(&home));
         let loopback = IpAddr::V6(String::from("::1"));
-        dbg!(&loopback);
+        dbg!(&loopback, size_of_val(&loopback));
         // Here, it’s also easier to see another detail of how enums work:
         // the name of each enum variant that we define also becomes a function that constructs an instance of the enum.
     }
@@ -73,9 +75,9 @@ fn main() {
             V6(String),
         }
         let home = IpAddr::V4(127, 0, 0, 1);
-        dbg!(&home);
+        dbg!(&home, size_of_val(&home));
         let loopback = IpAddr::V6(String::from("::1"));
-        dbg!(&loopback);
+        dbg!(&loopback, size_of_val(&loopback));
     }
 
     //
@@ -91,7 +93,7 @@ fn main() {
         }
         impl Message {
             fn call(&self) {
-                dbg!(&self);
+                dbg!(self, size_of_val(self));
             }
         }
         // Can have an array of enum variants even if they store different data types inside.
