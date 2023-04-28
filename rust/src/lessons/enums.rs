@@ -107,6 +107,41 @@ fn main() {
             msg.call();
         }
     }
+
+    //
+
+    {
+        // The Option type encodes the very common scenario in which a value could be something or it could be nothing.
+        let some_number = Some(5);
+        dbg!(&some_number, size_of_val(&some_number));
+        let absent_string: Option<String> = None;
+        dbg!(&absent_string, size_of_val(&absent_string));
+        // Cannot add Option<integer> to integer
+        // let number = 3 + some_number;
+        // error[E0277]: cannot add `Option<{integer}>` to `{integer}`
+        //    --> src/lessons/enums.rs:120:24
+        //     |
+        // 120 |         let number = 3 + some_number;
+        //     |                        ^ no implementation for `{integer} + Option<{integer}>`
+        //     |
+        //     = help: the trait `Add<Option<{integer}>>` is not implemented for `{integer}`
+        //     = help: the following other types implement trait `Add<Rhs>`:
+        //               <&'a f32 as Add<f32>>
+        //               <&'a f64 as Add<f64>>
+        //               <&'a i128 as Add<i128>>
+        //               <&'a i16 as Add<i16>>
+        //               <&'a i32 as Add<i32>>
+        //               <&'a i64 as Add<i64>>
+        //               <&'a i8 as Add<i8>>
+        //               <&'a isize as Add<isize>>
+        //             and 48 others
+
+        // In other words, you have to convert an Option<T> to a T before you can perform T operations with it.
+        // Generally, this helps catch one of the most common issues with null: assuming that something isn’t null when it actually is.
+
+        // This will panic as Option is None
+        println!("{}", absent_string.unwrap());
+    }
 }
 
 // Rust enums are implemented as C tagged unions
