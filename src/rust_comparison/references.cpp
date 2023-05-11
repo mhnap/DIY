@@ -105,6 +105,20 @@ int main() {
     std::cout << "a:" << a << "; b:" << b << std::endl;
   }
 
+  {
+    // Can change the owned value if there is still a valid reference to it
+    std::vector<int> v = {1, 2};
+    int& r = v[0];
+    v = {0, 1, 2, 4};
+    // std::cout << "r:" << r << std::endl;
+    // ==207879==ERROR: AddressSanitizer: heap-use-after-free on address 0x602000000030 at pc 0x55d7bea3baf2 bp 0x7ffc1da8aa80 sp 0x7ffc1da8aa70
+    //READ of size 4 at 0x602000000030 thread T0
+    //    #0 0x55d7bea3baf1 in main /home/mhnap/projects/DIY/src/rust_comparison/references.cpp:113
+    //    #1 0x7fb15ec29d8f in __libc_start_call_main ../sysdeps/nptl/libc_start_call_main.h:58
+    //    #2 0x7fb15ec29e3f in __libc_start_main_impl ../csu/libc-start.c:392
+    //    #3 0x55d7bea3a604 in _start (/home/mhnap/projects/DIY/build/debug/src/rust_comparison/rust_comp_references+0x3604)
+  }
+
   { std::cout << "sizeof bool:" << sizeof(bool) << "; sizeof bool&:" << sizeof(bool&) << std::endl; }
 }
 
@@ -122,6 +136,7 @@ int main() {
 //
 // Cons:
 // - references are implicitly created
+// - no borrow checker, thus references can easily be dangling
 //
 // Notes:
 // - Rust references are more like std::reference_wrapper

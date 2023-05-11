@@ -231,6 +231,39 @@ fn main() {
     }
 
     {
+        // Cannot change the owned value if there is still a valid reference to it
+        // https://rust-lang.github.io/rfcs/2094-nll.html
+        let mut x = 42;
+        let r = &x;
+        // x = 0;
+        // error[E0506]: cannot assign to `x` because it is borrowed
+        //    --> src/cpp_comparison/references.rs:238:9
+        //     |
+        // 237 |         let r = &x;
+        //     |                 -- `x` is borrowed here
+        // 238 |         x = 0;
+        //     |         ^^^^^ `x` is assigned to here but it was already borrowed
+        // 239 |         println!("r:{r}");
+        //     |                      - borrow later used here
+        println!("r:{r}");
+
+        // This example makes even more sense
+        let mut v = vec![1, 2];
+        let r = &v[0];
+        // v = vec![1, 2, 3, 4];
+        // error[E0506]: cannot assign to `v` because it is borrowed
+        //    --> src/cpp_comparison/references.rs:253:9
+        //     |
+        // 252 |         let r = &v[0];
+        //     |                  - `v` is borrowed here
+        // 253 |         v = vec![1, 2, 3, 4];
+        //     |         ^ `v` is assigned to here but it was already borrowed
+        // 254 |         println!("r:{r}");
+        //     |                      - borrow later used here
+        println!("r:{r}");
+    }
+
+    {
         println!(
             "sizeof bool:{}; sizeof &bool:{}",
             size_of::<bool>(),
@@ -257,6 +290,7 @@ fn main() {
 // Pros:
 // - need to explicitly create reference
 // - reference has own distinct type
+// - there is a borrow checker, thus references cannot be dangling
 //
 // Notes:
 // - Rust references are more like std::reference_wrapper

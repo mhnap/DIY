@@ -169,7 +169,26 @@ fn main() {
 
         // str1 is valid because we take and give ownership back to it
         str1 = takes_and_gives_back(str1);
-        println!("{str1}");
+        println!("str1:{str1}");
+    }
+
+    {
+        // Cannot move the owned value if there is still a valid reference to it
+        let mut v = vec![1, 2];
+        let r = &v[0];
+        // let nv = v;
+        // error[E0505]: cannot move out of `v` because it is borrowed
+        //    --> src/cpp_comparison/move_semantics.rs:178:18
+        //     |
+        // 176 |         let mut v = vec![1, 2];
+        //     |             ----- binding `v` declared here
+        // 177 |         let r = &v[0];
+        //     |                  - borrow of `v` occurs here
+        // 178 |         let nv = v;
+        //     |                  ^ move out of `v` occurs here
+        // 179 |         println!("r:{r}");
+        //     |                      - borrow later used here
+        println!("r:{r}");
     }
 }
 
