@@ -1,3 +1,16 @@
+// globalId = groupId * localSize + localId
+// globalSize % localSize == 0
+// numGroups = globalSize / localSize
+
+// localId = subGroupId * subGroupSize + subGroupLocalId
+// numSubGroups = ceil(localSize / subGroupSize)
+
+// localSize SHOULD BE >= maxSubGroupSize, because sub_group_block_read and sub_group_block_write
+// values are p[ sub_group_local_id + max_sub_group_size ]
+
+// If using sub_group_block_read or sub_group_block_write, always should set REQD_SUB_GROUP_SIZE
+// to not have the problem described above
+
 #define _CAT(a, b) a##b
 #define CAT(a, b) _CAT(a, b)
 

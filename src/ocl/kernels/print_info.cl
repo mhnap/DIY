@@ -1,7 +1,3 @@
-// globalId = groupId * localSize + localId
-// globalSize % localSize == 0
-// numGroups = globalSize / localSize
-
 #include "common.cl"
 
 #ifndef PRINT_SUBGROUP_INFO
