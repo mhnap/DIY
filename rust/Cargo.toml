@@ -78,6 +78,10 @@ name = "pattern_matching"
 path = "src/lessons/pattern_matching.rs"
 
 [[bin]]
+name = "modules"
+path = "src/lessons/modules/modules.rs"
+
+[[bin]]
 name = "guessing_game"
 path = "src/practices/guessing_game.rs"
 
