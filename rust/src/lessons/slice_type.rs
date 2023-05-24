@@ -128,8 +128,9 @@ fn main() {
 
     {
         // Just as we might want to refer to part of a string, we might want to refer to part of an array.
-        let a = [1, 2, 3, 4, 5];
-        let slice = &a[1..3];
+        let mut a = [1, 2, 3, 4, 5];
+        // Can be mutable if the underlying data type allows mutation.
+        let slice = &mut a[1..3];
         assert_eq!(slice, &[2, 3]);
         // This slice has the type &[i32].
         // It works the same way as string slices do, by storing a reference to the first element and a length.
@@ -137,3 +138,4 @@ fn main() {
 }
 
 // Rust Slice type is similar to C++ std::string_view and std::span
+// But it's possible to mutate the underlying data if a slice is mutable
