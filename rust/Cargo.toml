@@ -34,6 +34,10 @@ name = "variable_shadowing"
 path = "src/cpp_comparison/variable_shadowing.rs"
 
 [[bin]]
+name = "noalias_optimization"
+path = "src/cpp_comparison/noalias_optimization.rs"
+
+[[bin]]
 name = "constants"
 path = "src/lessons/constants.rs"
 
