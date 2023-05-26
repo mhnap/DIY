@@ -1,3 +1,5 @@
+// https://doc.rust-lang.org/book/ch07-00-managing-growing-projects-with-packages-crates-and-modules.html
+
 // Features sometimes collectively referred to as the module system, include:
 //
 // Packages: A Cargo feature that lets you build, test, and share crates
