@@ -1,4 +1,4 @@
-// https://doc.rust-lang.org/stable/book/ch06-01-defining-an-enum.html
+// https://doc.rust-lang.org/book/ch06-01-defining-an-enum.html
 
 use std::mem::size_of_val;
 

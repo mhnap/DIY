@@ -1,4 +1,4 @@
-// https://doc.rust-lang.org/stable/book/ch03-03-how-functions-work.html
+// https://doc.rust-lang.org/book/ch03-03-how-functions-work.html
 
 fn main() {
     // Rust code uses snake case as the conventional style for function and variable names, in which all letters are lowercase and underscores separate words.

@@ -1,4 +1,4 @@
-// https://doc.rust-lang.org/stable/book/ch03-02-data-types.html
+// https://doc.rust-lang.org/book/ch03-02-data-types.html
 
 use std::mem::size_of_val;
 

@@ -1,4 +1,4 @@
-// https://doc.rust-lang.org/stable/book/ch03-01-variables-and-mutability.html
+// https://doc.rust-lang.org/book/ch03-01-variables-and-mutability.html
 
 fn main() {
     let shadowed_binding = 1.5;

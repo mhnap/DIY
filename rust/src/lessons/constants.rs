@@ -1,4 +1,4 @@
-// https://doc.rust-lang.org/stable/book/ch03-01-variables-and-mutability.html
+// https://doc.rust-lang.org/book/ch03-01-variables-and-mutability.html
 
 // Cannot create global variable with let
 // let PI = 3.14;

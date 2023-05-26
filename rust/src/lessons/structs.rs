@@ -1,4 +1,4 @@
-// https://doc.rust-lang.org/stable/book/ch05-01-defining-structs.html
+// https://doc.rust-lang.org/book/ch05-01-defining-structs.html
 
 use std::mem::size_of_val;
 

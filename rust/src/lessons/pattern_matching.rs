@@ -1,5 +1,5 @@
-// https://doc.rust-lang.org/stable/book/ch06-02-match.html
-// https://doc.rust-lang.org/stable/book/ch06-03-if-let.html
+// https://doc.rust-lang.org/book/ch06-02-match.html
+// https://doc.rust-lang.org/book/ch06-03-if-let.html
 
 fn main() {
     // Rust has an extremely powerful control flow construct called match that allows you to compare a value against a series of patterns and then execute code based on which pattern matches.

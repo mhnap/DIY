@@ -1,4 +1,4 @@
-// https://doc.rust-lang.org/stable/book/ch05-03-method-syntax.html
+// https://doc.rust-lang.org/book/ch05-03-method-syntax.html
 
 fn main() {
     {
