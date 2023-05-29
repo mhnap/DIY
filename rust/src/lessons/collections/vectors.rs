@@ -1,4 +1,5 @@
 // https://doc.rust-lang.org/book/ch08-01-vectors.html
+// https://doc.rust-lang.org/std/vec/struct.Vec.html
 
 fn main() {
     // Rust’s standard library includes a number of very useful data structures called collections.
