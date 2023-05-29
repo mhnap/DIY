@@ -82,6 +82,10 @@ name = "modules"
 path = "src/lessons/modules/modules.rs"
 
 [[bin]]
+name = "vectors"
+path = "src/lessons/collections/vectors.rs"
+
+[[bin]]
 name = "guessing_game"
 path = "src/practices/guessing_game.rs"
 
