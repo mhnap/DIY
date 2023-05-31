@@ -90,6 +90,10 @@ name = "strings"
 path = "src/lessons/collections/strings.rs"
 
 [[bin]]
+name = "hash_maps"
+path = "src/lessons/collections/hash_maps.rs"
+
+[[bin]]
 name = "guessing_game"
 path = "src/practices/guessing_game.rs"
 

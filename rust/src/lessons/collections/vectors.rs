@@ -46,6 +46,28 @@ fn main() {
     //    |                                      ----- immutable borrow later used here
     println!("The first element is: {first}");
 
+    // Ownership is moved into vector.
+    let mut v = Vec::new();
+    let s = "hello".to_owned();
+    v.push(s);
+    dbg!(&v);
+    // dbg!(&s);
+    // error[E0382]: borrow of moved value: `s`
+    //   --> src/lessons/collections/vectors.rs:53:10
+    //    |
+    // 50 |     let s = "hello".to_owned();
+    //    |         - move occurs because `s` has type `String`, which does not implement the `Copy` trait
+    // 51 |     v.push(s);
+    //    |            - value moved here
+    // 52 |     dbg!(&v);
+    // 53 |     dbg!(&s);
+    //    |          ^^ value borrowed here after move
+    //    |
+    // help: consider cloning the value if the performance cost is acceptable
+    //    |
+    // 51 |     v.push(s.clone());
+    //    |             ++++++++
+
     // Printing each element in a vector by iterating over the elements using a for loop.
     let v = vec![100, 32, 57];
     for i in &v {

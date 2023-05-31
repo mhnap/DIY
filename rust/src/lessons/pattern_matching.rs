@@ -182,6 +182,24 @@ fn main() {
             println!("The maximum is configured to be {}", max);
         }
 
+        // Note, don't work in the opposite direction.
+        let config_max = Some(3u8);
+        // if let config_max = Some(max) {
+        //     println!("The maximum is configured to be {}", max);
+        // }
+        // error[E0425]: cannot find value `max` in this scope
+        //    --> src/lessons/pattern_matching.rs:187:34
+        //     |
+        // 187 |         if let config_max = Some(max) {
+        //     |                                  ^^^ not found in this scope
+        //     |
+        // help: consider importing one of these items
+        //     |
+        // 4   | use core::cmp::max;
+        //     |
+        // 4   | use std::cmp::max;
+        //     |
+
         // Or we could use an if let and else expression
         let config_max: Option<u8> = None;
         if let Some(max) = config_max {
