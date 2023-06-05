@@ -113,6 +113,9 @@ path = "src/practices/the_twelve_days_of_christmas.rs"
 name = "fizzbuzz"
 path = "src/practices/fizzbuzz.rs"
 
+[[bin]]
+name = "mean_median_mode"
+path = "src/practices/mean_median_mode.rs"
 
 [dependencies]
 rand = "0.8.5"
