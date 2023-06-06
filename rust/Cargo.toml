@@ -117,5 +117,9 @@ path = "src/practices/fizzbuzz.rs"
 name = "mean_median_mode"
 path = "src/practices/mean_median_mode.rs"
 
+[[bin]]
+name = "pig_latin"
+path = "src/practices/pig_latin.rs"
+
 [dependencies]
 rand = "0.8.5"
