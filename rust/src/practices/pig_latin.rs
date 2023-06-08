@@ -55,7 +55,7 @@ fn str_to_pig_latin(s: &str) -> String {
 
 fn main() {
     loop {
-        print!("Please input your string (`q` to quit) : ");
+        print!("Please input your string (`q` to quit): ");
         io::stdout().flush().expect("Unable to flush stdout");
 
         let mut input = String::new();

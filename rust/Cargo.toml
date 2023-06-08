@@ -121,5 +121,9 @@ path = "src/practices/mean_median_mode.rs"
 name = "pig_latin"
 path = "src/practices/pig_latin.rs"
 
+[[bin]]
+name = "employees_manager"
+path = "src/practices/employees_manager.rs"
+
 [dependencies]
 rand = "0.8.5"
