@@ -98,6 +98,10 @@ name = "hash_maps"
 path = "src/lessons/collections/hash_maps.rs"
 
 [[bin]]
+name = "error_handling"
+path = "src/lessons/error_handling.rs"
+
+[[bin]]
 name = "guessing_game"
 path = "src/practices/guessing_game.rs"
 
