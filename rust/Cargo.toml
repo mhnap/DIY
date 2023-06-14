@@ -38,6 +38,10 @@ name = "noalias_optimization"
 path = "src/cpp_comparison/noalias_optimization.rs"
 
 [[bin]]
+name = "division_by_zero"
+path = "src/cpp_comparison/division_by_zero.rs"
+
+[[bin]]
 name = "constants"
 path = "src/lessons/constants.rs"
 
