@@ -42,6 +42,10 @@ name = "division_by_zero"
 path = "src/cpp_comparison/division_by_zero.rs"
 
 [[bin]]
+name = "duck_typing"
+path = "src/cpp_comparison/duck_typing.rs"
+
+[[bin]]
 name = "constants"
 path = "src/lessons/constants.rs"
 
