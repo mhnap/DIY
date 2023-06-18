@@ -110,6 +110,10 @@ name = "generics"
 path = "src/lessons/generics.rs"
 
 [[bin]]
+name = "traits"
+path = "src/lessons/traits.rs"
+
+[[bin]]
 name = "guessing_game"
 path = "src/practices/guessing_game.rs"
 
