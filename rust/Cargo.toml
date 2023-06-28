@@ -118,6 +118,10 @@ name = "lifetimes"
 path = "src/lessons/lifetimes.rs"
 
 [[bin]]
+name = "tests"
+path = "src/lessons/tests.rs"
+
+[[bin]]
 name = "guessing_game"
 path = "src/practices/guessing_game.rs"
 
