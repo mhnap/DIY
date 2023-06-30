@@ -26,3 +26,5 @@ int main() {
   const int char_result = largest(char_list);
   std::cout << "The largest char is " << char_result << std::endl;
 }
+
+// https://wiki.c2.com/?LatentTypesSmell
