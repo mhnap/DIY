@@ -153,5 +153,9 @@ path = "src/practices/pig_latin.rs"
 name = "employees_manager"
 path = "src/practices/employees_manager.rs"
 
+[[bin]]
+name = "before_main"
+path = "src/experiments/before_main.rs"
+
 [dependencies]
 rand = "0.8.5"
