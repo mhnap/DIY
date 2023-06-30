@@ -169,6 +169,29 @@ fn main() {
         use std::io::{self, Write};
     }
 
+    // Some crazy user can implement its own "std" module.
+    // In such case we can fix ambiguity by using "::" for true std module.
+    // Such technique is often used in macros.
+    {
+        mod std {}
+        // use std::io::{self, Write};
+        // error[E0659]: `std` is ambiguous
+        //    --> src/lessons/modules/modules.rs:176:13
+        //     |
+        // 176 |         use std::io::{self, Write};
+        //     |             ^^^ ambiguous name
+        //     |
+        //     = note: ambiguous because of multiple potential import sources
+        //     = note: `std` could refer to a built-in crate
+        //     = help: use `::std` to refer to this crate unambiguously
+        // note: `std` could also refer to the module defined here
+        //    --> src/lessons/modules/modules.rs:175:9
+        //     |
+        // 175 |         mod std {}
+        //     |         ^^^^^^^^^^
+        use ::std::io::{self, Write};
+    }
+
     // If we want to bring all public items defined in a path into scope, we can specify that path followed by the * glob operator.
     {
         use std::collections::*;
