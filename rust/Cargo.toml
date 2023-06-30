@@ -157,5 +157,9 @@ path = "src/practices/employees_manager.rs"
 name = "before_main"
 path = "src/experiments/before_main.rs"
 
+[[bin]]
+name = "test"
+path = "src/experiments/test.rs"
+
 [dependencies]
 rand = "0.8.5"
