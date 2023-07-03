@@ -1,5 +1,4 @@
 struct A(i8, u8);
-
 struct B(i8, u8);
 
 type C = (i8, u8);
