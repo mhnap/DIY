@@ -173,5 +173,9 @@ path = "src/experiments/raii.rs"
 name = "copy_ref_struct"
 path = "src/experiments/copy_ref_struct.rs"
 
+[[bin]]
+name = "no_default_copy"
+path = "src/experiments/no_default_copy.rs"
+
 [dependencies]
 rand = "0.8.5"
