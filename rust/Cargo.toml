@@ -169,5 +169,9 @@ path = "src/experiments/nominal_vs_structural_typing.rs"
 name = "raii"
 path = "src/experiments/raii.rs"
 
+[[bin]]
+name = "copy_ref_struct"
+path = "src/experiments/copy_ref_struct.rs"
+
 [dependencies]
 rand = "0.8.5"
