@@ -177,5 +177,9 @@ path = "src/experiments/copy_ref_struct.rs"
 name = "no_default_copy"
 path = "src/experiments/no_default_copy.rs"
 
+[[bin]]
+name = "generics_with_ref"
+path = "src/experiments/generics_with_ref.rs"
+
 [dependencies]
 rand = "0.8.5"
