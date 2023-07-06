@@ -18,8 +18,13 @@ Rust:
 - data types and sizes +
 - functions +
 - control_flow +
-- enums
+- enums +
 - type inference and turbofish
 - object slicing
 - fair const?
-- error handing
+- error handing +
+- trait object with type parametrization
+- two different drop
+- sizes +
+- auto traits and marker traits
+- alignment and packed struct
