@@ -185,5 +185,9 @@ path = "src/experiments/no_default_copy.rs"
 name = "sizes"
 path = "src/experiments/sizes.rs"
 
+[[bin]]
+name = "generics_with_derived_clone"
+path = "src/experiments/generics_with_derived_clone.rs"
+
 [dependencies]
 rand = "0.8.5"
