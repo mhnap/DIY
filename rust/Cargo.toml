@@ -126,6 +126,10 @@ name = "closures"
 path = "src/lessons/closures.rs"
 
 [[bin]]
+name = "default_trait"
+path = "src/lessons/default_trait.rs"
+
+[[bin]]
 name = "guessing_game"
 path = "src/practices/guessing_game.rs"
 
