@@ -130,6 +130,10 @@ name = "default_trait"
 path = "src/lessons/default_trait.rs"
 
 [[bin]]
+name = "iterators"
+path = "src/lessons/iterators.rs"
+
+[[bin]]
 name = "guessing_game"
 path = "src/practices/guessing_game.rs"
 
