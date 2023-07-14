@@ -134,6 +134,10 @@ name = "iterators"
 path = "src/lessons/iterators.rs"
 
 [[bin]]
+name = "smart_pointers"
+path = "src/lessons/smart_pointers.rs"
+
+[[bin]]
 name = "guessing_game"
 path = "src/practices/guessing_game.rs"
 
