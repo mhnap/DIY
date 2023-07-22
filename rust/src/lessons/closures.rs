@@ -382,4 +382,31 @@ fn main() {
         // 328 |             F: Fn(),
         //     |                ^^^^ required by this bound in `call_f`
     }
+
+    {
+        fn check_fn<F: Fn()>(f: F) {}
+
+        fn check_fnmut<F: FnMut()>(f: F) {}
+
+        fn check_fnonce<F: FnOnce()>(f: F) {}
+
+        struct A(i32);
+        let mut a = A(1);
+
+        check_fn(|| {
+            &a;
+            // &mut a; // error[E0596]: cannot borrow `a` as mutable, as it is a captured variable in a `Fn` closure
+            // a; // error[E0507]: cannot move out of `a`, a captured variable in an `Fn` closure
+        });
+        check_fnmut(|| {
+            &a;
+            &mut a;
+            // a; // error[E0507]: cannot move out of `a`, a captured variable in an `FnMut` closure
+        });
+        check_fnonce(|| {
+            &a;
+            &mut a;
+            a;
+        });
+    }
 }
