@@ -209,5 +209,9 @@ path = "src/experiments/sizes.rs"
 name = "generics_with_derived_clone"
 path = "src/experiments/generics_with_derived_clone.rs"
 
+[[bin]]
+name = "rc_in_mutex"
+path = "src/experiments/rc_in_mutex.rs"
+
 [dependencies]
 rand = "0.8.5"
