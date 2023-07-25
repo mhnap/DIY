@@ -150,6 +150,10 @@ name = "unsafe"
 path = "src/lessons/unsafe.rs"
 
 [[bin]]
+name = "types"
+path = "src/lessons/types.rs"
+
+[[bin]]
 name = "guessing_game"
 path = "src/practices/guessing_game.rs"
 
