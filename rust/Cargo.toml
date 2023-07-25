@@ -146,6 +146,10 @@ name = "concurrency"
 path = "src/lessons/concurrency.rs"
 
 [[bin]]
+name = "unsafe"
+path = "src/lessons/unsafe.rs"
+
+[[bin]]
 name = "guessing_game"
 path = "src/practices/guessing_game.rs"
 
