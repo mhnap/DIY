@@ -409,4 +409,123 @@ fn main() {
             a;
         });
     }
+
+    //
+
+    // https://doc.rust-lang.org/book/ch19-05-advanced-functions-and-closures.html
+
+    // We’ve talked about how to pass closures to functions; you can also pass regular functions to functions!
+    // This technique is useful when you want to pass a function you’ve already defined rather than defining a new closure.
+    // Functions coerce to the type fn (with a lowercase f), not to be confused with the Fn closure trait.
+    // The fn type is called a function pointer.
+    // Passing functions with function pointers will allow you to use functions as arguments to other functions.
+    fn add_one(x: i32) -> i32 {
+        x + 1
+    }
+    fn do_twice(f: fn(i32) -> i32, arg: i32) -> i32 {
+        f(arg) + f(arg)
+    }
+    let answer = do_twice(add_one, 5);
+    println!("The answer is: {}", answer);
+
+    // Unlike closures, fn is a type rather than a trait, so we specify fn as the parameter type directly rather than declaring a generic type parameter with one of the Fn traits as a trait bound.
+
+    // Function pointers implement all three of the closure traits (Fn, FnMut, and FnOnce), meaning you can always pass a function pointer as an argument for a function that expects a closure.
+    // It’s best to write functions using a generic type and one of the closure traits so your functions can accept either functions or closures.
+
+    // The same behaviour can be achieved with generics on Fn trait.
+    fn do_twice_v2<F: Fn(i32) -> i32>(f: F, arg: i32) -> i32 {
+        f(arg) + f(arg)
+    }
+    let answer = do_twice_v2(add_one, 5);
+    println!("The answer is: {}", answer);
+
+    // That said, one example of where you would want to only accept fn and not closures is when interfacing with external code that doesn’t have closures: C functions can accept functions as arguments, but C doesn’t have closures.
+
+    // We could use a closure.
+    let list_of_numbers = vec![1, 2, 3];
+    let list_of_strings: Vec<String> = list_of_numbers.iter().map(|i| i.to_string()).collect();
+    dbg!(list_of_numbers, list_of_strings);
+
+    // Or we could use a function pointer.
+    let list_of_numbers = vec![1, 2, 3];
+    let list_of_strings: Vec<String> = list_of_numbers.iter().map(ToString::to_string).collect();
+    dbg!(list_of_numbers, list_of_strings);
+
+    // The name of each enum variant that we define also becomes an initializer function.
+    // We can use these initializer functions as function pointers that implement the closure traits, which means we can specify the initializer functions as arguments for methods that take closures.
+    #[derive(Debug)]
+    enum Status {
+        Value(u32),
+        Stop,
+    }
+    let list_of_statuses: Vec<Status> = (0u32..20).map(Status::Value).collect();
+    dbg!(list_of_statuses);
+
+    //
+
+    // Closures are represented by traits, which means you can’t return closures directly.
+    // In most cases where you might want to return a trait, you can instead use the concrete type that implements the trait as the return value of the function.
+    // However, you can’t do that with closures because they don’t have a concrete type that is returnable; you’re not allowed to use the function pointer fn as a return type, for example.
+
+    // NOTE: Seems, that there is bug in book - https://github.com/rust-lang/book/issues/3055
+    // It IS possible to use the function pointer fn as a return type.
+    fn return_fn() -> fn(i32) -> i32 {
+        add_one
+    }
+    let some_fn = return_fn();
+    dbg!(some_fn(1));
+
+    // Even possible to use closure that coerce to fn as a return type.
+    fn return_closure_as_fn() -> fn(i32) -> i32 {
+        |i| i + 2
+    }
+    let some_fn = return_closure_as_fn();
+    dbg!(some_fn(1));
+
+    // Still cannot return closures that don't coerce to fn.
+
+    // fn return_closure() -> fn(i32) -> i32 {
+    //     let num = 2;
+    //     |i| i + num
+    // }
+    // error[E0308]: mismatched types
+    //    --> src/lessons/closures.rs:489:9
+    //     |
+    // 487 |     fn return_closure() -> fn(i32) -> i32 {
+    //     |                            -------------- expected `fn(i32) -> i32` because of return type
+    // 488 |         let num = 2;
+    // 489 |         |i| i + num
+    //     |         ^^^^^^^^^^^ expected fn pointer, found closure
+    //     |
+    //     = note: expected fn pointer `fn(i32) -> i32`
+    //                   found closure `[closure@src/lessons/closures.rs:489:9: 489:12]`
+    // note: closures can only be coerced to `fn` types if they do not capture any variables
+    //    --> src/lessons/closures.rs:489:17
+    //     |
+    // 489 |         |i| i + num
+    //     |                 ^^^ `num` captured here
+
+    // fn return_closure() -> Fn(i32) -> i32 {
+    //     let num = 2;
+    //     |i| i + num
+    // }
+    // error[E0782]: trait objects must include the `dyn` keyword
+    //    --> src/lessons/closures.rs:509:28
+    //     |
+    // 509 |     fn return_closure() -> Fn(i32) -> i32 {
+    //     |                            ^^^^^^^^^^^^^^
+    //     |
+    // help: add `dyn` keyword before this trait
+    //     |
+    // 509 |     fn return_closure() -> dyn Fn(i32) -> i32 {
+    //     |                            +++
+
+    // Only can return closures that don't coerce to fn as trait objects.
+    fn return_closure() -> Box<dyn Fn(i32) -> i32> {
+        let num = 2;
+        Box::new(move |i| i + num)
+    }
+    let some_fn = return_closure();
+    dbg!(some_fn(1));
 }
