@@ -221,5 +221,9 @@ path = "src/experiments/generics_with_derived_clone.rs"
 name = "rc_in_mutex"
 path = "src/experiments/rc_in_mutex.rs"
 
+[[bin]]
+name = "anonymous_type_parameters"
+path = "src/experiments/anonymous_type_parameters.rs"
+
 [dependencies]
 rand = "0.8.5"
