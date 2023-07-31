@@ -55,7 +55,7 @@ mod sealed_method {
 
 mod partially_sealed {
     mod private {
-        pub struct Sealed {}
+        pub struct Sealed;
     }
 
     pub trait MyTrait {
@@ -70,6 +70,29 @@ mod partially_sealed {
     impl MyTrait for MyStruct {
         fn hi(&self) {
             self.hi_from(private::Sealed {});
+        }
+    }
+}
+
+mod partially_sealed_with_bound {
+    mod private {
+        pub struct Sealed;
+        pub trait IsSealed {}
+        impl IsSealed for Sealed {}
+    }
+
+    pub trait MyTrait {
+        fn hi_from<L: private::IsSealed>(&self) {
+            println!("Hi from MyStruct!");
+        }
+        fn hi(&self);
+    }
+
+    pub struct MyStruct;
+
+    impl MyTrait for MyStruct {
+        fn hi(&self) {
+            self.hi_from::<private::Sealed>();
         }
     }
 }
@@ -187,6 +210,39 @@ fn main() {
             //    --> src/experiments/sealed_trait.rs:57:5
             //     |
             // 57  |     mod private {
+            //     |     ^^^^^^^^^^^
+
+            bar.hi();
+        }
+
+        let my_struct = MyStruct;
+        foo(my_struct);
+
+        struct A;
+        impl MyTrait for A {
+            fn hi(&self) {
+                println!("Hi from A!");
+            }
+        }
+        let a = A;
+        foo(a);
+    }
+
+    {
+        use partially_sealed_with_bound::*;
+
+        fn foo(bar: impl MyTrait) {
+            // bar.hi_from::<partially_sealed_with_bound::private::Sealed>();
+            // error[E0603]: module `private` is private
+            //    --> src/experiments/sealed_trait.rs:258:56
+            //     |
+            // 258 |             bar.hi_from::<partially_sealed_with_bound::private::Sealed>();
+            //     |                                                        ^^^^^^^ private module
+            //     |
+            // note: the module `private` is defined here
+            //    --> src/experiments/sealed_trait.rs:78:5
+            //     |
+            // 78  |     mod private {
             //     |     ^^^^^^^^^^^
 
             bar.hi();
