@@ -225,5 +225,9 @@ path = "src/experiments/rc_in_mutex.rs"
 name = "anonymous_type_parameters"
 path = "src/experiments/anonymous_type_parameters.rs"
 
+[[bin]]
+name = "sealed_trait"
+path = "src/experiments/sealed_trait.rs"
+
 [dependencies]
 rand = "0.8.5"
