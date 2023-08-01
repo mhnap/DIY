@@ -212,6 +212,9 @@ fn main() {
             // 57  |     mod private {
             //     |     ^^^^^^^^^^^
 
+            // Can hack this error by using some unsafe code.
+            bar.hi_from(unsafe { std::mem::zeroed() });
+
             bar.hi();
         }
 
