@@ -328,6 +328,12 @@ fn main() {
     // 314 |     let Some(x) = Some(1) else { todo!() };
     //     |                           ++++++++++++++++
 
+    // Note that a refutable pattern in local binding can be handled with an `else` branch.
+    let Some(x) = Some(1) else {
+        panic!();
+    };
+    dbg!(x);
+
     if let x = 5 {
         println!("{}", x);
     };
