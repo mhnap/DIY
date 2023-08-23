@@ -85,4 +85,32 @@ fn main() {
         println!("{number}!");
     }
     println!("LIFTOFF!!!");
+
+    // Different do-while loops.
+    {
+        // Works by using loop with break.
+        let mut vec: Vec<i8> = vec![];
+        loop {
+            let elem = vec.pop();
+            dbg!(elem);
+            if elem.is_none() {
+                break;
+            }
+        }
+
+        // Don't work as it's a regular while-do loop.
+        let mut vec: Vec<i8> = vec![];
+        while let Some(elem) = vec.pop() {
+            dbg!(elem);
+        }
+
+        // Works because the condition is an expression with a bool return type and is continuously executed.
+        // https://www.reddit.com/r/rust/comments/1v9rgp/rust_has_dowhile_loops/
+        let mut vec: Vec<i8> = vec![];
+        while {
+            let elem = vec.pop();
+            dbg!(elem);
+            elem.is_some()
+        } {}
+    }
 }
