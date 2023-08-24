@@ -19,4 +19,27 @@ fn main() {
     let char_list = vec!['y', 'm', 'a', 'q'];
     let result = largest(&char_list);
     println!("The largest char is {}", result);
+
+    //
+
+    // NOTE: Generic type does not mean ANY type.
+
+    // Doesn't work.
+    // fn push_one(vec: &mut Vec<_>) {
+    //     vec.push(1)
+    // }
+
+    // Doesn't work.
+    // fn push_one<T>(vec: &mut Vec<T>) {
+    //     vec.push(1)
+    // }
+
+    // Work.
+    fn push_one(vec: &mut Vec<i32>) {
+        vec.push(1)
+    }
+
+    let mut vec = vec![0];
+    push_one(&mut vec);
+    dbg!(vec);
 }
