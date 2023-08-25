@@ -156,6 +156,30 @@ name = "macros"
 path = "src/lessons/macros.rs"
 
 [[bin]]
+name = "async1"
+path = "src/lessons/async/async1.rs"
+
+[[bin]]
+name = "async2"
+path = "src/lessons/async/async2.rs"
+
+[[bin]]
+name = "async3"
+path = "src/lessons/async/async3.rs"
+
+[[bin]]
+name = "async4"
+path = "src/lessons/async/async4.rs"
+
+[[bin]]
+name = "async5"
+path = "src/lessons/async/async5.rs"
+
+[[bin]]
+name = "async6"
+path = "src/lessons/async/async6.rs"
+
+[[bin]]
 name = "guessing_game"
 path = "src/practices/guessing_game.rs"
 
@@ -235,3 +259,4 @@ path = "src/experiments/sealed_trait.rs"
 rand = "0.8.5"
 hello_macro = { path = "hello_macro" }
 hello_macro_derive = { path = "hello_macro_derive" }
+tokio = { version = "1.29.1", features = ["macros", "rt-multi-thread"] }
