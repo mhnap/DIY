@@ -5,6 +5,10 @@
 // - Attribute-like macros that define custom attributes usable on any item
 // - Function-like macros that look like function calls but operate on the tokens specified as their argument
 
+pub trait HelloMacro {
+    fn hello_macro();
+}
+
 fn main() {
     // Fundamentally, macros are a way of writing code that writes other code, which is known as metaprogramming.
     // Macros expand to produce more code than the code you’ve written manually.
@@ -93,8 +97,6 @@ fn main() {
     // We have defined a trait and its function in the hello_macro crate.
     // At this point, our crate user could implement the trait to achieve the desired functionality, like so:
     {
-        use hello_macro::HelloMacro;
-
         struct Pancakes;
 
         impl HelloMacro for Pancakes {
@@ -132,7 +134,6 @@ fn main() {
     // These crates make it much simpler to parse any sort of Rust code we might want to handle: writing a full parser for Rust code is no simple task.
 
     {
-        use hello_macro::HelloMacro;
         use hello_macro_derive::HelloMacro;
 
         #[derive(HelloMacro)]

@@ -1,4 +1,4 @@
 [package]
-name = "hello_macro"
+name = "cpp_comparison"
 version = "0.1.0"
 edition = "2021"
