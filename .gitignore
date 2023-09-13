@@ -2,5 +2,3 @@
 /cmake-build-*/
 /.idea/
 /rust/target/
-/rust/hello_macro/target/
-/rust/hello_macro_derive/target/

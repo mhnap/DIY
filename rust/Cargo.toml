@@ -153,7 +153,7 @@ path = "src/lessons/types.rs"
 
 [[bin]]
 name = "macros"
-path = "src/lessons/macros.rs"
+path = "src/lessons/macros/macros.rs"
 
 [[bin]]
 name = "async1"
@@ -257,6 +257,6 @@ path = "src/experiments/sealed_trait.rs"
 
 [dependencies]
 rand = "0.8.5"
-hello_macro = { path = "hello_macro" }
-hello_macro_derive = { path = "hello_macro_derive" }
+hello_macro = { path = "src/lessons/macros/hello_macro" }
+hello_macro_derive = { path = "src/lessons/macros/hello_macro_derive" }
 tokio = { version = "1.29.1", features = ["macros", "rt-multi-thread"] }
