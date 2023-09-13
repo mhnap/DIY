@@ -1,0 +1,7 @@
+add_subdirectory(common)
+target_include_directories(common PUBLIC ".")
+add_subdirectory(lessons)
+add_subdirectory(practices)
+add_subdirectory(ocl)
+target_include_directories(ocl PUBLIC ".")
+add_subdirectory(rust_comparison)

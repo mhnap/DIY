@@ -1,4 +1,3 @@
-/build/
-/cmake-build-*/
 /.idea/
 /rust/target/
+/cpp/build/
