@@ -11,7 +11,10 @@ fn read_integers() -> Vec<i32> {
             .read_line(&mut input)
             .expect("Failed to read line.");
 
-        integers = input.split_whitespace().filter_map(|c| c.parse().ok()).collect();
+        integers = input
+            .split_whitespace()
+            .filter_map(|c| c.parse().ok())
+            .collect();
         if integers.is_empty() {
             println!("Failed to read list.");
             continue;
@@ -73,18 +76,18 @@ fn main() {
     let mean = get_mean(&integers);
     match mean {
         Some(mean) => println!("Mean is {mean}!"),
-        None => println!("No mean!")
+        None => println!("No mean!"),
     }
 
     let median = get_median(&integers);
     match median {
         Some(median) => println!("Median is {median}!"),
-        None => println!("No median!")
+        None => println!("No median!"),
     }
 
     let mode = get_mode(&integers);
     match mode {
         Some(mode) => println!("Mode is {:?}!", mode),
-        None => println!("No mode!")
+        None => println!("No mode!"),
     }
 }

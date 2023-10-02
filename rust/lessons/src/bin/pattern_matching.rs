@@ -209,7 +209,7 @@ fn main() {
         }
 
         // Can use the same syntax with regular variable initialization
-        let Some(value) = Some(3.5) else {panic!()};
+        let Some(value) = Some(3.5) else { panic!() };
         dbg!(value);
     }
 

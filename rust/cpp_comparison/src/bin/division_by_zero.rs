@@ -65,7 +65,9 @@ fn main() {
 
     {
         // There is checked_div method that return Option<{number}>.
-        fn get_zero() -> i32 { 0 }
+        fn get_zero() -> i32 {
+            0
+        }
         let a: i32 = 1;
         let b = get_zero();
         let c = a.checked_div(b);
@@ -74,7 +76,9 @@ fn main() {
 
     {
         // There is checks for runtime integer division by zero.
-        fn get_zero() -> i32 { 0 }
+        fn get_zero() -> i32 {
+            0
+        }
         let a = 1;
         let b = get_zero();
         let c = a / b;
@@ -85,7 +89,9 @@ fn main() {
     {
         // There is also unsafe nightly-only API to divide unchecked.
         // https://stackoverflow.com/questions/42544491/can-i-disable-checking-for-zero-division-every-time-the-division-happens
-        fn get_zero() -> i32 { 0 }
+        fn get_zero() -> i32 {
+            0
+        }
         let a = 1;
         let b = get_zero();
         let c = unsafe { std::intrinsics::unchecked_div(a, b) };

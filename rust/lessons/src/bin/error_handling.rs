@@ -1,6 +1,6 @@
 use std::error::Error;
 use std::fs::{self, File};
-use std::io::{self, Read, ErrorKind};
+use std::io::{self, ErrorKind, Read};
 use std::process::{ExitCode, Termination};
 
 // By default main return unit type ().
@@ -92,7 +92,7 @@ fn main() -> Result<(), Box<dyn Error>> {
                 Err(e) => panic!("Problem creating the file: {:?}", e),
             },
             other_error => panic!("Problem opening the file: {:?}", other_error),
-        }
+        },
     };
     dbg!(greeting_file);
 
@@ -115,11 +115,13 @@ fn main() -> Result<(), Box<dyn Error>> {
 
     // Similarly, the `expect` method lets us also choose the panic! error message.
     // Using `expect` instead of `unwrap` and providing good error messages can convey your intent and make tracking down the source of a panic easier.
-    let greeting_file = File::open("hello.txt").expect("hello.txt should be included in this project");
+    let greeting_file =
+        File::open("hello.txt").expect("hello.txt should be included in this project");
 
     // In production-quality code, most Rustaceans choose expect rather than unwrap and give more context about why the operation is expected to always succeed.
     // That way, if your assumptions are ever proven wrong, you have more information to use in debugging.
 
+    //
 
     // When a function’s implementation calls something that might fail, instead of handling the error within the function itself, you can return the error to the calling code so that it can decide what to do.
     // This is known as `propagating` the error and gives more control to the calling code, where there might be more information or logic that dictates how the error should be handled than what you have available in the context of your code.
@@ -209,6 +211,7 @@ fn main() -> Result<(), Box<dyn Error>> {
     // Note that you can use the ? operator on a Result in a function that returns Result, and you can use the ? operator on an Option in a function that returns Option, but you can’t mix and match.
     // The ? operator won’t automatically convert a Result to an Option or vice versa; in those cases, you can use methods like the ok method on Result or the ok_or method on Option to do the conversion explicitly.
 
+    //
 
     // The main function is special because it’s the entry and exit point of executable programs, and there are restrictions on what its return type can be for the programs to behave as expected.
     // The main function may return any types that implement the std::process::Termination trait, which contains a function report that returns an ExitCode.

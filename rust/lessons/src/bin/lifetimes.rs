@@ -13,9 +13,11 @@ fn main() {
     {
         // The main aim of lifetimes is to prevent dangling references, which cause a program to reference data other than the data it’s intended to reference.
         let a = 42;
-        let mut r = &a; // 'a lifetime
+        // 'a lifetime
+        let mut r = &a;
         {
-            let x = 5;   // 'b lifetime
+            // 'b lifetime
+            let x = 5;
             // r = &x;
             // error[E0597]: `x` does not live long enough
             //   --> src/lessons/lifetimes.rs:20:17
@@ -288,7 +290,8 @@ fn main() {
         use std::fmt::Display;
 
         fn longest_with_an_announcement<'a, T>(x: &'a str, y: &'a str, ann: T) -> &'a str
-            where T: Display
+        where
+            T: Display,
         {
             println!("Announcement! {}", ann);
             if x.len() > y.len() {
@@ -301,11 +304,8 @@ fn main() {
         let string1 = String::from("abcd");
         let string2 = "xyz";
 
-        let result = longest_with_an_announcement(
-            string1.as_str(),
-            string2,
-            "Today is someone's birthday!",
-        );
+        let result =
+            longest_with_an_announcement(string1.as_str(), string2, "Today is someone's birthday!");
         println!("The longest string is {}", result);
     }
 }

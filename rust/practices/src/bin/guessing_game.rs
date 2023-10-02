@@ -17,7 +17,7 @@ mod guess {
         pub fn new(value: i32) -> Option<Guess> {
             match value {
                 0..=100 => Some(Guess { value: value as u8 }),
-                _ => None
+                _ => None,
             }
         }
 

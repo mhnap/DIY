@@ -6,9 +6,9 @@ fn main() {
 }
 
 mod employees_manager {
+    use std::collections::{HashMap, HashSet};
     use std::io;
     use std::io::Write;
-    use std::collections::{HashMap, HashSet};
 
     // Each `Employee` and `Department` are unique.
     // So, one `Employee` can be added only to one `Department`.
@@ -24,7 +24,9 @@ mod employees_manager {
 
     impl EmployeesManager {
         pub fn new() -> Self {
-            EmployeesManager { departments: Departments::new() }
+            EmployeesManager {
+                departments: Departments::new(),
+            }
         }
 
         pub fn run(&mut self) {
@@ -53,15 +55,23 @@ mod employees_manager {
             println!("This is a basic employees management tool.");
             println!("You can add or remove employees and their departments in a company.");
             println!("Use this list of commands:");
-            println!(" - \"Add `employee_name` to `department_name`\" to add employee to department.");
+            println!(
+                " - \"Add `employee_name` to `department_name`\" to add employee to department."
+            );
             println!(" - \"Remove `department_name` department\" to remove department.");
             println!(" - \"Remove `employee_name` employee\" to remove employee from department.");
-            println!(" - \"List `department_name` department\" to list department with its employees.");
+            println!(
+                " - \"List `department_name` department\" to list department with its employees."
+            );
             println!(" - \"List `employee_name` employee\" to list employee with its department.");
             println!(" - \"List departments\" to list all departments.");
             println!(" - \"List employees\" to list all employees.");
-            println!(" - \"List departments with employees\" to list all departments with employees.");
-            println!(" - \"List employees with departments\" to list all employees with departments.");
+            println!(
+                " - \"List departments with employees\" to list all departments with employees."
+            );
+            println!(
+                " - \"List employees with departments\" to list all employees with departments."
+            );
             println!(" - \"Quit\" to quit.");
             println!();
         }
@@ -71,7 +81,9 @@ mod employees_manager {
             match command_parts[..] {
                 ["Add", employee, "to", department] => {
                     match self.add_employee_to_department(employee, department) {
-                        None => println!("{employee} was successfully added to {department} department."),
+                        None => println!(
+                            "{employee} was successfully added to {department} department."
+                        ),
                         Some(old_department) => {
                             if old_department == department {
                                 println!("{employee} is already added to {department} department!");
@@ -81,30 +93,25 @@ mod employees_manager {
                         }
                     }
                 }
-                ["Remove", department, "department"] => {
-                    match self.remove_department(department) {
-                        true => println!("{department} department was successfully removed."),
-                        false => println!("Cannot find {department} department!")
-                    }
-                }
-                ["Remove", employee, "employee"] => {
-                    match self.remove_employee(employee) {
-                        true => println!("{employee} was successfully removed."),
-                        false => println!("Cannot find {employee}!")
-                    }
-                }
-                ["List", department, "department"] => {
-                    match self.list_department(department) {
-                        Some(employees) => println!("List of employees in {department} department is {:?}.", employees),
-                        None => println!("Cannot find {department} department!")
-                    }
-                }
-                ["List", employee, "employee"] => {
-                    match self.list_employee(employee) {
-                        Some(department) => println!("{employee}'s department is {department}."),
-                        None => println!("Cannot find {employee}!")
-                    }
-                }
+                ["Remove", department, "department"] => match self.remove_department(department) {
+                    true => println!("{department} department was successfully removed."),
+                    false => println!("Cannot find {department} department!"),
+                },
+                ["Remove", employee, "employee"] => match self.remove_employee(employee) {
+                    true => println!("{employee} was successfully removed."),
+                    false => println!("Cannot find {employee}!"),
+                },
+                ["List", department, "department"] => match self.list_department(department) {
+                    Some(employees) => println!(
+                        "List of employees in {department} department is {:?}.",
+                        employees
+                    ),
+                    None => println!("Cannot find {department} department!"),
+                },
+                ["List", employee, "employee"] => match self.list_employee(employee) {
+                    Some(department) => println!("{employee}'s department is {department}."),
+                    None => println!("Cannot find {employee}!"),
+                },
                 ["List", "departments"] => {
                     let departments = self.list_departments();
                     println!("List of departments is {:?}.", departments);
@@ -130,7 +137,11 @@ mod employees_manager {
         }
 
         // TODO: Investigate why Option<&Department> don't work.
-        fn add_employee_to_department(&mut self, employee: &str, department: &str) -> Option<Department> {
+        fn add_employee_to_department(
+            &mut self,
+            employee: &str,
+            department: &str,
+        ) -> Option<Department> {
             // Check whether this employee is added to some department.
             for (old_department, employees) in &self.departments {
                 if employees.get(employee).is_some() {
