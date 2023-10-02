@@ -113,4 +113,20 @@ fn main() {
             elem.is_some()
         } {}
     }
+
+    // Can break from labeled blocks.
+    let x = true;
+    let result = 'block: {
+        println!("do_thing()");
+        if !x {
+            break 'block 1;
+        }
+        println!("do_next_thing()");
+        if x {
+            break 'block 2;
+        }
+        println!("do_last_thing()");
+        3
+    };
+    dbg!(result);
 }
