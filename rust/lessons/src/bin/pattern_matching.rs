@@ -329,9 +329,12 @@ fn main() {
     //     |                           ++++++++++++++++
 
     // Note that a refutable pattern in local binding can be handled with an `else` branch.
-    let Some(x) = Some(1) else {
-        panic!();
-    };
+    let opt_x = Some(1);
+    let Some(x) = opt_x else { panic!() };
+    dbg!(x);
+
+    // This is the same logic but longer code as above.
+    let x = if let Some(x) = opt_x { x } else { panic!() };
     dbg!(x);
 
     if let x = 5 {
