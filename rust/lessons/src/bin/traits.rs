@@ -356,6 +356,33 @@ fn main() {
             //     |
         }
 
+        // Need to remember that impl Trait returns opaque type.
+        {
+            // Because displayable_v1 returns impl Display, then we only know that s2 is some type that implements Display, not that it is a String which has a push_str method.
+            // Therefore we cannot call s2.push_str(..).
+            fn displayable_v1<T: Display>(t: T) -> impl Display {
+                t
+            }
+            let s = String::from("hello");
+            let mut s = displayable_v1(s);
+            // s.push_str(" world");
+            // error[E0599]: no method named `push_str` found for opaque type `impl std::fmt::Display` in the current scope
+            //    --> lessons/src/bin/traits.rs:368:15
+            //     |
+            // 368 |             s.push_str(" world");
+            //     |               ^^^^^^^^ method not found in `impl Display`
+            println!("{s}");
+
+            // If the return type of displayable was -> T, then this program would compile.
+            fn displayable_v2<T: Display>(t: T) -> T {
+                t
+            }
+            let s = String::from("hello");
+            let mut s = displayable_v2(s);
+            s.push_str(" world");
+            println!("{s}");
+        }
+
         //
 
         // By using a trait bound with an impl block that uses generic type parameters, we can implement methods conditionally for types that implement the specified traits.
