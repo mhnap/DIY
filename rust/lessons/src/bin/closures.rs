@@ -150,6 +150,37 @@ fn main() {
     }
 
     {
+        // https://enet4.github.io/rust-tropes/#toilet-closure
+
+        // The toilet closure is similar to std::mem::drop, i.e. a function that moves an argument and causes it to be dropped.
+        let f = |_| ();
+        let s = String::from("Hello");
+        f(s);
+        // println!("{s}");
+        // error[E0382]: borrow of moved value: `s`
+        //    --> lessons/src/bin/closures.rs:159:19
+        //     |
+        // 157 |         let s = String::from("Hello");
+        //     |             - move occurs because `s` has type `String`, which does not implement the `Copy` trait
+        // 158 |         f(s);
+        //     |           - value moved here
+        // 159 |         println!("{s}");
+        //     |                   ^^^ value borrowed here after move
+        //     |
+        //     = note: this error originates in the macro `$crate::format_args_nl` which comes from the expansion of the macro `println` (in Nightly builds, run with -Z macro-backtrace for more info)
+        // help: consider cloning the value if the performance cost is acceptable
+        //     |
+        // 158 |         f(s.clone());
+        //     |            ++++++++
+
+        // But we can use reference to not consume value.
+        let f = |_| ();
+        let s = String::from("Hello");
+        f(&s);
+        println!("{s}");
+    }
+
+    {
         // Note that we can coerce closure to fn with type annotation manually.
         let expensive_closure: fn(u64) -> u64 = |num: u64| -> u64 {
             println!("calculating slowly...");
@@ -410,6 +441,59 @@ fn main() {
         });
     }
 
+    {
+        // https://rust-book.cs.brown.edu/ch13-01-closures.html#closures-must-name-captured-lifetimes
+
+        // The issue is that we need to tell Rust that the closure returned from `make_a_cloner` must not live longer than `s_ref`.
+        // fn make_a_cloner(s_ref: &str) -> impl Fn() -> String {
+        //     move || s_ref.to_string()
+        // }
+        // error[E0700]: hidden type for `impl Fn() -> String` captures lifetime that does not appear in bounds
+        //    --> lessons/src/bin/closures.rs:448:13
+        //     |
+        // 447 |         fn make_a_cloner(s_ref: &str) -> impl Fn() -> String {
+        //     |                                 ----     ------------------- opaque type defined here
+        //     |                                 |
+        //     |                                 hidden type `[closure@lessons/src/bin/closures.rs:448:13: 448:20]` captures the anonymous lifetime defined here
+        // 448 |             move || s_ref.to_string()
+        //     |             ^^^^^^^^^^^^^^^^^^^^^^^^^
+        //     |
+        // help: to declare that `impl Fn() -> String` captures `'_`, you can add an explicit `'_` lifetime bound
+        //     |
+        // 447 |         fn make_a_cloner(s_ref: &str) -> impl Fn() -> String + '_ {
+        //     |                                                              ++++
+
+        // We can do that explicitly using a lifetime parameter like this:
+        //              vvvv         vv                             vvvv
+        fn make_a_cloner<'a>(s_ref: &'a str) -> impl Fn() -> String + 'a {
+            move || s_ref.to_string()
+        }
+
+        // Rust recognizes that as long as `make_a_cloner` is in use, `s_own` cannot be dropped.
+        let s_own = String::from("Hello world");
+        let cloner = make_a_cloner(&s_own);
+        // drop(s_own);
+        // error[E0505]: cannot move out of `s_own` because it is borrowed
+        //    --> lessons/src/bin/closures.rs:475:14
+        //     |
+        // 473 |         let s_own = String::from("Hello world");
+        //     |             ----- binding `s_own` declared here
+        // 474 |         let cloner = make_a_cloner(&s_own);
+        //     |                                    ------ borrow of `s_own` occurs here
+        // 475 |         drop(s_own);
+        //     |              ^^^^^ move out of `s_own` occurs here
+        // 476 |         cloner();
+        //     |         ------ borrow later used here
+        cloner();
+
+        // Note that we can use the lifetime elision rules to make the function type more concise.
+        // We can remove the <'a> generic so long as we keep an indicator that the returned closure depends on some lifetime.
+        fn make_a_cloner_v2(s_ref: &str) -> impl Fn() -> String + '_ {
+            move || s_ref.to_string()
+        }
+        let cloner = make_a_cloner_v2(&s_own);
+        cloner();
+    }
     //
 
     // https://doc.rust-lang.org/book/ch19-05-advanced-functions-and-closures.html
