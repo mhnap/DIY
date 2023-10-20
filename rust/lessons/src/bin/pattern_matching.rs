@@ -608,6 +608,29 @@ fn main() {
     //     |          |
     //     |          previously used here
 
+    // Ignore all values in array.
+    let a = [("0".to_string(), "1")];
+    let [..] = a;
+    println!("{a:?}");
+
+    // Get first value and ignore rest.
+    let [(n, ..)] = a;
+    // println!("{a:?}");
+    // error[E0382]: borrow of partially moved value: `a`
+    //    --> lessons/src/bin/pattern_matching.rs:618:15
+    //     |
+    // 617 |     let [(n, ..)] = a;
+    //     |           - value partially moved here
+    // 618 |     println!("{a:?}");
+    //     |               ^^^^^ value borrowed here after partial move
+    //     |
+    //     = note: partial move occurs because `a[..].0` has type `String`, which does not implement the `Copy` trait
+    //     = note: this error originates in the macro `$crate::format_args_nl` which comes from the expansion of the macro `println` (in Nightly builds, run with -Z macro-backtrace for more info)
+    // help: borrow this binding in the pattern to avoid moving the value
+    //     |
+    // 617 |     let [(ref n, ..)] = a;
+    //     |           +++
+
     //
 
     // Extra Conditionals with Match Guards
