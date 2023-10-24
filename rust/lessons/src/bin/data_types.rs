@@ -1,4 +1,5 @@
 // https://doc.rust-lang.org/book/ch03-02-data-types.html
+// https://doc.rust-lang.org/rust-by-example/primitives/tuples.html
 
 use std::mem::size_of_val;
 
@@ -71,6 +72,10 @@ fn main() {
     // Tuple
     let tup = (500, 6.4, 1);
     dbg!(tup, size_of_val(&tup));
+
+    // To create one element tuples, the comma is required to tell them apart from a literal surrounded by parentheses.
+    println!("One element tuple: {:?}", (5u32,));
+    println!("Just an integer: {:?}", (5u32));
 
     // Tuple destructuring
     let (i, j, _) = tup;
