@@ -3,6 +3,7 @@
 	"diffEditor.hideUnchangedRegions.enabled": true,
 	"diffEditor.ignoreTrimWhitespace": false,
 	"diffEditor.renderSideBySide": false,
+	"editor.bracketPairColorization.enabled": false,
 	"editor.cursorSurroundingLines": 5,
 	"editor.find.loop": false,
 	"editor.guides.indentation": false,
@@ -21,7 +22,6 @@
 	"window.newWindowDimensions": "fullscreen",
 	"window.restoreFullscreen": true,
 	"workbench.activityBar.location": "hidden",
-	"workbench.colorTheme": "Default Dark+",
 	"workbench.editor.limit.enabled": true,
 	"workbench.editor.limit.value": 5
 }
