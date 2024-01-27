@@ -4,13 +4,110 @@
 	"diffEditor.renderSideBySide": false,
 	"editor.accessibilitySupport": "off",
 	"editor.bracketPairColorization.enabled": false,
+	"editor.fontFamily": "JetBrains Mono",
+	"editor.fontSize": 13,
 	"editor.guides.indentation": false,
 	"editor.inlayHints.enabled": "offUnlessPressed",
 	"editor.largeFileOptimizations": false,
+	"editor.lineHeight": 1.6,
 	"editor.matchBrackets": "near",
-	"editor.minimap.autohide": true,
+	"editor.minimap.enabled": false,
 	"editor.renderWhitespace": "none",
 	"editor.scrollBeyondLastLine": false,
+	"editor.semanticTokenColorCustomizations": {
+		"[Monokai]": {
+			"rules": {
+				"builtinType": {
+					"fontStyle": "",
+					"foreground": "#F92672"
+				},
+				"comment": {
+					"fontStyle": "",
+					"foreground": "#75715E"
+				},
+				"decorator": {
+					"fontStyle": "",
+					"foreground": "#F8F8F2"
+				},
+				"decorator.declaration": {
+					"fontStyle": "",
+					"foreground": "#A6E22E"
+				},
+				"derive": {
+					"fontStyle": "",
+					"foreground": "#6897bb"
+				},
+				"enum": {
+					"fontStyle": "",
+					"foreground": "#b5b6e3"
+				},
+				"enumMember": {
+					"fontStyle": "italic",
+					"foreground": "#b5b6e3"
+				},
+				"function": {
+					"fontStyle": "",
+					"foreground": "#66d9ef"
+				},
+				"function.declaration": {
+					"fontStyle": "",
+					"foreground": "#A6E22E"
+				},
+				"interface": {
+					"fontStyle": "",
+					"foreground": "#6897bb"
+				},
+				"keyword": {
+					"fontStyle": "",
+					"foreground": "#F92672"
+				},
+				"lifetime": {
+					"fontStyle": "italic",
+					"foreground": "#20999D"
+				},
+				"macro": {
+					"fontStyle": "",
+					"foreground": "#4EADE5"
+				},
+				"method": {
+					"fontStyle": "",
+					"foreground": "#66d9ef"
+				},
+				"method.declaration": {
+					"fontStyle": "",
+					"foreground": "#A6E22E"
+				},
+				"namespace": {
+					"fontStyle": "",
+					"foreground": "#b5b6e3"
+				},
+				"operator": {
+					"fontStyle": "",
+					"foreground": "#F92672"
+				},
+				"parameter": {
+					"fontStyle": "",
+					"foreground": "#FD971F"
+				},
+				"property": {
+					"fontStyle": "",
+					"foreground": "#AE81FF"
+				},
+				"struct": {
+					"fontStyle": "",
+					"foreground": "#b5b6e3"
+				},
+				"typeAlias": {
+					"fontStyle": "",
+					"foreground": "#b5b6e3"
+				},
+				"typeParameter": {
+					"fontStyle": "",
+					"foreground": "#20999D"
+				}
+			}
+		}
+	},
 	"editor.smoothScrolling": true,
 	"files.autoSave": "afterDelay",
 	"rust-analyzer.check.allTargets": false,
@@ -22,6 +119,12 @@
 	"window.openFoldersInNewWindow": "on",
 	"window.restoreFullscreen": true,
 	"workbench.activityBar.location": "hidden",
+	"workbench.colorCustomizations": {
+		"[Monokai]": {
+			"statusBarItem.remoteBackground": "#414339"
+		}
+	},
+	"workbench.colorTheme": "Monokai",
 	"workbench.list.horizontalScrolling": true,
 	"workbench.list.smoothScrolling": true,
 	"workbench.tree.enableStickyScroll": true,
