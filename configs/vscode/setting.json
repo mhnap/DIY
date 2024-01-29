@@ -179,8 +179,8 @@
 	"search.showLineNumbers": true,
 	"window.menuBarVisibility": "hidden",
 	"window.newWindowDimensions": "fullscreen",
-	"window.openFoldersInNewWindow": "on",
 	"window.restoreFullscreen": true,
+	"workbench.activityBar.location": "hidden",
 	"workbench.colorCustomizations": {
 		"[Monokai]": {
 			"statusBarItem.remoteBackground": "#414339"
