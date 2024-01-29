@@ -172,6 +172,7 @@
 		}
 	},
 	"files.autoSave": "afterDelay",
+	"git.enableSmartCommit": true,
 	"rust-analyzer.check.allTargets": false,
 	"rust-analyzer.checkOnSave": false,
 	"search.seedWithNearestWord": true,
@@ -180,7 +181,6 @@
 	"window.newWindowDimensions": "fullscreen",
 	"window.openFoldersInNewWindow": "on",
 	"window.restoreFullscreen": true,
-	"workbench.activityBar.location": "hidden",
 	"workbench.colorCustomizations": {
 		"[Monokai]": {
 			"statusBarItem.remoteBackground": "#414339"
