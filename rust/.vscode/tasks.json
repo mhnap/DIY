@@ -1,0 +1,26 @@
+{
+	"version": "2.0.0",
+	"tasks": [
+		{
+			"label": "clear terminal",
+			"type": "shell",
+			"command": "clear",
+			"group": "build"
+		},
+		{
+			"label": "rust: cargo check",
+			"type": "cargo",
+			"command": "check",
+			"problemMatcher": [
+				"$rustc"
+			],
+			"group": {
+				"kind": "build",
+				"isDefault": true
+			},
+			"dependsOn": [
+				"clear terminal"
+			]
+		}
+	]
+}
