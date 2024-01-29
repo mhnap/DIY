@@ -17,98 +17,160 @@
 	"editor.semanticTokenColorCustomizations": {
 		"[Monokai]": {
 			"rules": {
+				"*.unsafe": {
+					"fontStyle": "underline"
+				},
 				"builtinType": {
 					"fontStyle": "",
 					"foreground": "#F92672"
 				},
-				"comment": {
-					"fontStyle": "",
-					"foreground": "#75715E"
-				},
-				"decorator": {
-					"fontStyle": "",
-					"foreground": "#F8F8F2"
-				},
-				"decorator.declaration": {
-					"fontStyle": "",
-					"foreground": "#A6E22E"
-				},
+				"comment": "#75715E",
+				"decorator": "#F8F8F2",
+				"decorator.declaration": "#A6E22E",
 				"derive": {
 					"fontStyle": "",
-					"foreground": "#6897bb"
+					"foreground": "#6897BB"
 				},
 				"enum": {
 					"fontStyle": "",
-					"foreground": "#b5b6e3"
+					"foreground": "#B5B6E3"
 				},
 				"enumMember": {
 					"fontStyle": "italic",
-					"foreground": "#b5b6e3"
+					"foreground": "#B5B6E3"
 				},
-				"function": {
-					"fontStyle": "",
-					"foreground": "#66d9ef"
-				},
-				"function.declaration": {
-					"fontStyle": "",
-					"foreground": "#A6E22E"
-				},
+				"formatSpecifier": "#4EADE5",
+				"function": "#66D9EF",
+				"function.declaration": "#A6E22E",
 				"interface": {
 					"fontStyle": "",
-					"foreground": "#6897bb"
+					"foreground": "#6897BB"
 				},
 				"keyword": {
-					"fontStyle": "",
-					"foreground": "#F92672"
+					"fontStyle": ""
 				},
 				"lifetime": {
 					"fontStyle": "italic",
 					"foreground": "#20999D"
 				},
-				"macro": {
-					"fontStyle": "",
-					"foreground": "#4EADE5"
-				},
-				"method": {
-					"fontStyle": "",
-					"foreground": "#66d9ef"
-				},
-				"method.declaration": {
-					"fontStyle": "",
-					"foreground": "#A6E22E"
-				},
+				"macro": "#4EADE5",
+				"method": "#66D9EF",
+				"method.declaration": "#A6E22E",
 				"namespace": {
 					"fontStyle": "",
-					"foreground": "#b5b6e3"
-				},
-				"operator": {
-					"fontStyle": "",
-					"foreground": "#F92672"
+					"foreground": "#B5B6E3"
 				},
 				"parameter": {
-					"fontStyle": "",
-					"foreground": "#FD971F"
+					"fontStyle": ""
 				},
-				"property": {
-					"fontStyle": "",
-					"foreground": "#AE81FF"
-				},
+				"property": "#AE81FF",
 				"struct": {
 					"fontStyle": "",
-					"foreground": "#b5b6e3"
+					"foreground": "#B5B6E3"
 				},
 				"typeAlias": {
 					"fontStyle": "",
-					"foreground": "#b5b6e3"
+					"foreground": "#B5B6E3"
 				},
 				"typeParameter": {
 					"fontStyle": "",
 					"foreground": "#20999D"
-				}
+				},
+				"variable.declaration.static": "#908B25",
+				"variable.static": "#908B25"
 			}
 		}
 	},
 	"editor.smoothScrolling": true,
+	"editor.tokenColorCustomizations": {
+		"[Monokai]": {
+			"textMateRules": [
+				{
+					"scope": "comment",
+					"settings": {
+						"foreground": "#75715E"
+					}
+				},
+				{
+					"scope": "constant.other",
+					"settings": {
+						"foreground": "#908B25"
+					}
+				},
+				{
+					"scope": "entity.name.function",
+					"settings": {
+						"foreground": "#66D9EF"
+					}
+				},
+				{
+					"scope": "entity.name.function.macro",
+					"settings": {
+						"foreground": "#4EADE5"
+					}
+				},
+				{
+					"scope": "entity.name.namespace",
+					"settings": {
+						"fontStyle": "",
+						"foreground": "#B5B6E3"
+					}
+				},
+				{
+					"scope": "entity.name.type",
+					"settings": {
+						"fontStyle": "",
+						"foreground": "#B5B6E3"
+					}
+				},
+				{
+					"scope": "entity.name.type.lifetime",
+					"settings": {
+						"fontStyle": "italic",
+						"foreground": "#20999D"
+					}
+				},
+				{
+					"scope": "entity.name.type.numeric",
+					"settings": {
+						"foreground": "#F92672"
+					}
+				},
+				{
+					"scope": "entity.name.type.primitive",
+					"settings": {
+						"foreground": "#F92672"
+					}
+				},
+				{
+					"scope": "punctuation.definition.interpolation",
+					"settings": {
+						"foreground": "#4EADE5"
+					}
+				},
+				{
+					"scope": "punctuation.definition.lifetime",
+					"settings": {
+						"fontStyle": "italic",
+						"foreground": "#20999D"
+					}
+				},
+				{
+					"scope": "storage.type",
+					"settings": {
+						"fontStyle": "",
+						"foreground": "#F92672"
+					}
+				},
+				{
+					"scope": "variable.language.self",
+					"settings": {
+						"foreground": "#F92672"
+					}
+				}
+			]
+		}
+	},
 	"files.autoSave": "afterDelay",
 	"rust-analyzer.check.allTargets": false,
 	"rust-analyzer.checkOnSave": false,
