@@ -28,5 +28,15 @@
         "key": "ctrl+delete",
         "command": "deleteWordPartRight",
         "when": "textInputFocus && !editorReadonly"
+    },
+    {
+        "key": "alt+left",
+        "command": "workbench.action.navigateBack",
+        "when": "canNavigateBack"
+    },
+    {
+        "key": "alt+right",
+        "command": "workbench.action.navigateForward",
+        "when": "canNavigateForward"
     }
 ]
