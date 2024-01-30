@@ -38,5 +38,10 @@
         "key": "alt+right",
         "command": "workbench.action.navigateForward",
         "when": "canNavigateForward"
+    },
+    {
+        "key": "f4",
+        "command": "git.openFile",
+        "when": "isInDiffEditor"
     }
 ]
