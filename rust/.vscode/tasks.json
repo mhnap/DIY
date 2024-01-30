@@ -8,7 +8,7 @@
 			"group": "build"
 		},
 		{
-			"label": "rust: cargo check",
+			"label": "cargo check",
 			"type": "cargo",
 			"command": "check",
 			"problemMatcher": [
