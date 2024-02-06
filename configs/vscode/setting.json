@@ -82,6 +82,7 @@
 		}
 	},
 	"editor.smoothScrolling": true,
+	"editor.stickyScroll.enabled": false,
 	"editor.tokenColorCustomizations": {
 		"[Monokai]": {
 			"textMateRules": [
@@ -143,6 +144,12 @@
 					}
 				},
 				{
+					"scope": "keyword.operator",
+					"settings": {
+						"foreground": "#F8F8F2"
+					}
+				},
+				{
 					"scope": "punctuation.definition.interpolation",
 					"settings": {
 						"foreground": "#4EADE5"
@@ -173,6 +180,7 @@
 	},
 	"files.autoSave": "afterDelay",
 	"git.enableSmartCommit": true,
+	"gitlens.currentLine.enabled": false,
 	"rust-analyzer.check.allTargets": false,
 	"rust-analyzer.checkOnSave": false,
 	"search.seedWithNearestWord": true,
@@ -187,8 +195,9 @@
 		}
 	},
 	"workbench.colorTheme": "Monokai",
+	"workbench.editor.limit.enabled": true,
+	"workbench.editor.limit.perEditorGroup": true,
 	"workbench.list.horizontalScrolling": true,
 	"workbench.list.smoothScrolling": true,
-	"workbench.tree.enableStickyScroll": true,
 	"workbench.tree.renderIndentGuides": "none"
 }
