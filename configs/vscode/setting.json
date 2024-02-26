@@ -188,7 +188,6 @@
 	"window.menuBarVisibility": "hidden",
 	"window.newWindowDimensions": "fullscreen",
 	"window.restoreFullscreen": true,
-	"workbench.activityBar.location": "hidden",
 	"workbench.colorCustomizations": {
 		"[Monokai]": {
 			"statusBarItem.remoteBackground": "#414339"
