@@ -144,7 +144,7 @@
 					}
 				},
 				{
-					"scope": "keyword.operator",
+					"scope": "keyword.operator.access.dot",
 					"settings": {
 						"foreground": "#F8F8F2"
 					}
@@ -183,8 +183,10 @@
 	"gitlens.currentLine.enabled": false,
 	"rust-analyzer.check.allTargets": false,
 	"rust-analyzer.checkOnSave": false,
+	"rust-analyzer.semanticHighlighting.operator.enable": false,
 	"search.seedWithNearestWord": true,
 	"search.showLineNumbers": true,
+	"security.promptForLocalFileProtocolHandling": false,
 	"window.menuBarVisibility": "hidden",
 	"window.newWindowDimensions": "fullscreen",
 	"window.restoreFullscreen": true,
