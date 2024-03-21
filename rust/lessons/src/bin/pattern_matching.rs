@@ -505,6 +505,12 @@ fn main() {
 
     // Destructuring with patterns is a convenient way to use pieces of values, such as the value from each field in a struct, separately from each other.
 
+    // Destructuring can be used in function parameters as well.
+    fn destruct(((feet, inches), Point { x, y }): ((i32, i32), Point)) {
+        dbg!(feet, inches, x, y);
+    }
+    destruct(((3, 10), Point { x: 3, y: -10 }));
+
     //
 
     // Ignoring an Entire Value with _
