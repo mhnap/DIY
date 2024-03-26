@@ -1,4 +1,5 @@
 {
+	"bookmarks.sideBar.countBadge": "off",
 	"diffEditor.hideUnchangedRegions.enabled": true,
 	"diffEditor.ignoreTrimWhitespace": false,
 	"diffEditor.renderSideBySide": false,
@@ -150,6 +151,12 @@
 					}
 				},
 				{
+					"scope": "punctuation.brackets.angle",
+					"settings": {
+						"foreground": "#F92672"
+					}
+				},
+				{
 					"scope": "punctuation.definition.interpolation",
 					"settings": {
 						"foreground": "#4EADE5"
@@ -184,7 +191,6 @@
 	"rust-analyzer.check.allTargets": false,
 	"rust-analyzer.checkOnSave": false,
 	"rust-analyzer.semanticHighlighting.operator.enable": false,
-	"search.seedWithNearestWord": true,
 	"search.showLineNumbers": true,
 	"security.promptForLocalFileProtocolHandling": false,
 	"window.menuBarVisibility": "hidden",
@@ -198,6 +204,7 @@
 	"workbench.colorTheme": "Monokai",
 	"workbench.editor.limit.enabled": true,
 	"workbench.editor.limit.perEditorGroup": true,
+	"workbench.editor.limit.value": 20,
 	"workbench.list.horizontalScrolling": true,
 	"workbench.list.smoothScrolling": true,
 	"workbench.tree.renderIndentGuides": "none"
