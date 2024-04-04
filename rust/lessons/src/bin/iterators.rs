@@ -146,4 +146,29 @@ fn main() {
 
     // Iterators, although a high-level abstraction, get compiled down to roughly the same code as if you’d written the lower-level code yourself.
     // Iterators are one of Rust’s zero-cost abstractions, by which we mean using the abstraction imposes no additional runtime overhead.
+
+    //
+
+    // https://doc.rust-lang.org/rust-by-example/error/iter_result.html
+    // https://diaries.vercel.app/collecting-result
+
+    // An iterator of Result<T, E> items can be collected into Result<Collection<T>, E>.
+    // Result implements FromIterator so that a vector of results (Vec<Result<T, E>>) can be turned into a result with a vector (Result<Vec<T>, E>).
+    // Once an Result::Err is found, the iteration will terminate.
+    let strings = vec!["tofu", "93", "18"];
+    let numbers: Result<Vec<_>, _> = strings.into_iter().map(|s| s.parse::<i32>()).collect();
+    assert!(numbers.is_err());
+
+    let strings = vec!["93", "18"];
+    let numbers: Result<Vec<_>, _> = strings.into_iter().map(|s| s.parse::<i32>()).collect();
+    assert_eq!(numbers, Ok(vec![93, 18]));
+
+    // This same technique can be used with Option.
+    let strings = vec!["tofu", "93", "18"];
+    let numbers: Option<Vec<_>> = strings.into_iter().map(|s| s.parse::<i32>().ok()).collect();
+    assert!(numbers.is_none());
+
+    let strings = vec!["93", "18"];
+    let numbers: Option<Vec<_>> = strings.into_iter().map(|s| s.parse::<i32>().ok()).collect();
+    assert_eq!(numbers, Some(vec![93, 18]));
 }
