@@ -1,3 +1,10 @@
 [workspace]
-members = ["cpp_comparison", "experiments", "lessons", "practices", "dtolnay_quiz"]
+members = [
+    "cpp_comparison",
+    "experiments",
+    "lessons",
+    "practices",
+    "dtolnay_quiz",
+    "crates",
+]
 resolver = "2"
