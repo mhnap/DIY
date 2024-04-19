@@ -1,9 +1,9 @@
 [package]
-name = "lessons"
+name = "books_trpl"
 version = "0.1.0"
 edition = "2021"
 
 [dependencies]
 tokio = { version = "1.29.1", features = ["macros", "rt-multi-thread"] }
-hello_macro_derive = { path = "../macros/hello_macro_derive" }
+books_trpl_proc_macro = { path = "../trpl_proc_macro" }
 rand = "0.8.5"

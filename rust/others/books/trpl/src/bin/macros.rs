@@ -134,7 +134,7 @@ fn main() {
     // These crates make it much simpler to parse any sort of Rust code we might want to handle: writing a full parser for Rust code is no simple task.
 
     {
-        use hello_macro_derive::HelloMacro;
+        use books_trpl_proc_macro::HelloMacro;
 
         #[derive(HelloMacro)]
         struct Pancakes;

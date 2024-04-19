@@ -1,5 +1,5 @@
 [package]
-name = "crates"
+name = "my_crates_usage"
 version = "0.1.0"
 edition = "2021"
 
