@@ -5,3 +5,4 @@ edition = "2021"
 
 [dependencies]
 structural-convert = { version = "0.13" }
+thiserror = { version = "1.0.59" }
