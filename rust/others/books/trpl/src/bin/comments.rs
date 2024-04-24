@@ -30,34 +30,32 @@ fn main() {
     Note: The previous column of `*` was entirely for style. There's
     no actual need for it.
     */
+}
 
-    //
+pub mod intra_rustdoc_links {
+    //! AST types representing various typed SQL expressions. Almost all types
+    //! implement either [`Expression`] or [`AsExpression`].
 
-    mod intra_rustdoc_links {
-        //! AST types representing various typed SQL expressions. Almost all types
-        //! implement either [`Expression`] or [`AsExpression`].
+    /// Represents a typed fragment of SQL. Apps should not need to implement this
+    /// type directly, but it may be common to use this as type boundaries.
+    /// Libraries should consider using [`infix_predicate!`] or
+    /// [`postfix_predicate!`] instead of implementing this directly.
+    pub trait Expression {
+        type SqlType;
+    }
 
-        /// Represents a typed fragment of SQL. Apps should not need to implement this
-        /// type directly, but it may be common to use this as type boundaries.
-        /// Libraries should consider using [`infix_predicate!`] or
-        /// [`postfix_predicate!`] instead of implementing this directly.
-        pub trait Expression {
-            type SqlType;
-        }
-
-        /// Describes how a type can be represented as an expression for a given type.
-        /// These types couldn't just implement [`Expression`] directly, as many things
-        /// can be used as an expression of multiple types. ([`String`] for example, can
-        /// be used as either [`VarChar`] or [text type][`Text`]).
-        /// Taken from [this link][Link].
-        ///
-        /// [`VarChar`]: super::VarChar
-        /// [`Text`]: super::Text
-        /// [Link]: https://rust-lang.github.io/rfcs/1946-intra-rustdoc-links.html
-        pub trait AsExpression<T> {
-            type Expression: Expression<SqlType = T>;
-            fn as_expression(self) -> Self::Expression;
-        }
+    /// Describes how a type can be represented as an expression for a given type.
+    /// These types couldn't just implement [`Expression`] directly, as many things
+    /// can be used as an expression of multiple types. ([`String`] for example, can
+    /// be used as either [`VarChar`] or [text type][`Text`]).
+    /// Taken from [this link][Link].
+    ///
+    /// [`VarChar`]: super::VarChar
+    /// [`Text`]: super::Text
+    /// [Link]: https://rust-lang.github.io/rfcs/1946-intra-rustdoc-links.html
+    pub trait AsExpression<T> {
+        type Expression: Expression<SqlType = T>;
+        fn as_expression(self) -> Self::Expression;
     }
 }
 
