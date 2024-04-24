@@ -163,4 +163,30 @@ fn main() {
 
     // Also note that we switched the type of the t parameter from T to &T. Because the type might not be Sized, we need to use it behind some kind of pointer.
     // In this case, we’ve chosen a reference.
+
+    struct Foo<T>(T);
+    struct Bar<T: ?Sized>(T);
+
+    // struct FooUse(Foo<[i32]>);
+    //     error[E0277]: the size for values of type `[i32]` cannot be known at compilation time
+    //     --> others/books/trpl/src/bin/types.rs:170:19
+    //      |
+    //  170 |     struct FooUse(Foo<[i32]>); // error: Sized is not implemented for [i32]
+    //      |                   ^^^^^^^^^^ doesn't have a size known at compile-time
+    //      |
+    //      = help: the trait `Sized` is not implemented for `[i32]`
+    //  note: required by a bound in `Foo`
+    //     --> others/books/trpl/src/bin/types.rs:167:16
+    //      |
+    //  167 |     struct Foo<T>(T);
+    //      |                ^ required by this bound in `Foo`
+    //  help: you could relax the implicit `Sized` bound on `T` if it were used through indirection like `&T` or `Box<T>`
+    //     --> others/books/trpl/src/bin/types.rs:167:16
+    //      |
+    //  167 |     struct Foo<T>(T);
+    //      |                ^  - ...if indirection were used here: `Box<T>`
+    //      |                |
+    //      |                this could be changed to `T: ?Sized`...
+
+    struct BarUse(Bar<[i32]>);
 }
