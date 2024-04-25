@@ -88,4 +88,9 @@ fn main() {
     //  If not, consider using anyhow to wrap sub-errors in application code.
     //  If they are needed, encode them in an enum and provide conversions. Consider using thiserror to help with this.
     // Consider using the anyhow crate for convenient, idiomatic error handling.
+
+    //
+
+    // https://www.reddit.com/r/rust/comments/gj8inf/rust_structuring_and_handling_errors_in_2020/
+    // Above link contains additional information about error handling, as well as an interesting discussion with burntsushi.
 }
