@@ -6,7 +6,6 @@
 	"editor.accessibilitySupport": "off",
 	"editor.bracketPairColorization.enabled": false,
 	"editor.fontFamily": "JetBrains Mono",
-	"editor.fontSize": 13,
 	"editor.guides.indentation": false,
 	"editor.inlayHints.enabled": "offUnlessPressed",
 	"editor.largeFileOptimizations": false,
@@ -77,6 +76,8 @@
 					"fontStyle": "",
 					"foreground": "#20999D"
 				},
+				"variable.constant": "#908B25",
+				"variable.declaration.constant": "#908B25",
 				"variable.declaration.static": "#908B25",
 				"variable.static": "#908B25"
 			}
@@ -187,9 +188,11 @@
 	},
 	"files.autoSave": "afterDelay",
 	"git.enableSmartCommit": true,
+	"gitlens.codeLens.enabled": false,
 	"gitlens.currentLine.enabled": false,
 	"rust-analyzer.check.allTargets": false,
 	"rust-analyzer.checkOnSave": false,
+	"rust-analyzer.lens.implementations.enable": false,
 	"rust-analyzer.semanticHighlighting.operator.enable": false,
 	"search.showLineNumbers": true,
 	"security.promptForLocalFileProtocolHandling": false,
