@@ -6,3 +6,4 @@ edition = "2021"
 [dependencies]
 structural-convert = { version = "0.13" }
 thiserror = { version = "1.0.59" }
+relative-path = "1.9.2"

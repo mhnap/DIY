@@ -70,7 +70,7 @@ fn dbg_path(var: &str, path: &Path) {
 }
 
 // On Unix:
-//
+
 // var: 'unix_style'
 // debug: '"/Users/Administrator/projects"'
 // display: '/Users/Administrator/projects'
@@ -132,6 +132,7 @@ fn dbg_path(var: &str, path: &Path) {
 //
 
 // On Windows:
+
 // var: 'unix_style'
 // debug: '"/Users/Administrator/projects"'
 // display: '/Users/Administrator/projects'
