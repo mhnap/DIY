@@ -4,6 +4,8 @@ version = "0.1.0"
 edition = "2021"
 
 [dependencies]
-structural-convert = { version = "0.13" }
-thiserror = { version = "1.0.59" }
+structural-convert = "0.13"
+thiserror = "1.0.59"
 relative-path = "1.9.2"
+temp-dir = "0.1.13"
+temp-file = "0.1.8"
