@@ -207,23 +207,32 @@ fn main() {
     }
 
     {
+        // https://www.reddit.com/r/rust/comments/wvhu6z/generic_param_accepts_both_referencetype_and/
         let mut a = 1;
 
         // Generics match concrete type.
-        fn foo<T>(t: T) {}
+        fn foo<T>(t: T) {
+            println!("T is {}", std::any::type_name::<T>());
+        }
         foo(a); // T is i32
         foo(&a); // T is &i32
         foo(&mut a); // T is &mut i32
+        foo::<&i32>(&mut a); // Can make T as &i32.
 
         // When there is ref or mut ref with a generic type, it adds just constraints.
-        fn bar<T>(t: &T) {}
+        fn bar<T>(t: &T) {
+            println!("T is {}", std::any::type_name::<T>());
+        }
         // bar(a); // error[E0308]: mismatched types
-        bar(&a); // T is &i32
-        bar(&mut a); // T is &mut i32
+        bar::<i32>(&a); // T is i32
+        bar::<&i32>(&&a); // Need to add one more reference to make T as &i32.
+        bar(&mut a); // T is i32
 
-        fn baz<T>(t: &mut T) {}
+        fn baz<T>(t: &mut T) {
+            println!("T is {}", std::any::type_name::<T>());
+        }
         // baz(a); // error[E0308]: mismatched types
         // baz(&a); // error[E0308]: mismatched types
-        baz(&mut a); // T is &mut i32
+        baz(&mut a); // T is i32
     }
 }
