@@ -159,4 +159,45 @@ fn main() {
             dbg!(err);
         }
     }
+
+    // Can use untagged enum representation.
+    #[derive(Debug, Deserialize, Serialize)]
+    pub struct Plugins {
+        plugins: Vec<Plugin>,
+    }
+
+    #[derive(Debug, Deserialize, Serialize)]
+    pub struct Plugin {
+        pub check_delay_sec: i64,
+        pub plugin_config: PluginConfig,
+    }
+
+    #[derive(Debug, Deserialize, Serialize)]
+    #[serde(untagged)]
+    pub enum PluginConfig {
+        Empty,
+        Ping(String),
+        SystemdUnitsChecker(Vec<String>),
+    }
+
+    let json = serde_json::json!({
+        "plugins":
+            [
+             {
+                "check_delay_sec": 6,
+                "plugin_config": null
+             },
+             {
+                "check_delay_sec": 7,
+                "plugin_config": "8.8.8.8"
+             },
+             {
+                "check_delay_sec": 3,
+                "plugin_config": ["0.0.0.0", "1.1.1.1"]
+             },
+            ]
+    });
+
+    let data: Plugins = serde_json::from_value(json).unwrap();
+    dbg!(data);
 }
