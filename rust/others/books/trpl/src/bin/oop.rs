@@ -218,6 +218,50 @@ fn main() {
     // Dynamic dispatch also prevents the compiler from choosing to inline a method’s code, which in turn prevents some optimizations.
     // However, we did get extra flexibility in the code that we wrote and were able to support, so it’s a trade-off to consider.
 
+    // Box<dyn Trait> is the same as Box<dyn Trait + 'static>.
+    // https://doc.rust-lang.org/stable/reference/lifetime-elision.html#default-trait-object-lifetimes
+    // https://doc.rust-lang.org/stable/reference/type-coercions.html?highlight=unsizing#unsized-coercions
+    // https://github.com/rust-lang/rfcs/blob/master/text/0192-bounds-on-object-and-generic-types.md
+    // https://stackoverflow.com/questions/25959075/why-explicit-lifetime-bound-required-for-boxt-in-struct
+    // https://www.reddit.com/r/rust/comments/r724o0/lifetime_of_boxed_trait_objects/
+    // https://github.com/rust-lang/rust/issues/80675
+    // https://users.rust-lang.org/t/why-this-impl-type-lifetime-may-not-live-long-enough/67855
+    // https://users.rust-lang.org/t/box-with-a-trait-object-requires-static-lifetime/35261
+
+    // This can be observed by below example:
+    // fn get_box_draw(draw: impl Draw) -> Box<dyn Draw> {
+    //     Box::new(draw)
+    // }
+    // let draw = get_box_draw(A);
+    // draw.draw();
+    //     error[E0310]: the parameter type `impl Draw` may not live long enough
+    //     --> others/books/trpl/src/bin/oop.rs:224:9
+    //      |
+    //  224 |         Box::new(draw)
+    //      |         ^^^^^^^^^^^^^^
+    //      |         |
+    //      |         the parameter type `impl Draw` must be valid for the static lifetime...
+    //      |         ...so that the type `impl Draw` will meet its required lifetime bounds
+    //      |
+    //  help: consider adding an explicit lifetime bound
+    //      |
+    //  223 |     fn get_box_draw(draw: impl Draw + 'static) -> Box<dyn Draw> {
+    //      |                                     +++++++++
+
+    // And correct version:
+    fn get_box_draw(draw: impl Draw + 'static) -> Box<dyn Draw> {
+        Box::new(draw)
+    }
+    let draw = get_box_draw(A);
+    draw.draw();
+
+    // Or with a custom lifetime:
+    fn get_box_draw_v2<'a>(draw: impl Draw + 'a) -> Box<dyn Draw + 'a> {
+        Box::new(draw)
+    }
+    let draw = get_box_draw_v2(A);
+    draw.draw();
+
     //
 
     // https://doc.rust-lang.org/book/ch17-03-oo-design-patterns.html
