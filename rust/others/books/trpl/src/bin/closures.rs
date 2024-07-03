@@ -439,6 +439,96 @@ fn main() {
             &mut a;
             a;
         });
+
+        //
+
+        // https://stackoverflow.com/questions/50135871/how-can-a-closure-using-the-move-keyword-create-a-fnmut-closure
+        // The `move` modifier controls how captures are moved **into** the closure when it's **created**.
+        // Fn membership is determined by how captures are moved **out of** the closure (or consumed in some other way).
+
+        let a = A(1);
+        check_fn(move || {
+            &a;
+        });
+        // `a` was moved **into** closure, because we specified the `move` keyword.
+        // dbg!(a.0);
+        //     error[E0382]: use of moved value: `a`
+        //     --> others/books/trpl/src/bin/closures.rs:452:9
+        //      |
+        //  447 |         let a = A(1);
+        //      |             - move occurs because `a` has type `A`, which does not implement the `Copy` trait
+        //  448 |         check_fn(move || {
+        //      |                  ------- value moved into closure here
+        //  449 |             &a;
+        //      |              - variable moved due to use in closure
+        //  ...
+        //  452 |         dbg!(a.0);
+        //      |         ^^^^^^^^^ value used here after move
+        //      |
+
+        // But, this is still a `Fn` closure and cannot move out value.
+        // let a = A(1);
+        // check_fn(move || {
+        //     a;
+        // });
+        //     error[E0507]: cannot move out of `a`, a captured variable in an `Fn` closure
+        //     --> others/books/trpl/src/bin/closures.rs:470:21
+        //      |
+        //  468 |                 let a = A(1);
+        //      |                     - captured outer variable
+        //  469 |                 check_fn(move || {
+        //      |                          ------- captured by this `Fn` closure
+        //  470 |                     a;
+        //      |                     ^ move occurs because `a` has type `A`, which does not implement the `Copy` trait
+
+        // https://doc.rust-lang.org/reference/types/closure.html
+        // Note: move closures may still implement Fn or FnMut, even though they capture variables by move.
+        // This is because the traits implemented by a closure type are determined by what the closure does with captured values, not how it captures them.
+
+        let s = String::from("hello world");
+        let my_fnonce = move || s;
+        my_fnonce();
+        // my_fnonce();
+        //     error[E0382]: use of moved value: `my_fnonce`
+        //     --> others/books/trpl/src/bin/closures.rs:488:9
+        //      |
+        //  487 |         my_fnonce();
+        //      |         ----------- `my_fnonce` moved due to this call
+        //  488 |         my_fnonce();
+        //      |         ^^^^^^^^^ value used here after move
+        //      |
+        //  note: closure cannot be invoked more than once because it moves the variable `s` out of its environment
+        //     --> others/books/trpl/src/bin/closures.rs:486:33
+        //      |
+        //  486 |         let my_fnonce = move || s;
+        //      |                                 ^
+        //  note: this value implements `FnOnce`, which causes it to be moved when called
+        //     --> others/books/trpl/src/bin/closures.rs:487:9
+        //      |
+        //  487 |         my_fnonce();
+        //      |         ^^^^^^^^^
+
+        let s = String::from("hello world");
+        let my_fn = move || s.len();
+        my_fn();
+        // With `move`, the variables are moved when the closure is created, not when it is invoked.
+        // So, it's possible to call closure that moved value inside multiple times until it's not trying to move out (Fn/FnMut).
+        my_fn();
+        // But yeah, the value was moved into closure during creation because of `move`.
+        // dbg!(s);
+        //     error[E0382]: use of moved value: `s`
+        //     --> others/books/trpl/src/bin/closures.rs:512:9
+        //      |
+        //  508 |         let s = String::from("hello world");
+        //      |             - move occurs because `s` has type `String`, which does not implement the `Copy` trait
+        //  509 |         let my_fn = move || s.len();
+        //      |                     ------- - variable moved due to use in closure
+        //      |                     |
+        //      |                     value moved into closure here
+        //  ...
+        //  512 |         dbg!(s);
+        //      |         ^^^^^^^ value used here after move
+        //      |
     }
 
     {
