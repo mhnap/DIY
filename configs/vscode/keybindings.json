@@ -43,5 +43,9 @@
         "key": "f4",
         "command": "git.openFile",
         "when": "isInDiffEditor"
+    },
+    {
+        "key": "ctrl+d",
+        "command": "editor.action.duplicateSelection"
     }
 ]
