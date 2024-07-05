@@ -200,4 +200,37 @@ fn main() {
 
     let data: Plugins = serde_json::from_value(json).unwrap();
     dbg!(data);
+
+    // By default serde do not change enum variants names.
+    #[derive(Debug, Deserialize, Serialize)]
+    enum MyEnum {
+        VariantOne(i32),
+        VariantTwo { name: String },
+        VariantThree,
+    }
+    let vec = vec![
+        MyEnum::VariantOne(42),
+        MyEnum::VariantTwo {
+            name: "Mike".to_string(),
+        },
+        MyEnum::VariantThree,
+    ];
+    dbg!(serde_json::to_string(&vec));
+
+    // But can rename all of them.
+    #[derive(Debug, Deserialize, Serialize)]
+    #[serde(rename_all = "snake_case")]
+    enum MyEnum2 {
+        VariantOne(i32),
+        VariantTwo { name: String },
+        VariantThree,
+    }
+    let vec = vec![
+        MyEnum2::VariantOne(42),
+        MyEnum2::VariantTwo {
+            name: "Mike".to_string(),
+        },
+        MyEnum2::VariantThree,
+    ];
+    dbg!(serde_json::to_string(&vec));
 }
