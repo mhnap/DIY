@@ -1,0 +1,12 @@
+[package]
+name = "async"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+chrono = "0.4"
+futures = "0.3"
+tokio = { version = "1.38", features = ["full", "tracing"] }
+tokio-util = "0.7"
+tracing = "0.1"
+tracing-subscriber = { version = "0.3", features = ["env-filter"] }

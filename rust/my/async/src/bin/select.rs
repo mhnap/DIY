@@ -1,3 +1,5 @@
+// https://docs.rs/tokio/latest/tokio/macro.select.html
+
 #[tokio::main]
 async fn main() {
     // tokio::select! {}
@@ -44,8 +46,8 @@ async fn main() {
     // This behavior can be overridden by adding biased; to the beginning of the macro usage.
     // This will cause select to poll the futures in the order they appear from top to bottom.
     // There are a few reasons you may want this:
-    //   The random number generation of tokio::select! has a non-zero CPU cost.
-    //   Your futures may interact in a way where known polling order is significant.
+    // - The random number generation of tokio::select! has a non-zero CPU cost.
+    // - Your futures may interact in a way where known polling order is significant.
 
     tokio::select! {
         biased;
@@ -219,24 +221,55 @@ async fn main() {
     }
 
     // This version will use `CancellationToken`.
+    println!();
     let mut i = 0;
     let cancellation_token = tokio_util::sync::CancellationToken::new();
 
     loop {
+        i += 1;
         tokio::select! {
             _ = cancellation_token.cancelled() => {
                 println!("cancellation token is cancelled");
                 break;
             }
             _ = async {
-                i += 1;
+                println!("operation started {i}");
+                tokio::time::sleep(std::time::Duration::from_millis(100)).await;
+                // Simulate cancellation while running the task.
                 if i == 4 {
                     cancellation_token.cancel()
                 };
-                tokio::time::sleep(std::time::Duration::from_millis(300)).await
+                tokio::time::sleep(std::time::Duration::from_millis(100)).await;
             } => {
-                println!("operation completed");
+                println!("operation completed {i}");
             }
         }
     }
+    // Last operation was not completed as the task was canceled.
+
+    // This version also will use `CancellationToken`.
+    // But try to complete the last task before canceling.
+    println!();
+    let mut i = 0;
+    let cancellation_token = tokio_util::sync::CancellationToken::new();
+
+    loop {
+        if cancellation_token.is_cancelled() {
+            println!("cancellation token is cancelled");
+            break;
+        }
+        i += 1;
+        let fut = async {
+            println!("operation started {i}");
+            tokio::time::sleep(std::time::Duration::from_millis(100)).await;
+            // Simulate cancellation while running the task.
+            if i == 4 {
+                cancellation_token.cancel()
+            };
+            tokio::time::sleep(std::time::Duration::from_millis(100)).await;
+        };
+        fut.await;
+        println!("operation completed {i}");
+    }
+    // Last operation still was completed.
 }
