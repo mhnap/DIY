@@ -22,6 +22,7 @@ fn scope() {
 
     let t2 = Token("2");
     // `1` will be moved to new shadowed variable and thus will be dropped sooner in reverse order.
+    // Drop for `t1` will never be called, as it's moved.
     let t2 = t1;
     println!("t2 shadowed");
 
@@ -37,9 +38,9 @@ fn exprs() {
     }
 
     // Will live till the end of `match`.
-    match make_token("matched token") {
-        Ok(_) => println!("match arm"),
-        Err(_) => unreachable!(),
+    match make_token("matched token").is_ok() {
+        true => println!("match arm"),
+        false => unreachable!(),
     }
     println!("after match");
 
@@ -58,7 +59,7 @@ fn exprs() {
 
 fn fn_args() {
     #[allow(unused)]
-    fn takes_args(t1: Token, (t2, t3): (Token, Token), _: Token) {
+    fn takes_args(t1: Token, (_, t2): (Token, Token), _: Token) {
         println!("function body");
     }
 
@@ -89,8 +90,8 @@ fn structs() {
 
     // struct fields are dropped in the same order as declared in the struct (source-code-wise, not memory-layout-wise).
     let s = SomeStruct {
-        a: Token("a"),
         b: Token("b"),
+        a: Token("a"),
         c: Token("c"),
     };
 }
