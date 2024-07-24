@@ -6,20 +6,21 @@ use std::os::unix::prelude::*;
 #[cfg(windows)]
 use std::os::windows::prelude::*;
 
-fn main() {
+fn main() -> Result<(), Box<dyn std::error::Error>> {
     if let Some(path) = std::env::args().skip(1).next() {
-        let full_path = std::fs::canonicalize(path).unwrap();
-        print_file_metadata(full_path).unwrap();
+        let full_path = std::fs::canonicalize(path)?;
+        print_file_metadata(full_path)?;
     } else {
         if cfg!(unix) {
-            print_file_metadata("/sys/kernel/mm/hugepages/hugepages-2048kB/resv_hugepages")
-                .unwrap();
+            print_file_metadata("/sys/kernel/mm/hugepages/hugepages-2048kB/resv_hugepages")?;
         } else if cfg!(windows) {
-            print_file_metadata(r#"C:\Windows\System32\LogFiles\WMI\RtBackup"#).unwrap();
+            print_file_metadata(r#"C:\Windows\System32\LogFiles\WMI\RtBackup"#)?;
         } else {
             unreachable!();
         }
     }
+
+    Ok(())
 }
 
 fn print_file_metadata(path: impl AsRef<std::path::Path>) -> Result<(), std::io::Error> {
@@ -40,6 +41,7 @@ fn print_file_metadata(path: impl AsRef<std::path::Path>) -> Result<(), std::io:
     }
     #[cfg(windows)]
     {
+        use std::os::windows::fs::FileTypeExt;
         dbg!(file_type.is_symlink_dir());
         dbg!(file_type.is_symlink_file());
     }
