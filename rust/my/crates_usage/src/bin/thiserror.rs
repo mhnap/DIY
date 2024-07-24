@@ -1,3 +1,5 @@
+#![feature(error_generic_member_access)]
+
 fn main() {
     /// Needs manual [`std::fmt::Display`] and [`std::error::Error`] implementations.
     #[derive(Debug)]
@@ -101,4 +103,79 @@ fn main() {
     let my_error52 = MyError5::SomeErr2(my_error3);
     println!("{my_error52}");
     error_chain(&my_error52);
+
+    //
+
+    // Errors may use `#[error(transparent)]` to forward the source and Display methods
+    // straight through to an underlying error without adding an additional message.
+    #[derive(Debug, thiserror::Error)]
+    enum MyError6 {
+        #[error(transparent)]
+        IoErr(#[from] std::io::Error),
+    }
+
+    // But it's sometimes hard to understand in what exactly place the error was created.
+
+    fn read_two_files(
+        path1: &std::path::Path,
+        path2: &std::path::Path,
+    ) -> Result<Vec<u8>, MyError6> {
+        let mut buf1 = std::fs::read(path1)?;
+        let buf2 = std::fs::read(path2)?;
+        buf1.extend(buf2);
+        Ok(buf1)
+    }
+
+    let res = read_two_files("file1".as_ref(), "file2".as_ref());
+    match res {
+        Ok(buf) => println!("We read buf: {buf:?}"),
+        Err(err) => eprintln!("We got err: {err}"),
+    }
+
+    // Output is:
+    // We got err: No such file or directory (os error 2)
+    // But what exactly file could not be read?
+
+    //
+
+    // It can be solved by using backtrace but only on nightly as this is unstable feature.
+
+    // #[derive(Debug, thiserror::Error)]
+    // enum MyError7 {
+    //     #[error(transparent)]
+    //     IoErr(#[from] std::io::Error, std::backtrace::Backtrace),
+    // }
+    //     error: #[error(transparent)] requires exactly one field
+    //     --> my/crates_usage/src/bin/thiserror.rs:143:9
+    //      |
+    //  143 | /         #[error(transparent)]
+    //  144 | |         IoErr(#[from] std::io::Error, std::backtrace::Backtrace),
+    //      | |________________________________________________________________^
+
+    #[derive(Debug, thiserror::Error)]
+    enum MyError7 {
+        #[error("{0}")]
+        IoErr(#[from] std::io::Error, std::backtrace::Backtrace),
+    }
+
+    fn read_two_files_v2(
+        path1: &std::path::Path,
+        path2: &std::path::Path,
+    ) -> Result<Vec<u8>, MyError7> {
+        let mut buf1 = std::fs::read(path1)?;
+        let buf2 = std::fs::read(path2)?;
+        buf1.extend(buf2);
+        Ok(buf1)
+    }
+
+    let res = read_two_files_v2("file1".as_ref(), "file2".as_ref());
+    match res {
+        Ok(buf) => println!("We read buf: {buf:?}"),
+        Err(err) => {
+            eprintln!("We got err: {err}",);
+            if let Some(backtrace) = std::error::request_ref::<std::backtrace::Backtrace>(&err) {
+                eprintln!("With backtrace: {backtrace}");
+            }
+        }
+    }
 }
