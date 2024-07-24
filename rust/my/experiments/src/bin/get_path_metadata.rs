@@ -1,15 +1,26 @@
 use chrono::{DateTime, Utc};
+use std::{
+    env, error, fs,
+    io::{self, Read},
+    os,
+    path::Path,
+};
 
 #[cfg(unix)]
-use std::os::unix::prelude::*;
+use os::unix::prelude::*;
 
 #[cfg(windows)]
-use std::os::windows::prelude::*;
+use os::windows::prelude::*;
 
-fn main() -> Result<(), Box<dyn std::error::Error>> {
-    if let Some(path) = std::env::args().skip(1).next() {
-        let full_path = std::fs::canonicalize(path)?;
-        print_file_metadata(full_path)?;
+fn main() -> Result<(), Box<dyn error::Error>> {
+    if let Some(path) = env::args().skip(1).next() {
+        let full_path = fs::canonicalize(path)?;
+        print_file_metadata(&full_path)?;
+
+        // Try to read one byte if this is a file.
+        if full_path.is_file() {
+            dbg!(try_read_one_byte(&full_path)?);
+        }
     } else {
         if cfg!(unix) {
             print_file_metadata("/sys/kernel/mm/hugepages/hugepages-2048kB/resv_hugepages")?;
@@ -23,9 +34,9 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
     Ok(())
 }
 
-fn print_file_metadata(path: impl AsRef<std::path::Path>) -> Result<(), std::io::Error> {
+fn print_file_metadata(path: impl AsRef<Path>) -> Result<(), io::Error> {
     dbg!(path.as_ref());
-    let metadata = std::fs::metadata(path)?;
+    let metadata = fs::metadata(path)?;
 
     let file_type = metadata.file_type();
     dbg!(file_type.is_dir());
@@ -41,7 +52,7 @@ fn print_file_metadata(path: impl AsRef<std::path::Path>) -> Result<(), std::io:
     }
     #[cfg(windows)]
     {
-        use std::os::windows::fs::FileTypeExt;
+        use os::windows::fs::FileTypeExt;
         dbg!(file_type.is_symlink_dir());
         dbg!(file_type.is_symlink_file());
     }
@@ -103,4 +114,11 @@ fn print_file_metadata(path: impl AsRef<std::path::Path>) -> Result<(), std::io:
     }
 
     Ok(())
+}
+
+fn try_read_one_byte(path: &Path) -> Result<u8, io::Error> {
+    let mut file = fs::File::open(path)?;
+    let mut byte = [0; 1];
+    file.read(&mut byte)?;
+    Ok(byte[0])
 }
