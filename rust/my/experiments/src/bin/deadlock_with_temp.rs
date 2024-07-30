@@ -1,3 +1,5 @@
+// https://blog.m-ou.se/super-let
+
 #[derive(Debug)]
 struct Range {
     start: u32,
@@ -27,7 +29,6 @@ fn main() {
 
     // c) similar to b), but here is deadlock
     // This is because temporary values lifetimes were extended.
-    // More here: https://blog.m-ou.se/super-let
     {
         let range = Range {
             start: range_with_mutex.lock().unwrap().start,
