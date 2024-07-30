@@ -9,6 +9,8 @@
 // https://hackmd.io/@rust-lang-team/HJpRzPzoa
 // https://hackmd.io/@rust-lang-team/BJZgkKqs6
 // https://fasterthanli.me/articles/a-rust-match-made-in-hell
+// https://github.com/rust-lang/rust/issues/93883
+// https://rust-lang.github.io/rust-clippy/master/#/significant_drop_in_scrutinee
 
 struct Token(&'static str);
 
