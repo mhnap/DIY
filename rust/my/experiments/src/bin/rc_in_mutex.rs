@@ -1,4 +1,5 @@
 // https://www.sobyte.net/post/2022-02/rust-mutex-send
+// https://users.rust-lang.org/t/sending-type-that-doesnt-implement-send/69665
 
 use std::rc::Rc;
 use std::sync::{Arc, Mutex};
