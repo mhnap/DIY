@@ -230,7 +230,6 @@ fn main() -> Result<(), Box<dyn Error>> {
     // We can propagate `std::io::Error` here because main return trait object of type `Error` for `Err` case.
     let greeting_file = File::open("hello.txt")?;
     dbg!(greeting_file);
-    Ok(())
 
     //
 
@@ -243,4 +242,15 @@ fn main() -> Result<(), Box<dyn Error>> {
     // Therefore, returning Result is a good default choice when you’re defining a function that might fail.
 
     // More guidelines for error handling can be found in this chapter of The Book.
+
+    //
+
+    // Error can be downcasted.
+    let err: &dyn Error = &File::open("hellotxt").unwrap_err();
+    assert!(err.is::<std::io::Error>());
+    if let Some(err) = err.downcast_ref::<std::io::Error>() {
+        dbg!(err);
+    }
+
+    Ok(())
 }
