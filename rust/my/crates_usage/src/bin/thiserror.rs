@@ -1,5 +1,15 @@
 #![feature(error_generic_member_access)]
 
+macro_rules! print_err {
+    ($err:expr) => {
+        println!("----- {} -----", stringify!($err));
+        println!("Display:\n{}", $err);
+        println!("Display alternate:\n{:#}", $err);
+        println!("Debug:\n{:?}", $err);
+        println!("Debug alternate:\n{:#?}", $err);
+    };
+}
+
 fn main() {
     /// Needs manual [`std::fmt::Display`] and [`std::error::Error`] implementations.
     #[derive(Debug)]
@@ -18,7 +28,7 @@ fn main() {
     impl std::error::Error for MyError1 {}
 
     let my_error1 = MyError1::SomeErr(String::from("some error"));
-    println!("{my_error1}");
+    dbg!(format!("{my_error1}"));
 
     //
 
@@ -30,7 +40,7 @@ fn main() {
     }
 
     let my_error2 = MyError2::SomeErr(String::from("some another error"));
-    println!("{my_error2}");
+    dbg!(format!("{my_error2}"));
 
     //
 
@@ -42,7 +52,7 @@ fn main() {
     }
 
     let my_error3 = MyError3::from(my_error2);
-    println!("{my_error3}");
+    dbg!(format!("{my_error3}"));
 
     //
 
@@ -66,18 +76,18 @@ fn main() {
     }
 
     let my_error4 = MyError4::from(my_error3.clone());
-    println!("{my_error4}");
+    dbg!(format!("{my_error4}"));
     error_chain(&my_error4);
 
     //
 
     // #[source] can be useful when no `From` is required or couple of the same inner types can be as a source.
-
+    //
     // #[derive(Debug, thiserror::Error)]
     // enum MyError5 {
     //     #[error("my error 5: some err 1")]
     //     SomeErr1(#[from] MyError3),
-
+    //
     //     #[error("my error 5: some err 2")]
     //     SomeErr2(#[from] MyError3),
     // }
@@ -97,84 +107,156 @@ fn main() {
     }
 
     let my_error51 = MyError5::from(my_error3.clone());
-    println!("{my_error51}");
+    dbg!(format!("{my_error51}"));
     error_chain(&my_error51);
 
     let my_error52 = MyError5::SomeErr2(my_error3);
-    println!("{my_error52}");
+    dbg!(format!("{my_error52}"));
     error_chain(&my_error52);
 
     //
 
-    // Errors may use `#[error(transparent)]` to forward the source and Display methods
-    // straight through to an underlying error without adding an additional message.
-    #[derive(Debug, thiserror::Error)]
-    enum MyError6 {
-        #[error(transparent)]
-        IoErr(#[from] std::io::Error),
+    {
+        // Errors may use `#[error(transparent)]` to forward the source and Display methods
+        // straight through to an underlying error without adding an additional message.
+        #[derive(Debug, thiserror::Error)]
+        enum MyError {
+            #[error(transparent)]
+            Io(#[from] std::io::Error),
+        }
+
+        // But it's sometimes hard to understand in what exactly place the error was created.
+
+        fn read_two_files(
+            path1: &std::path::Path,
+            path2: &std::path::Path,
+        ) -> Result<Vec<u8>, MyError> {
+            let mut buf1 = std::fs::read(path1)?;
+            let buf2 = std::fs::read(path2)?;
+            buf1.extend(buf2);
+            Ok(buf1)
+        }
+
+        let res = read_two_files("file1".as_ref(), "file2".as_ref());
+        match res {
+            Ok(buf) => println!("We read buf: {buf:?}"),
+            Err(err) => eprintln!("We got err: {err}"),
+        }
+
+        // Output is:
+        // We got err: No such file or directory (os error 2)
     }
 
-    // But it's sometimes hard to understand in what exactly place the error was created.
-
-    fn read_two_files(
-        path1: &std::path::Path,
-        path2: &std::path::Path,
-    ) -> Result<Vec<u8>, MyError6> {
-        let mut buf1 = std::fs::read(path1)?;
-        let buf2 = std::fs::read(path2)?;
-        buf1.extend(buf2);
-        Ok(buf1)
-    }
-
-    let res = read_two_files("file1".as_ref(), "file2".as_ref());
-    match res {
-        Ok(buf) => println!("We read buf: {buf:?}"),
-        Err(err) => eprintln!("We got err: {err}"),
-    }
-
-    // Output is:
-    // We got err: No such file or directory (os error 2)
     // But what exactly file could not be read?
 
     //
 
     // It can be solved by using backtrace but only on nightly as this is unstable feature.
+    // Note that usage of backtrace is automatically detected and `provide` method is always generated,
+    // and cannot be turned off, so it's not possible to have backtrace with thiserror on stable.
+    //
+    //     error[E0658]: use of unstable library feature 'error_generic_member_access'
+    //     --> my/crates_usage/src/bin/thiserror.rs:146:21
+    //      |
+    //  146 |     #[derive(Debug, thiserror::Error)]
+    //      |                     ^^^^^^^^^^^^^^^^
+    //      |
+    //      = note: see issue #99301 <https://github.com/rust-lang/rust/issues/99301> for more information
+    //      = note: this error originates in the derive macro `thiserror::Error` (in Nightly builds, run with -Z macro-backtrace for more info)
 
+    // #[error(transparent)] requires exactly one field
+    //
     // #[derive(Debug, thiserror::Error)]
-    // enum MyError7 {
+    // enum MyError {
     //     #[error(transparent)]
-    //     IoErr(#[from] std::io::Error, std::backtrace::Backtrace),
+    //     Io(#[from] std::io::Error, std::backtrace::Backtrace),
     // }
     //     error: #[error(transparent)] requires exactly one field
     //     --> my/crates_usage/src/bin/thiserror.rs:143:9
     //      |
     //  143 | /         #[error(transparent)]
-    //  144 | |         IoErr(#[from] std::io::Error, std::backtrace::Backtrace),
+    //  144 | |         Io(#[from] std::io::Error, std::backtrace::Backtrace),
     //      | |________________________________________________________________^
 
-    #[derive(Debug, thiserror::Error)]
-    enum MyError7 {
-        #[error("{0}")]
-        IoErr(#[from] std::io::Error, std::backtrace::Backtrace),
+    {
+        #[derive(Debug, thiserror::Error)]
+        enum MyError {
+            #[error("{0}")]
+            Io(#[from] std::io::Error, std::backtrace::Backtrace),
+        }
+
+        // For variants that use #[from] and also contain a Backtrace field, a backtrace is captured from within the From impl.
+        //
+        // Expanded:
+        // #[allow(unused_qualifications)]
+        // impl ::core::convert::From<std::io::Error> for MyError {
+        //     #[allow(deprecated)]
+        //     fn from(source: std::io::Error) -> Self {
+        //         MyError::Io {
+        //             0: source,
+        //             1: ::core::convert::From::from(std::backtrace::Backtrace::capture()),
+        //         }
+        //     }
+        // }
+
+        fn read_two_files(
+            path1: &std::path::Path,
+            path2: &std::path::Path,
+        ) -> Result<Vec<u8>, MyError> {
+            let mut buf1 = std::fs::read(path1)?;
+            let buf2 = std::fs::read(path2)?;
+            buf1.extend(buf2);
+            Ok(buf1)
+        }
+
+        let res = read_two_files("file1".as_ref(), "file2".as_ref());
+        match res {
+            Ok(buf) => println!("We read buf: {buf:?}"),
+            Err(err) => {
+                eprintln!("We got err: {err}");
+                if let Some(backtrace) = std::error::request_ref::<std::backtrace::Backtrace>(&err)
+                {
+                    eprintln!("With backtrace: {backtrace}");
+                }
+            }
+        }
     }
 
-    fn read_two_files_v2(
-        path1: &std::path::Path,
-        path2: &std::path::Path,
-    ) -> Result<Vec<u8>, MyError7> {
-        let mut buf1 = std::fs::read(path1)?;
-        let buf2 = std::fs::read(path2)?;
-        buf1.extend(buf2);
-        Ok(buf1)
-    }
+    //
 
-    let res = read_two_files_v2("file1".as_ref(), "file2".as_ref());
-    match res {
-        Ok(buf) => println!("We read buf: {buf:?}"),
-        Err(err) => {
-            eprintln!("We got err: {err}",);
-            if let Some(backtrace) = std::error::request_ref::<std::backtrace::Backtrace>(&err) {
-                eprintln!("With backtrace: {backtrace}");
+    // I found one solution how to use backtrace with `thiserror` on stable:
+    // It's needed to create new type alias for backtrace.
+
+    {
+        type MyBacktrace = std::backtrace::Backtrace;
+
+        #[derive(Debug, thiserror::Error)]
+        enum MyError {
+            #[error("{0}")]
+            Io(#[source] std::io::Error, MyBacktrace),
+        }
+
+        impl From<std::io::Error> for MyError {
+            fn from(err: std::io::Error) -> Self {
+                MyError::Io(err, MyBacktrace::capture())
+            }
+        }
+
+        fn read_two_files(
+            path1: &std::path::Path,
+            path2: &std::path::Path,
+        ) -> Result<Vec<u8>, MyError> {
+            let mut buf1 = std::fs::read(path1)?;
+            let buf2 = std::fs::read(path2)?;
+            buf1.extend(buf2);
+            Ok(buf1)
+        }
+
+        let res = read_two_files("file1".as_ref(), "file2".as_ref());
+        match res {
+            Ok(buf) => println!("We read buf: {buf:?}"),
+            Err(err) => {
+                print_err!(err);
             }
         }
     }
