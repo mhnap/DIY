@@ -87,7 +87,7 @@ fn main() {
     // The same mechanism that panic uses to get the calling location is available for all.
     // It's called with std::panic::Location::caller().
 
-    /// Calls (prints) the `name` together with  the calling location.
+    /// Calls (prints) the `name` together with the calling location.
     #[track_caller]
     pub fn call_me(name: &str) {
         let caller = std::panic::Location::caller();
