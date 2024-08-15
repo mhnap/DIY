@@ -1,12 +1,18 @@
 #![feature(error_generic_member_access)]
+#![feature(error_iter)]
 
 macro_rules! print_err {
     ($err:expr) => {
-        println!("----- {} -----", stringify!($err));
+        println!("----- {} at {} -----", stringify!($err), line!());
         println!("Display:\n{}", $err);
         println!("Display alternate:\n{:#}", $err);
         println!("Debug:\n{:?}", $err);
         println!("Debug alternate:\n{:#?}", $err);
+        let as_dyn: &dyn std::error::Error = &$err;
+        for source in as_dyn.sources().skip(1) {
+            println!("Caused by: {source}");
+        }
+        println!("----------------------");
     };
 }
 
@@ -140,7 +146,9 @@ fn main() {
         let res = read_two_files("file1".as_ref(), "file2".as_ref());
         match res {
             Ok(buf) => println!("We read buf: {buf:?}"),
-            Err(err) => eprintln!("We got err: {err}"),
+            Err(err) => {
+                print_err!(err);
+            }
         }
 
         // Output is:
@@ -181,7 +189,7 @@ fn main() {
     {
         #[derive(Debug, thiserror::Error)]
         enum MyError {
-            #[error("{0}")]
+            #[error("Io error")]
             Io(#[from] std::io::Error, std::backtrace::Backtrace),
         }
 
@@ -213,7 +221,7 @@ fn main() {
         match res {
             Ok(buf) => println!("We read buf: {buf:?}"),
             Err(err) => {
-                eprintln!("We got err: {err}");
+                print_err!(err);
                 if let Some(backtrace) = std::error::request_ref::<std::backtrace::Backtrace>(&err)
                 {
                     eprintln!("With backtrace: {backtrace}");
@@ -232,7 +240,7 @@ fn main() {
 
         #[derive(Debug, thiserror::Error)]
         enum MyError {
-            #[error("{0}")]
+            #[error("Io error")]
             Io(#[source] std::io::Error, MyBacktrace),
         }
 
@@ -260,4 +268,20 @@ fn main() {
             }
         }
     }
+
+    // Note that `#[error("{0}")]` with `#[source]` or `#[from]` is incorrect usage, as it will be duplicated in source.
+    // Only `#[error(transparent)]` can be used with `#[source]` or `#[from]` or new error string.
+    //
+    // #[error(transparent)]
+    // Io(#[from] std::io::Error),
+    //
+    // or
+    //
+    // #[error("Io error")]
+    // Io(#[from] std::io::Error, std::backtrace::Backtrace),
+    //
+    // not
+    //
+    // #[error("{0}")]
+    // Io(#[from] std::io::Error, std::backtrace::Backtrace),
 }
