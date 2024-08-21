@@ -3,16 +3,16 @@
 
 macro_rules! print_err {
     ($err:expr) => {
-        println!("----- {} at {} -----", stringify!($err), line!());
-        println!("Display:\n{}", $err);
-        println!("Display alternate:\n{:#}", $err);
-        println!("Debug:\n{:?}", $err);
-        println!("Debug alternate:\n{:#?}", $err);
+        eprintln!("----- {} at {} -----", stringify!($err), line!());
+        eprintln!("Display:\n{}", $err);
+        eprintln!("Display alternate:\n{:#}", $err);
+        eprintln!("Debug:\n{:?}", $err);
+        eprintln!("Debug alternate:\n{:#?}", $err);
         let as_dyn: &dyn std::error::Error = &$err;
         for source in as_dyn.sources().skip(1) {
-            println!("Caused by: {source}");
+            eprintln!("Caused by: {source}");
         }
-        println!("----------------------");
+        eprintln!("----------------------");
     };
 }
 
@@ -67,10 +67,10 @@ fn main() {
 
     // From https://www.lpalmieri.com/posts/error-handling-rust
     fn error_chain(e: &impl std::error::Error) {
-        print!("Error: {e}\n");
+        eprint!("Error: {e}\n");
         let mut current = e.source();
         while let Some(cause) = current {
-            print!("Caused by: {cause}\n");
+            eprint!("Caused by: {cause}\n");
             current = cause.source();
         }
     }
@@ -268,6 +268,8 @@ fn main() {
             }
         }
     }
+
+    //
 
     // Note that `#[error("{0}")]` with `#[source]` or `#[from]` is incorrect usage, as it will be duplicated in source.
     // Only `#[error(transparent)]` can be used with `#[source]` or `#[from]` or new error string.

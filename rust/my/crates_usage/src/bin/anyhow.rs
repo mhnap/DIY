@@ -2,11 +2,11 @@ use anyhow::Context;
 
 macro_rules! print_err {
     ($err:expr) => {
-        println!("----- {} -----", stringify!($err));
-        println!("Display:\n{}", $err);
-        println!("Display alternate:\n{:#}", $err);
-        println!("Debug:\n{:?}", $err);
-        println!("Debug alternate:\n{:#?}", $err);
+        eprintln!("----- {} at {} -----", stringify!($err), line!());
+        eprintln!("Display:\n{}", $err);
+        eprintln!("Display alternate:\n{:#}", $err);
+        eprintln!("Debug:\n{:?}", $err);
+        eprintln!("Debug alternate:\n{:#?}", $err);
     };
 }
 
@@ -23,26 +23,22 @@ fn main() {
     let res = read_env_var("MY_ENV");
     match res {
         Ok(buf) => println!("We read env var: {buf:?}"),
-        Err(err) => eprintln!("We got err: {err}"),
+        Err(err) => {
+            print_err!(err);
+        }
     }
+
+    //
 
     // Attach context to help the person troubleshooting the error understand where things went wrong.
 
-    let res = read_env_var("MY_ENV").context("Failed to read env var");
+    let res = read_env_var("MY_ENV")
+        .context("Failed to read env var")
+        .context("One more outer error");
     match res {
         Ok(buf) => println!("We read env var: {buf:?}"),
-        Err(err) => eprintln!("We got err: {err}"),
+        Err(err) => {
+            print_err!(err);
+        }
     }
-
-    // Above there would be used `Display` impl for printing, and thus only the error itself would be reported:
-    // We got err: Failed to read env var
-
-    // But can use different formatting with more information (source errors and backtrace).
-
-    let err = read_env_var("MY_ENV")
-        .context("Failed to read env var")
-        .context("Outer context")
-        .unwrap_err();
-
-    print_err!(err);
 }
