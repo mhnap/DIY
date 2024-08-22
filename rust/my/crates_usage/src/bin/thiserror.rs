@@ -286,4 +286,206 @@ fn main() {
     //
     // #[error("{0}")]
     // Io(#[from] std::io::Error, std::backtrace::Backtrace),
+
+    //
+
+    // If a field is both a source (named source, or has #[source] or #[from] attribute) and is marked #[backtrace],
+    // then the Error trait’s provide() method is forwarded to the source’s provide so that both layers of the error share the same backtrace.
+    // The #[backtrace] attribute requires a nightly compiler with Rust version 1.73 or newer.
+
+    {
+        // External error from some sub-crate we nothing knows about.
+        #[derive(Debug, thiserror::Error)]
+        enum ExternalError {
+            #[error("Io error")]
+            Io(#[from] std::io::Error, std::backtrace::Backtrace),
+
+            #[error("Other error")]
+            Other,
+        }
+
+        fn read_two_files(
+            path1: &std::path::Path,
+            path2: &std::path::Path,
+        ) -> Result<Vec<u8>, ExternalError> {
+            let mut buf1 = std::fs::read(path1)?;
+            let buf2 = std::fs::read(path2)?;
+            buf1.extend(buf2);
+            Ok(buf1)
+        }
+
+        // Our own error.
+        #[derive(Debug, thiserror::Error)]
+        enum MyError {
+            // Variant for storing external error.
+            #[error(transparent)]
+            External {
+                #[from]
+                // Adds `provide` for taking backtrace from source (if exists).
+                //
+                // fn provide<'_request>(&'_request self, request: &mut std::error::Request<'_request>) {
+                //     #[allow(deprecated)]
+                //     match self {
+                //         MyError::External { source: source, .. } => {
+                //             use thiserror::__private::ThiserrorProvide as _;
+                //             source.thiserror_provide(request);
+                //         }
+                //     }
+                // }
+                //
+                // But there is nothing specific to backtrace, so can be used more broadly.
+                #[backtrace]
+                source: ExternalError,
+            },
+        }
+
+        fn my_read_two_files() -> Result<Vec<u8>, MyError> {
+            Ok(read_two_files("file1".as_ref(), "file2".as_ref())?)
+        }
+
+        let res = my_read_two_files();
+        match res {
+            Ok(buf) => println!("We read buf: {buf:?}"),
+            Err(err) => {
+                print_err!(err);
+                if let Some(backtrace) = std::error::request_ref::<std::backtrace::Backtrace>(&err)
+                {
+                    eprintln!("With backtrace: {backtrace}");
+                } else {
+                    eprintln!("No backtrace..");
+                }
+            }
+        }
+
+        // We requested a backtrace from `MyError` and it's provided from `ExternalError`.
+        // Part of backtrace:
+        //
+        //    2: thiserror::main::read_two_files
+        //              at ./my/crates_usage/src/bin/thiserror.rs:311:28
+        //    3: thiserror::main::my_read_two_files
+        //              at ./my/crates_usage/src/bin/thiserror.rs:343:16
+        //    4: thiserror::main
+        //              at ./my/crates_usage/src/bin/thiserror.rs:346:19
+
+        fn other() -> Result<(), ExternalError> {
+            Err(ExternalError::Other)
+        }
+
+        fn my_other() -> Result<(), MyError> {
+            Ok(other()?)
+        }
+
+        let res = my_other();
+        match res {
+            Ok(buf) => println!("Success!"),
+            Err(err) => {
+                print_err!(err);
+                if let Some(backtrace) = std::error::request_ref::<std::backtrace::Backtrace>(&err)
+                {
+                    eprintln!("With backtrace: {backtrace}");
+                } else {
+                    eprintln!("No backtrace..");
+                }
+            }
+        }
+
+        // But in such case there would be no backtrace provided.
+    }
+
+    //
+
+    // Or we also can have our own backtrace.
+
+    {
+        // External error from some sub-crate we nothing knows about.
+        #[derive(Debug, thiserror::Error)]
+        enum ExternalError {
+            #[error("Io error")]
+            Io(#[from] std::io::Error, std::backtrace::Backtrace),
+
+            #[error("Other error")]
+            Other,
+        }
+
+        fn read_two_files(
+            path1: &std::path::Path,
+            path2: &std::path::Path,
+        ) -> Result<Vec<u8>, ExternalError> {
+            let mut buf1 = std::fs::read(path1)?;
+            let buf2 = std::fs::read(path2)?;
+            buf1.extend(buf2);
+            Ok(buf1)
+        }
+
+        // Our own error.
+        #[derive(Debug, thiserror::Error)]
+        enum MyError {
+            // Variant for storing external error.
+            #[error("External error")]
+            External {
+                #[from]
+                // Adds `provide` for taking backtrace from source (if exists).
+                source: ExternalError,
+                // #[backtrace] // This will discard source backtrace if used.
+                backtrace: std::backtrace::Backtrace,
+            },
+        }
+
+        fn my_read_two_files() -> Result<Vec<u8>, MyError> {
+            Ok(read_two_files("file1".as_ref(), "file2".as_ref())?)
+        }
+
+        let res = my_read_two_files();
+        match res {
+            Ok(buf) => println!("We read buf: {buf:?}"),
+            Err(err) => {
+                print_err!(err);
+                if let Some(backtrace) = std::error::request_ref::<std::backtrace::Backtrace>(&err)
+                {
+                    eprintln!("With backtrace: {backtrace}");
+                } else {
+                    eprintln!("No backtrace..");
+                }
+            }
+        }
+
+        // We requested a backtrace from `MyError` and it's provided from `ExternalError`.
+        // Part of backtrace:
+        //
+        //    2: thiserror::main::read_two_files
+        //              at ./my/crates_usage/src/bin/thiserror.rs:414:28
+        //    3: thiserror::main::my_read_two_files
+        //              at ./my/crates_usage/src/bin/thiserror.rs:435:16
+        //    4: thiserror::main
+        //              at ./my/crates_usage/src/bin/thiserror.rs:438:19
+
+        fn other() -> Result<(), ExternalError> {
+            Err(ExternalError::Other)
+        }
+
+        fn my_other() -> Result<(), MyError> {
+            Ok(other()?)
+        }
+
+        let res = my_other();
+        match res {
+            Ok(buf) => println!("Success!"),
+            Err(err) => {
+                print_err!(err);
+                if let Some(backtrace) = std::error::request_ref::<std::backtrace::Backtrace>(&err)
+                {
+                    eprintln!("With backtrace: {backtrace}");
+                } else {
+                    eprintln!("No backtrace..");
+                }
+            }
+        }
+
+        // There is no backtrace from `ExternalError`, but there is from `MyError`.
+        //
+        //    2: thiserror::main::my_other
+        //              at ./my/crates_usage/src/bin/thiserror.rs:467:16
+        //    3: thiserror::main
+        //              at ./my/crates_usage/src/bin/thiserror.rs:470:19
+    }
 }
