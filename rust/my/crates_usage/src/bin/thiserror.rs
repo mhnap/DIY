@@ -426,7 +426,7 @@ fn main() {
                 #[from]
                 // Adds `provide` for taking backtrace from source (if exists).
                 source: ExternalError,
-                // #[backtrace] // This will discard source backtrace if used.
+                // #[backtrace] // This will discard source backtrace if used. Why??
                 backtrace: std::backtrace::Backtrace,
             },
         }
