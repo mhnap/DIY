@@ -93,10 +93,11 @@ fn main() {
         let caller = std::panic::Location::caller();
 
         println!(
-            "Calling '{name}' from {file}:{line}",
+            "Calling '{name}' from {file}:{line}:{column}",
             name = name,
             file = caller.file(),
             line = caller.line(),
+            column = caller.column(),
         );
     }
 
