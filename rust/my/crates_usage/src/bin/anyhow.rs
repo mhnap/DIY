@@ -434,3 +434,42 @@ fn main() {
         //              at ./my/crates_usage/src/bin/anyhow.rs:419:19
     }
 }
+
+#[test]
+#[ignore = "https://github.com/dtolnay/thiserror/issues/174"]
+fn backtrace_preserved_after_thiserror_derive() {
+    #[derive(Debug, thiserror::Error)]
+    enum SomeError {
+        #[error(transparent)]
+        Anyhow(
+            #[from]
+            // #[backtrace] // <-- Passing with this attribute
+            anyhow::Error,
+        ),
+    }
+
+    let mut errs: Vec<_> = (0..2).map(|_| anyhow::anyhow!("aaa")).collect();
+
+    let wrapped = anyhow::Error::from(SomeError::Anyhow(errs.pop().unwrap()));
+    let notwrapped = errs.pop().unwrap();
+
+    assert_eq!(
+        wrapped.backtrace().to_string(),
+        notwrapped.backtrace().to_string()
+    );
+}
+
+#[test]
+fn source_preserved() {
+    #[derive(Debug, thiserror::Error)]
+    pub enum SomeError {
+        #[error("I/O")]
+        Io(#[source] std::io::Error),
+    }
+
+    let some_error = SomeError::Io(std::io::Error::new(std::io::ErrorKind::Other, "io error"));
+    assert!(some_error.source().is_some());
+
+    let anyhow_error = anyhow::Error::from(some_error);
+    assert!(anyhow_error.source().is_some());
+}
