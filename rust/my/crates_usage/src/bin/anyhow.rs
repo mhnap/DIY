@@ -28,7 +28,7 @@ macro_rules! print_err {
 fn error_chain(e: &impl std::error::Error) {
     let mut current = e.source();
     while let Some(cause) = current {
-        eprintln!("Caused by: {cause}");
+        eprintln!("Caused by: {cause}, dbg: {cause:?}");
         current = cause.source();
     }
 }
@@ -429,9 +429,9 @@ fn main() {
         // Part of backtrace:
         //
         //    4: anyhow::main::my_other
-        //              at ./my/crates_usage/src/bin/anyhow.rs:416:16
+        //              at ./my/crates_usage/src/bin/anyhow.rs:418:16
         //    5: anyhow::main
-        //              at ./my/crates_usage/src/bin/anyhow.rs:419:19
+        //              at ./my/crates_usage/src/bin/anyhow.rs:421:19
     }
 }
 
