@@ -64,6 +64,7 @@ fn main() {
 
     // It's better not to include an inner source error in the `Display` implementation,
     // as if we iterate through a chain of errors, the inner source error will be seen two times.
+    // https://blog.rust-lang.org/inside-rust/2021/07/01/What-the-error-handling-project-group-is-working-towards.html#guidelines-for-implementing-displayfmt-and-errorsource
 
     // From https://www.lpalmieri.com/posts/error-handling-rust
     fn error_chain(e: &impl std::error::Error) {
@@ -185,6 +186,8 @@ fn main() {
     //  143 | /         #[error(transparent)]
     //  144 | |         Io(#[from] std::io::Error, std::backtrace::Backtrace),
     //      | |________________________________________________________________^
+    //
+    // https://github.com/dtolnay/thiserror/issues/316
 
     {
         #[derive(Debug, thiserror::Error)]
@@ -273,6 +276,7 @@ fn main() {
 
     // Note that `#[error("{0}")]` with `#[source]` or `#[from]` is incorrect usage, as it will be duplicated in source.
     // Only `#[error(transparent)]` can be used with `#[source]` or `#[from]` or new error string.
+    // https://github.com/dtolnay/thiserror/issues/38
     //
     // #[error(transparent)]
     // Io(#[from] std::io::Error),
