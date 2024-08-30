@@ -6,8 +6,8 @@
 	"editor.bracketPairColorization.enabled": false,
 	"editor.fontFamily": "JetBrains Mono",
 	"editor.guides.indentation": false,
+	"editor.hover.enabled": false,
 	"editor.inlayHints.enabled": "offUnlessPressed",
-	"editor.largeFileOptimizations": false,
 	"editor.lineHeight": 1.6,
 	"editor.matchBrackets": "near",
 	"editor.minimap.enabled": false,
@@ -24,6 +24,7 @@
 					"foreground": "#F92672"
 				},
 				"comment": "#75715E",
+				"const": "#908B25",
 				"decorator": "#F8F8F2",
 				"decorator.declaration": "#A6E22E",
 				"derive": {
@@ -63,6 +64,7 @@
 					"fontStyle": ""
 				},
 				"property": "#AE81FF",
+				"static": "#908B25",
 				"struct": {
 					"fontStyle": "",
 					"foreground": "#B5B6E3"
@@ -187,6 +189,7 @@
 	},
 	"files.autoSave": "afterDelay",
 	"git.enableSmartCommit": true,
+	"githubPullRequests.pullBranch": "never",
 	"gitlens.codeLens.enabled": false,
 	"gitlens.currentLine.enabled": false,
 	"rust-analyzer.check.allTargets": false,
@@ -206,7 +209,7 @@
 	"workbench.colorTheme": "Monokai",
 	"workbench.editor.limit.enabled": true,
 	"workbench.editor.limit.perEditorGroup": true,
-	"workbench.editor.limit.value": 20,
+	"workbench.editor.limit.value": 10,
 	"workbench.list.horizontalScrolling": true,
 	"workbench.list.smoothScrolling": true,
 	"workbench.tree.renderIndentGuides": "none"
