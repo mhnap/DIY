@@ -40,6 +40,11 @@ fn scope() {
     // Value `3` will be dropped after assigning `4`.
     t3 = Token("4");
     println!("t3 re-assigned");
+
+    drop(t3);
+
+    // Value can be reassigned after drop.
+    t3 = Token("5");
 }
 
 fn exprs() {
