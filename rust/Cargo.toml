@@ -1,3 +1,10 @@
 [workspace]
 members = ["my/*", "others/books/*", "others/quizzes/*", "others/blogs/*"]
 resolver = "2"
+
+[profile.dev]
+debug = 0
+# Stripping of debug info will be added automatically
+# (since https://github.com/rust-lang/cargo/pull/13257),
+# but still add here explicitly to be more readable.
+strip = "debuginfo"
