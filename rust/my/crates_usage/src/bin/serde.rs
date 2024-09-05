@@ -44,6 +44,8 @@ fn main() {
     let data: MyData = serde_json::from_value(json).unwrap();
     dbg!(data);
 
+    //
+
     // But deserialization can fail if wrong format.
     let json = serde_json::json!({
         "number": 50,
@@ -61,6 +63,8 @@ fn main() {
             dbg!(err);
         }
     }
+
+    //
 
     // Or we can use the `#[serde(default)]` attribute on the field to use its `Default::default()` during deserialization.
     #[derive(Debug, Deserialize, Serialize)]
@@ -84,6 +88,37 @@ fn main() {
         }
     }
 
+    //
+
+    // Or we can specify a default value for some field used during deserializing, but only via function.
+    // There is an open issue for supporting default literals, see <https://github.com/serde-rs/serde/issues/368>.
+    #[derive(Debug, Deserialize, Serialize)]
+    struct ShortMyData {
+        number: i32,
+        #[serde(default = "default_string")]
+        string: String,
+    }
+
+    fn default_string() -> String {
+        "Mike".into()
+    }
+
+    let json = serde_json::json!({
+        "number": 50,
+    });
+    dbg!(&json);
+
+    match serde_json::from_value::<ShortMyData>(json.clone()) {
+        Ok(data) => {
+            dbg!(data);
+        }
+        Err(err) => {
+            dbg!(err);
+        }
+    }
+
+    //
+
     // But `#[serde(default)]` attribute won't help if we encontered JSON `null` value.
     // https://github.com/serde-rs/serde/issues/1098#issuecomment-1333665788
     let json = serde_json::json!({
@@ -103,6 +138,8 @@ fn main() {
         }
     }
 
+    //
+
     // But `Option` will handle JSON `null` value gracefully.
     let json = serde_json::json!({
         "number": 50,
@@ -121,6 +158,8 @@ fn main() {
         }
     }
 
+    //
+
     // Unknown fields are not denied by default.
     let json = serde_json::json!({
         "number": 50,
@@ -138,6 +177,8 @@ fn main() {
             dbg!(err);
         }
     }
+
+    //
 
     // But can specify `#[serde(deny_unknown_fields)]` attribute to deny unknown fields.
     #[derive(Debug, Deserialize, Serialize)]
@@ -159,6 +200,8 @@ fn main() {
             dbg!(err);
         }
     }
+
+    //
 
     // Can use untagged enum representation.
     #[derive(Debug, Deserialize, Serialize)]
@@ -201,6 +244,8 @@ fn main() {
     let data: Plugins = serde_json::from_value(json).unwrap();
     dbg!(data);
 
+    //
+
     // By default serde do not change enum variants names.
     #[derive(Debug, Deserialize, Serialize)]
     enum MyEnum {
@@ -208,6 +253,7 @@ fn main() {
         VariantTwo { name: String },
         VariantThree,
     }
+
     let vec = vec![
         MyEnum::VariantOne(42),
         MyEnum::VariantTwo {
@@ -217,6 +263,8 @@ fn main() {
     ];
     dbg!(serde_json::to_string(&vec));
 
+    //
+
     // But can rename all of them.
     #[derive(Debug, Deserialize, Serialize)]
     #[serde(rename_all = "snake_case")]
@@ -225,6 +273,7 @@ fn main() {
         VariantTwo { name: String },
         VariantThree,
     }
+
     let vec = vec![
         MyEnum2::VariantOne(42),
         MyEnum2::VariantTwo {
