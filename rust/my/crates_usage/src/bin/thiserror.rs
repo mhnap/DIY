@@ -110,14 +110,15 @@ fn main() {
         SomeErr1(#[from] MyError3),
 
         #[error("my error 5: some err 2")]
-        SomeErr2(#[source] MyError3),
+        SomeErr2(#[source] Option<MyError3>),
     }
 
     let my_error51 = MyError5::from(my_error3.clone());
     dbg!(format!("{my_error51}"));
     error_chain(&my_error51);
 
-    let my_error52 = MyError5::SomeErr2(my_error3);
+    // Source can be `Optional`.
+    let my_error52 = MyError5::SomeErr2(Some(my_error3));
     dbg!(format!("{my_error52}"));
     error_chain(&my_error52);
 
