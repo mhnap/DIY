@@ -3,6 +3,8 @@
 // https://blog.rust-lang.org/2020/08/27/Rust-1.46.0.html#track_caller
 // https://doc.rust-lang.org/reference/attributes/codegen.html#the-track_caller-attribute
 // https://rust-lang.github.io/rfcs/2091-inline-semantic.html
+// https://cxiao.net/posts/2023-12-08-rust-reversing-panic-metadata
+// https://doc.rust-lang.org/beta/unstable-book/compiler-flags/location-detail.html
 
 fn main() {
     pub fn do_not_call_with_zero_v1(val: u64) -> u64 {
