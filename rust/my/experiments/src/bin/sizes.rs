@@ -1,21 +1,46 @@
-use std::mem::size_of_val;
+// https://users.rust-lang.org/t/use-case-for-box-str-and-string/8295
+// https://www.reddit.com/r/rust/comments/174ndzi/fun_fact_size_of_optionstring
+// https://users.rust-lang.org/t/does-bool-save-space-over-u8/75250
+// https://stackoverflow.com/questions/73180983/why-is-the-size-of-optionbool-equal-to-1
+// https://www.reddit.com/r/rust/comments/wqsxk2/is_it_better_to_pass_optiont_or_optiont/
+
+use std::{mem::size_of_val, num::NonZero};
 
 fn main() {
-    let vec: Vec<i32> = vec![1, 2, 3];
-    dbg!(size_of_val(&vec));
+    dbg!(size_of::<i32>());
+    dbg!(size_of::<Option<i32>>());
+    dbg!(size_of::<&i32>());
+    dbg!(size_of::<Option<&i32>>());
+    dbg!(size_of::<bool>());
+    dbg!(size_of::<Option<bool>>());
+    dbg!(size_of::<NonZero<i32>>());
+    dbg!(size_of::<Option<NonZero<i32>>>());
+    dbg!(size_of::<Vec<i32>>());
+    dbg!(size_of::<Option<Vec<i32>>>());
+    dbg!(size_of::<Box<Vec<i32>>>());
+    dbg!(size_of::<Option<Box<Vec<i32>>>>());
+    dbg!(size_of::<Box<[i32]>>());
+    dbg!(size_of::<Option<Box<[i32]>>>());
+    dbg!(size_of::<String>());
+    dbg!(size_of::<Option<String>>());
+    dbg!(size_of::<Box<String>>());
+    dbg!(size_of::<Option<Box<String>>>());
+    dbg!(size_of::<Box<str>>());
+    dbg!(size_of::<Option<Box<str>>>());
+    struct A;
+    dbg!(size_of::<A>());
+    dbg!(size_of::<Option<A>>());
+    struct B {
+        byte: u8,
+    }
+    dbg!(size_of::<B>());
+    dbg!(size_of::<Option<B>>());
 
-    let boxed_vec: Box<Vec<i32>> = Box::new(vec.clone());
-    dbg!(size_of_val(&boxed_vec));
+    //
 
-    let boxed_vec_slice: Box<[i32]> = vec.clone().into_boxed_slice();
-    dbg!(size_of_val(&boxed_vec_slice));
-
-    let string: String = "hi".to_string();
-    dbg!(size_of_val(&string));
-
-    let boxed_string: Box<String> = Box::new(string.clone());
-    dbg!(size_of_val(&boxed_string));
-
-    let boxed_string_slice: Box<str> = string.clone().into_boxed_str();
-    dbg!(size_of_val(&boxed_string_slice));
+    dbg!(true as u8);
+    dbg!(false as u8);
+    dbg!(unsafe { std::mem::transmute::<_, u8>(Some(false)) });
+    dbg!(unsafe { std::mem::transmute::<_, u8>(Some(true)) });
+    dbg!(unsafe { std::mem::transmute::<Option<bool>, u8>(None) });
 }
