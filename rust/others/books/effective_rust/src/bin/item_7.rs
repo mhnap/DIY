@@ -90,10 +90,8 @@ fn main() {
     }
 
     // Overall, this allows clients of the builder to have a more ergonomic building experience:
-    let also_bob = DetailsBuilder::new("Robert", "Builder")
-        .middle_name("the")
-        .preferred_name("Bob")
-        .build();
+    let also_bob =
+        DetailsBuilder::new("Robert", "Builder").middle_name("the").preferred_name("Bob").build();
 
     // The all-consuming nature of this style of builder leads to a couple of wrinkles.
     // The first is that separating out stages of the build process can't be done on its own:

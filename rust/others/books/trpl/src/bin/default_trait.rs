@@ -6,10 +6,7 @@ fn main() {
         second: i32,
     }
 
-    let a1 = WithoutDefault {
-        first: 0,
-        second: 0,
-    };
+    let a1 = WithoutDefault { first: 0, second: 0 };
     dbg!(&a1);
 
     //
@@ -83,10 +80,7 @@ fn main() {
 
     impl Default for WithImplDefault {
         fn default() -> Self {
-            Self {
-                first: 42,
-                second: 43,
-            }
+            Self { first: 42, second: 43 }
         }
     }
 

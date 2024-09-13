@@ -1,1 +1,4 @@
 ignore = ["others/quizzes/dtolnay"]
+
+# https://github.com/rust-lang/rust-analyzer/pull/636
+use_small_heuristics = "Max"

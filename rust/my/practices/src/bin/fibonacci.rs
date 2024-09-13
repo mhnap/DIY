@@ -31,16 +31,7 @@ fn fibonacci_sequence(n: u8) -> Vec<usize> {
 
 fn main() {
     let n: u8 = 12;
-    println!(
-        "Fibonacci {n}th number (recursive) = {}",
-        fibonacci_number_recursive(n)
-    );
-    println!(
-        "Fibonacci {n}th number (iterative) = {}",
-        fibonacci_number_iterative(n)
-    );
-    println!(
-        "Fibonacci sequence to {n}th number = {:?}",
-        fibonacci_sequence(n)
-    );
+    println!("Fibonacci {n}th number (recursive) = {}", fibonacci_number_recursive(n));
+    println!("Fibonacci {n}th number (iterative) = {}", fibonacci_number_iterative(n));
+    println!("Fibonacci sequence to {n}th number = {:?}", fibonacci_sequence(n));
 }

@@ -87,11 +87,7 @@ fn main() {
         // No need to explicitly dereference a reference to use object methods
         let s: String = "42".to_string();
         let r: &String = &s;
-        println!(
-            "s:{}; r:{}",
-            s.chars().next().unwrap(),
-            r.chars().next().unwrap()
-        );
+        println!("s:{}; r:{}", s.chars().next().unwrap(), r.chars().next().unwrap());
     }
 
     {
@@ -264,11 +260,7 @@ fn main() {
     }
 
     {
-        println!(
-            "sizeof bool:{}; sizeof &bool:{}",
-            size_of::<bool>(),
-            size_of::<&bool>()
-        );
+        println!("sizeof bool:{}; sizeof &bool:{}", size_of::<bool>(), size_of::<&bool>());
     }
 }
 

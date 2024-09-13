@@ -24,9 +24,7 @@ mod employees_manager {
 
     impl EmployeesManager {
         pub fn new() -> Self {
-            EmployeesManager {
-                departments: Departments::new(),
-            }
+            EmployeesManager { departments: Departments::new() }
         }
 
         pub fn run(&mut self) {
@@ -36,9 +34,7 @@ mod employees_manager {
                 io::stdout().flush().expect("Unable to flush stdout");
 
                 let mut input = String::new();
-                io::stdin()
-                    .read_line(&mut input)
-                    .expect("Failed to read line.");
+                io::stdin().read_line(&mut input).expect("Failed to read line.");
 
                 let command = input.trim();
                 if command.is_empty() {
@@ -102,10 +98,9 @@ mod employees_manager {
                     false => println!("Cannot find {employee}!"),
                 },
                 ["List", department, "department"] => match self.list_department(department) {
-                    Some(employees) => println!(
-                        "List of employees in {department} department is {:?}.",
-                        employees
-                    ),
+                    Some(employees) => {
+                        println!("List of employees in {department} department is {:?}.", employees)
+                    }
                     None => println!("Cannot find {department} department!"),
                 },
                 ["List", employee, "employee"] => match self.list_employee(employee) {

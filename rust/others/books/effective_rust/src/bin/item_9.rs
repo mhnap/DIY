@@ -60,12 +60,7 @@ fn main() {
 
     // should start to feel more natural expressed as a functional-style expression:
 
-    let even_sum_squares: u64 = values
-        .iter()
-        .filter(|x| *x % 2 == 0)
-        .take(5)
-        .map(|x| x * x)
-        .sum();
+    let even_sum_squares: u64 = values.iter().filter(|x| *x % 2 == 0).take(5).map(|x| x * x).sum();
 
     dbg!(even_sum_squares);
 

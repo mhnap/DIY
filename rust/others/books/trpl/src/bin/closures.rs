@@ -75,23 +75,15 @@ fn main() {
             }
         }
 
-        let store = Inventory {
-            shirts: vec![ShirtColor::Blue, ShirtColor::Red, ShirtColor::Blue],
-        };
+        let store = Inventory { shirts: vec![ShirtColor::Blue, ShirtColor::Red, ShirtColor::Blue] };
 
         let user_pref1 = Some(ShirtColor::Red);
         let giveaway1 = store.giveaway(user_pref1);
-        println!(
-            "The user with preference {:?} gets {:?}",
-            user_pref1, giveaway1
-        );
+        println!("The user with preference {:?} gets {:?}", user_pref1, giveaway1);
 
         let user_pref2 = None;
         let giveaway2 = store.giveaway(user_pref2);
-        println!(
-            "The user with preference {:?} gets {:?}",
-            user_pref2, giveaway2
-        );
+        println!("The user with preference {:?} gets {:?}", user_pref2, giveaway2);
 
         // One interesting aspect here is that we’ve passed a closure that calls self.most_stocked() on the current Inventory instance.
         // The standard library didn’t need to know anything about the Inventory or ShirtColor types we defined, or the logic we want to use in this scenario.
@@ -291,9 +283,7 @@ fn main() {
         //     |
         // 243 |         thread::spawn(move || println!("From thread: {:?}", list))
         //     |                       ++++
-        thread::spawn(move || println!("From thread: {:?}", list))
-            .join()
-            .unwrap();
+        thread::spawn(move || println!("From thread: {:?}", list)).join().unwrap();
 
         // After the closure definition, an immutable borrow to print isn’t allowed because the value is already moved into closure.
         // println!("Before defining closure: {:?}", list);

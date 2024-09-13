@@ -2,13 +2,7 @@ use color_eyre::eyre::Context;
 
 macro_rules! print_err {
     ($err:expr) => {
-        eprintln!(
-            "----- {} at {}:{}:{} -----",
-            stringify!($err),
-            file!(),
-            line!(),
-            column!()
-        );
+        eprintln!("----- {} at {}:{}:{} -----", stringify!($err), file!(), line!(), column!());
         eprintln!("Display:\n{}", $err);
         eprintln!("Display alternate:\n{:#}", $err);
         eprintln!("Debug:\n{:?}", $err);
@@ -47,9 +41,8 @@ fn main() {
 
     // Wrap a lower level error with a new error created from a message to help the person troubleshooting understand the chain of failures that occurred.
 
-    let res = read_env_var("MY_ENV")
-        .context("Failed to read env var")
-        .context("One more outer error");
+    let res =
+        read_env_var("MY_ENV").context("Failed to read env var").context("One more outer error");
     match res {
         Ok(buf) => println!("We read env var: {buf:?}"),
         Err(err) => {

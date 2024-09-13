@@ -139,13 +139,8 @@ fn main() {
         // Panic if index is past the end of the array and is not known at compile time
         println!("Please enter an array index.");
         let mut index = String::new();
-        std::io::stdin()
-            .read_line(&mut index)
-            .expect("Failed to read line");
-        let index: usize = index
-            .trim()
-            .parse()
-            .expect("Index entered was not a number");
+        std::io::stdin().read_line(&mut index).expect("Failed to read line");
+        let index: usize = index.trim().parse().expect("Index entered was not a number");
         let element = arr[index];
         println!("The value of the element at index {index} is: {element}");
     }

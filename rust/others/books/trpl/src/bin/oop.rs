@@ -133,9 +133,7 @@ fn main() {
         }
     }
 
-    let screen = gui_dynamic::Screen {
-        components: vec![&a, &b],
-    };
+    let screen = gui_dynamic::Screen { components: vec![&a, &b] };
     screen.run();
 
     // This works differently from defining a struct that uses a generic type parameter with trait bounds.
@@ -171,13 +169,9 @@ fn main() {
     //                found reference `&B`
 
     // This restricts us to a Screen instance that has a list of components all of type A or all of type B.
-    let screen_a = gui_static::Screen {
-        components: vec![&a, &a],
-    };
+    let screen_a = gui_static::Screen { components: vec![&a, &a] };
     screen_a.run();
-    let screen_b = gui_static::Screen {
-        components: vec![&b, &b],
-    };
+    let screen_b = gui_static::Screen { components: vec![&b, &b] };
     screen_b.run();
 
     // If you’ll only ever have homogeneous collections, using generics and trait bounds is preferable because the definitions will be monomorphized at compile time to use the concrete types.
@@ -280,10 +274,7 @@ fn main() {
 
         impl Post {
             pub fn new() -> Post {
-                Post {
-                    state: Some(Box::new(Draft {})),
-                    content: String::new(),
-                }
+                Post { state: Some(Box::new(Draft {})), content: String::new() }
             }
 
             pub fn add_text(&mut self, text: &str) {
@@ -335,9 +326,7 @@ fn main() {
 
         impl State for Draft {
             fn request_review(self: Box<Self>) -> Box<dyn State> {
-                Box::new(PendingReview {
-                    got_first_approve: false,
-                })
+                Box::new(PendingReview { got_first_approve: false })
             }
             fn approve(self: Box<Self>) -> Box<dyn State> {
                 self
@@ -428,9 +417,7 @@ fn main() {
 
         impl Post {
             pub fn new() -> DraftPost {
-                DraftPost {
-                    content: String::new(),
-                }
+                DraftPost { content: String::new() }
             }
 
             pub fn content(&self) -> &str {
@@ -444,9 +431,7 @@ fn main() {
             }
 
             pub fn request_review(self) -> PendingTwoReviewPost {
-                PendingTwoReviewPost {
-                    content: self.content,
-                }
+                PendingTwoReviewPost { content: self.content }
             }
         }
 
@@ -456,15 +441,11 @@ fn main() {
 
         impl PendingTwoReviewPost {
             pub fn approve(self) -> PendingOneReviewPost {
-                PendingOneReviewPost {
-                    content: self.content,
-                }
+                PendingOneReviewPost { content: self.content }
             }
 
             pub fn reject(self) -> DraftPost {
-                DraftPost {
-                    content: self.content,
-                }
+                DraftPost { content: self.content }
             }
         }
 
@@ -474,15 +455,11 @@ fn main() {
 
         impl PendingOneReviewPost {
             pub fn approve(self) -> Post {
-                Post {
-                    content: self.content,
-                }
+                Post { content: self.content }
             }
 
             pub fn reject(self) -> PendingTwoReviewPost {
-                PendingTwoReviewPost {
-                    content: self.content,
-                }
+                PendingTwoReviewPost { content: self.content }
             }
         }
     }

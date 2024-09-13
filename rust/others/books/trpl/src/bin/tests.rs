@@ -83,28 +83,16 @@ mod tests_v3 {
 
     #[test]
     fn larger_can_hold_smaller() {
-        let larger = Rectangle {
-            width: 8,
-            height: 7,
-        };
-        let smaller = Rectangle {
-            width: 5,
-            height: 1,
-        };
+        let larger = Rectangle { width: 8, height: 7 };
+        let smaller = Rectangle { width: 5, height: 1 };
 
         assert!(larger.can_hold(&smaller));
     }
 
     #[test]
     fn smaller_cannot_hold_larger() {
-        let larger = Rectangle {
-            width: 8,
-            height: 7,
-        };
-        let smaller = Rectangle {
-            width: 5,
-            height: 1,
-        };
+        let larger = Rectangle { width: 8, height: 7 };
+        let smaller = Rectangle { width: 5, height: 1 };
 
         // Because the correct result of the can_hold function in this case is false, we need to negate that result before we pass it to the assert! macro.
         assert!(!smaller.can_hold(&larger));
@@ -154,15 +142,9 @@ mod tests_v5 {
 
     #[test]
     fn is_different() {
-        let larger = Rectangle {
-            width: 8,
-            height: 7,
-        };
+        let larger = Rectangle { width: 8, height: 7 };
 
-        let smaller = Rectangle {
-            width: 5,
-            height: 1,
-        };
+        let smaller = Rectangle { width: 5, height: 1 };
 
         assert_ne!(larger, smaller);
         // We would get such error is Rectangle would not derive PartialEq trait.
@@ -206,11 +188,7 @@ mod tests_v6 {
     #[test]
     fn greeting_contains_name() {
         let result = greeting("Carol");
-        assert!(
-            result.contains("Carol"),
-            "Greeting did not contain name, value was `{}`",
-            result
-        );
+        assert!(result.contains("Carol"), "Greeting did not contain name, value was `{}`", result);
     }
 }
 

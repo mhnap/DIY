@@ -69,10 +69,7 @@ fn main() {
 
         impl<T: Copy> Clone for Point<T> {
             fn clone(&self) -> Self {
-                Self {
-                    x: self.x,
-                    y: self.y,
-                }
+                Self { x: self.x, y: self.y }
             }
         }
 
@@ -496,17 +493,11 @@ fn main() {
         type Output = Point;
 
         fn add(self, other: Point) -> Self::Output {
-            Point {
-                x: self.x + other.x,
-                y: self.y + other.y,
-            }
+            Point { x: self.x + other.x, y: self.y + other.y }
         }
     }
 
-    assert_eq!(
-        Point { x: 1, y: 0 } + Point { x: 2, y: 3 },
-        Point { x: 3, y: 3 }
-    );
+    assert_eq!(Point { x: 1, y: 0 } + Point { x: 2, y: 3 }, Point { x: 3, y: 3 });
 
     // The default generic type in this code is within the Add trait.
     // trait Add<Rhs = Self> {

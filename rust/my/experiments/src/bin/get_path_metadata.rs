@@ -66,18 +66,9 @@ fn print_file_metadata(path: impl AsRef<Path>) -> Result<(), io::Error> {
         dbg!(permissions.mode());
     }
 
-    dbg!(
-        metadata.modified(),
-        metadata.modified().map(DateTime::<Utc>::from)
-    );
-    dbg!(
-        metadata.accessed(),
-        metadata.accessed().map(DateTime::<Utc>::from)
-    );
-    dbg!(
-        metadata.created(),
-        metadata.created().map(DateTime::<Utc>::from)
-    );
+    dbg!(metadata.modified(), metadata.modified().map(DateTime::<Utc>::from));
+    dbg!(metadata.accessed(), metadata.accessed().map(DateTime::<Utc>::from));
+    dbg!(metadata.created(), metadata.created().map(DateTime::<Utc>::from));
 
     #[cfg(unix)]
     {
@@ -89,18 +80,9 @@ fn print_file_metadata(path: impl AsRef<Path>) -> Result<(), io::Error> {
         dbg!(metadata.gid());
         dbg!(metadata.rdev());
         dbg!(metadata.size());
-        dbg!(
-            metadata.atime(),
-            DateTime::from_timestamp(metadata.atime(), 0)
-        );
-        dbg!(
-            metadata.mtime(),
-            DateTime::from_timestamp(metadata.mtime(), 0)
-        );
-        dbg!(
-            metadata.ctime(),
-            DateTime::from_timestamp(metadata.ctime(), 0)
-        );
+        dbg!(metadata.atime(), DateTime::from_timestamp(metadata.atime(), 0));
+        dbg!(metadata.mtime(), DateTime::from_timestamp(metadata.mtime(), 0));
+        dbg!(metadata.ctime(), DateTime::from_timestamp(metadata.ctime(), 0));
         dbg!(metadata.blksize());
         dbg!(metadata.blocks());
     }

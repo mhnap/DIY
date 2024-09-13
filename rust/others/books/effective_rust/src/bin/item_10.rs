@@ -113,9 +113,7 @@ fn main() {
 
     impl Clone for POD {
         fn clone(&self) -> Self {
-            Self {
-                integer: self.integer + 1,
-            }
+            Self { integer: self.integer + 1 }
         }
     }
 

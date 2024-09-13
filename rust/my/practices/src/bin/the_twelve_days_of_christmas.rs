@@ -92,8 +92,5 @@ fn gen_lyrics() -> String {
 }
 
 fn main() {
-    println!(
-        "\"The Twelve Days of Christmas\" carol lyrics:\n\n{}",
-        gen_lyrics()
-    );
+    println!("\"The Twelve Days of Christmas\" carol lyrics:\n\n{}", gen_lyrics());
 }

@@ -33,10 +33,8 @@ async fn main() {
     println!("DURATION CERO: {}", duration.as_millis());
 
     println!("...TEST NUMERO UNO...");
-    let duration = measure(futures::future::join_all(
-        prefixes.iter().map(|p| print_numbers(p)),
-    ))
-    .await;
+    let duration =
+        measure(futures::future::join_all(prefixes.iter().map(|p| print_numbers(p)))).await;
     println!("DURATION UNO: {}", duration.as_millis());
 
     println!("...TEST NUMERO DOS...");
@@ -52,10 +50,9 @@ async fn main() {
     println!("DURATION DOS: {}", duration.as_millis());
 
     println!("...TEST NUMERO TRES...");
-    let duration =
-        measure(futures::future::join_all(prefixes.iter().map(|p| {
-            tokio::task::spawn(async move { print_numbers(p).await })
-        })))
-        .await;
+    let duration = measure(futures::future::join_all(
+        prefixes.iter().map(|p| tokio::task::spawn(async move { print_numbers(p).await })),
+    ))
+    .await;
     println!("DURATION TRES: {}", duration.as_millis());
 }

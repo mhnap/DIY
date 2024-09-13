@@ -6,11 +6,8 @@ async fn hello(name: &'static str) {
 
 fn main() {
     // Manually configure the Tokio runtime with a specific number of threads.
-    let tokio_rt = tokio::runtime::Builder::new_multi_thread()
-        .worker_threads(2)
-        .enable_all()
-        .build()
-        .unwrap();
+    let tokio_rt =
+        tokio::runtime::Builder::new_multi_thread().worker_threads(2).enable_all().build().unwrap();
 
     tokio_rt.block_on(hello("world"));
 

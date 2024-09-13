@@ -17,10 +17,7 @@ fn main() {
     // a) no deadlock.
     {
         let range_locked = range_with_mutex.lock().unwrap();
-        let range = Range {
-            start: range_locked.start,
-            end: range_locked.end,
-        };
+        let range = Range { start: range_locked.start, end: range_locked.end };
         dbg!(range);
     }
 

@@ -55,9 +55,8 @@ fn main() {
 
     // Attach context to help the person troubleshooting the error understand where things went wrong.
 
-    let res = read_env_var("MY_ENV")
-        .context("Failed to read env var")
-        .context("One more outer error");
+    let res =
+        read_env_var("MY_ENV").context("Failed to read env var").context("One more outer error");
     match res {
         Ok(buf) => println!("We read env var: {buf:?}"),
         Err(err) => {
@@ -357,9 +356,7 @@ fn main() {
 
         impl From<std::io::Error> for ExternalError {
             fn from(value: std::io::Error) -> Self {
-                Self::Io {
-                    source: value.into(),
-                }
+                Self::Io { source: value.into() }
             }
         }
 
@@ -453,10 +450,7 @@ fn backtrace_preserved_after_thiserror_derive() {
     let wrapped = anyhow::Error::from(SomeError::Anyhow(errs.pop().unwrap()));
     let notwrapped = errs.pop().unwrap();
 
-    assert_eq!(
-        wrapped.backtrace().to_string(),
-        notwrapped.backtrace().to_string()
-    );
+    assert_eq!(wrapped.backtrace().to_string(), notwrapped.backtrace().to_string());
 }
 
 #[test]

@@ -2,13 +2,7 @@ use stack_error::StackError;
 
 macro_rules! print_err {
     ($err:expr) => {
-        eprintln!(
-            "----- {} at {}:{}:{} -----",
-            stringify!($err),
-            file!(),
-            line!(),
-            column!()
-        );
+        eprintln!("----- {} at {}:{}:{} -----", stringify!($err), file!(), line!(), column!());
         eprintln!("Display:\n{}", $err);
         eprintln!("Display alternate:\n{:#}", $err);
         eprintln!("Debug:\n{:?}", $err);

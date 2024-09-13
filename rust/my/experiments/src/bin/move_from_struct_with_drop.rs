@@ -20,17 +20,13 @@ struct NonDropStruct {
 
 fn main() {
     // Can move from non drop struct.
-    let non_drop_struct = NonDropStruct {
-        fancy: FancyNum { num: 5 },
-    };
+    let non_drop_struct = NonDropStruct { fancy: FancyNum { num: 5 } };
 
     let fancy_field = non_drop_struct.fancy;
     println!("Fancy: {}", fancy_field.num);
 
     // Cannot move from drop struct.
-    let drop_struct = DropStruct {
-        fancy: FancyNum { num: 5 },
-    };
+    let drop_struct = DropStruct { fancy: FancyNum { num: 5 } };
     // let fancy_field = drop_struct.fancy;
     // println!("Fancy: {}", fancy_field.num);
     //     error[E0509]: cannot move out of type `DropStruct`, which implements the `Drop` trait
@@ -58,9 +54,7 @@ fn main() {
 
     // This error can be fixed by creating a reference to the fields of a struct, enum, or tuple using the ref keyword.
 
-    let drop_struct = DropStruct {
-        fancy: FancyNum { num: 5 },
-    };
+    let drop_struct = DropStruct { fancy: FancyNum { num: 5 } };
     let ref fancy_field = drop_struct.fancy;
     println!("Fancy: {}", fancy_field.num);
 }

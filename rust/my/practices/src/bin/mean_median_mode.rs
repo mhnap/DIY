@@ -7,14 +7,9 @@ fn read_integers() -> Vec<i32> {
 
     loop {
         let mut input = String::new();
-        io::stdin()
-            .read_line(&mut input)
-            .expect("Failed to read line.");
+        io::stdin().read_line(&mut input).expect("Failed to read line.");
 
-        integers = input
-            .split_whitespace()
-            .filter_map(|c| c.parse().ok())
-            .collect();
+        integers = input.split_whitespace().filter_map(|c| c.parse().ok()).collect();
         if integers.is_empty() {
             println!("Failed to read list.");
             continue;

@@ -3,13 +3,7 @@ use std::{fs, io, path::PathBuf};
 
 macro_rules! print_err {
     ($err:expr) => {
-        eprintln!(
-            "----- {} at {}:{}:{} -----",
-            stringify!($err),
-            file!(),
-            line!(),
-            column!()
-        );
+        eprintln!("----- {} at {}:{}:{} -----", stringify!($err), file!(), line!(), column!());
         eprintln!("Display:\n{}", $err);
         eprintln!("Display alternate:\n{:#}", $err);
         eprintln!("Debug:\n{:?}", $err);
@@ -111,9 +105,8 @@ fn main() {
 
         fn read_env_var(key: &str) -> Result<u8, snafu::Whatever> {
             let var = std::env::var(key).whatever_context("cannot read env var")?;
-            let num: u8 = var
-                .parse()
-                .with_whatever_context(|e| format!("cannot parse var: {e}"))?;
+            let num: u8 =
+                var.parse().with_whatever_context(|e| format!("cannot parse var: {e}"))?;
             Ok(num)
         }
 

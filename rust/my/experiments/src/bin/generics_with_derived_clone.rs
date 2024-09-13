@@ -7,10 +7,7 @@ fn main() {
         string2: String,
     }
 
-    let two_strings = TwoStrings {
-        string1: "hello".to_string(),
-        string2: "world".to_string(),
-    };
+    let two_strings = TwoStrings { string1: "hello".to_string(), string2: "world".to_string() };
     let two_strings_cloned = two_strings.clone();
     dbg!(&two_strings);
     dbg!(&two_strings_cloned);
@@ -22,20 +19,14 @@ fn main() {
         thing2: T,
     }
 
-    let two_ints = TwoThings {
-        thing1: 42,
-        thing2: 43,
-    };
+    let two_ints = TwoThings { thing1: 42, thing2: 43 };
     let two_ints_cloned = two_ints.clone();
     dbg!(&two_ints);
     dbg!(&two_ints_cloned);
 
     // Not satisfied Clone trait bound in this case.
     struct A;
-    let two_a = TwoThings {
-        thing1: A,
-        thing2: A,
-    };
+    let two_a = TwoThings { thing1: A, thing2: A };
     // let two_a_cloned = two_a.clone();
     // error[E0599]: the method `clone` exists for struct `TwoThings<A>`, but its trait bounds were not satisfied
     //   --> src/experiments/generics_with_derived_clone.rs:39:30

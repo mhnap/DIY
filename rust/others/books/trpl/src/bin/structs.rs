@@ -6,12 +6,7 @@ fn main() {
     // Structs are similar to tuples, in that both hold multiple related values.
     // Like tuples, the pieces of a struct can be different types. Unlike with tuples, in a struct you’ll name each piece of data so it’s clear what the values mean.
     // Adding these names means that structs are more flexible than tuples: you don’t have to rely on the order of the data to specify or access the values of an instance.
-    let mut user1 = (
-        true,
-        String::from("someusername123"),
-        String::from("someone@example.com"),
-        1,
-    );
+    let mut user1 = (true, String::from("someusername123"), String::from("someone@example.com"), 1);
     user1.2 = String::from("anotheremail@example.com");
     dbg!(&user1, size_of_val(&user1));
 
@@ -37,33 +32,17 @@ fn main() {
 
     // As with any expression, we can construct a new instance of the struct as the last expression in the function body to implicitly return that new instance.
     fn build_user_v1(email: String, username: String) -> User {
-        User {
-            active: true,
-            username: username,
-            email: email,
-            sign_in_count: 1,
-        }
+        User { active: true, username: username, email: email, sign_in_count: 1 }
     }
-    let user1 = build_user_v1(
-        "someusername123".to_string(),
-        "someone@example.com".to_string(),
-    );
+    let user1 = build_user_v1("someusername123".to_string(), "someone@example.com".to_string());
 
     //
 
     // Because the parameter names and the struct field names are exactly the same, we can use the field init shorthand syntax to rewrite build_user so it behaves exactly the same but doesn’t have the repetition of username and email.
     fn build_user_v2(email: String, username: String) -> User {
-        User {
-            active: true,
-            username,
-            email,
-            sign_in_count: 1,
-        }
+        User { active: true, username, email, sign_in_count: 1 }
     }
-    let user1 = build_user_v1(
-        "someusername123".to_string(),
-        "someone@example.com".to_string(),
-    );
+    let user1 = build_user_v1("someusername123".to_string(), "someone@example.com".to_string());
 
     //
 
@@ -80,18 +59,10 @@ fn main() {
 
     // Using struct update syntax, we can achieve the same effect with less code.
     // The syntax .. specifies that the remaining fields not explicitly set should have the same value as the fields in the given instance.
-    let user3 = User {
-        email: String::from("another@example.com"),
-        ..user2
-    };
+    let user3 = User { email: String::from("another@example.com"), ..user2 };
 
     // Struct also can be destructured
-    let User {
-        active,
-        username,
-        email,
-        sign_in_count,
-    } = user3;
+    let User { active, username, email, sign_in_count } = user3;
     dbg!(active, username, email, sign_in_count);
 
     //

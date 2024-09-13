@@ -24,10 +24,7 @@ fn main() {
 
     // Works with explicit type annotation.
     let _map: HashMap<_, _> = vec.iter().map(|v| (v.key, v.val)).collect();
-    let _map = vec
-        .iter()
-        .map(|v| (v.key, v.val))
-        .collect::<HashMap<_, _>>();
+    let _map = vec.iter().map(|v| (v.key, v.val)).collect::<HashMap<_, _>>();
 
     // Works without explicit type annotation when type is specified in the function signature.
     dbg_map(vec.iter().map(|v| (v.key, v.val)).collect());
@@ -54,11 +51,7 @@ fn main() {
     //    |                                                            ++++++++++
 
     // Works with explicit type annotation.
-    dbg_into_map(
-        vec.iter()
-            .map(|v| (v.key, v.val))
-            .collect::<HashMap<_, _>>(),
-    );
+    dbg_into_map(vec.iter().map(|v| (v.key, v.val)).collect::<HashMap<_, _>>());
 }
 
 fn dbg_map(map: HashMap<i32, i32>) {

@@ -12,9 +12,7 @@ pub struct FileDeleter {
 
 impl FileDeleter {
     pub fn new(path: PathBuf, retain: bool) -> Self {
-        Self {
-            file_deleter_inner: Arc::new(FileDeleterInner { path, retain }),
-        }
+        Self { file_deleter_inner: Arc::new(FileDeleterInner { path, retain }) }
     }
 }
 
@@ -46,10 +44,7 @@ impl Drop for FileDeleterInner {
                     println!("Deleted '{}' file", self.path.display());
                 }
             } else {
-                println!(
-                    "File '{}' won't be deleted as it does not exist",
-                    self.path.display()
-                );
+                println!("File '{}' won't be deleted as it does not exist", self.path.display());
             }
         }
     }

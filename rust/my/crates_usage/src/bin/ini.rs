@@ -3,9 +3,7 @@ fn main() {
         // Using `rust-ini`.
         let mut conf = ini::Ini::new();
         conf.with_section(None::<String>).set("encoding", "utf-8");
-        conf.with_section(Some("User"))
-            .set("given_name", "Tommy")
-            .set("unicode", "Raspberry树莓");
+        conf.with_section(Some("User")).set("given_name", "Tommy").set("unicode", "Raspberry树莓");
         conf.with_section(Some("Book")).set("name", "Rust cool");
         conf.write_to_file("conf1.ini").unwrap();
     }
@@ -44,14 +42,8 @@ fn main() {
 
         let c = Config {
             encoding: "utf-8",
-            user: User {
-                given_name: "Tommy".to_owned(),
-                unicode: "Raspberry树莓".to_owned(),
-            },
-
-            book: Book {
-                name: "Rust cool".to_owned(),
-            },
+            user: User { given_name: "Tommy".to_owned(), unicode: "Raspberry树莓".to_owned() },
+            book: Book { name: "Rust cool".to_owned() },
         };
 
         std::fs::write("conf3.ini", serde_ini::to_string(&c).unwrap()).unwrap();

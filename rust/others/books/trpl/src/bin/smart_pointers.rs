@@ -295,12 +295,8 @@ fn main() {
     }
 
     {
-        let c = CustomSmartPointer {
-            data: String::from("my stuff"),
-        };
-        let d = CustomSmartPointer {
-            data: String::from("other stuff"),
-        };
+        let c = CustomSmartPointer { data: String::from("my stuff") };
+        let d = CustomSmartPointer { data: String::from("other stuff") };
 
         println!("CustomSmartPointers created.");
     }
@@ -320,9 +316,7 @@ fn main() {
     // Occasionally, however, you might want to clean up a value early.
 
     // Rust doesn’t let you call the Drop trait’s drop method manually.
-    let c = CustomSmartPointer {
-        data: String::from("my stuff"),
-    };
+    let c = CustomSmartPointer { data: String::from("my stuff") };
     // c.drop();
     // error[E0040]: explicit use of destructor method
     //    --> src/lessons/smart_pointers.rs:321:7
@@ -609,16 +603,10 @@ fn main() {
             children: RefCell<Vec<Rc<Node>>>,
         }
 
-        let leaf = Rc::new(Node {
-            value: 3,
-            children: RefCell::new(vec![]),
-        });
+        let leaf = Rc::new(Node { value: 3, children: RefCell::new(vec![]) });
         println!("leaf = {:?}", leaf);
 
-        let branch = Rc::new(Node {
-            value: 5,
-            children: RefCell::new(vec![Rc::clone(&leaf)]),
-        });
+        let branch = Rc::new(Node { value: 5, children: RefCell::new(vec![Rc::clone(&leaf)]) });
         println!("branch = {:?}", branch);
 
         // We clone the Rc<Node> in leaf and store that in branch, meaning the Node in leaf now has two owners: leaf and branch.
@@ -680,11 +668,7 @@ fn main() {
         children: RefCell::new(vec![]),
     });
 
-    println!(
-        "leaf strong = {}, weak = {}",
-        Rc::strong_count(&leaf),
-        Rc::weak_count(&leaf),
-    );
+    println!("leaf strong = {}, weak = {}", Rc::strong_count(&leaf), Rc::weak_count(&leaf),);
 
     {
         let branch = Rc::new(Node {
@@ -701,19 +685,11 @@ fn main() {
             Rc::weak_count(&branch),
         );
 
-        println!(
-            "leaf strong = {}, weak = {}",
-            Rc::strong_count(&leaf),
-            Rc::weak_count(&leaf),
-        );
+        println!("leaf strong = {}, weak = {}", Rc::strong_count(&leaf), Rc::weak_count(&leaf),);
     }
 
     println!("leaf parent = {:?}", leaf.parent.borrow().upgrade());
-    println!(
-        "leaf strong = {}, weak = {}",
-        Rc::strong_count(&leaf),
-        Rc::weak_count(&leaf),
-    );
+    println!("leaf strong = {}, weak = {}", Rc::strong_count(&leaf), Rc::weak_count(&leaf),);
 
     // All of the logic that manages the counts and value dropping is built into Rc<T> and Weak<T> and their implementations of the Drop trait.
     // By specifying that the relationship from a child to its parent should be a Weak<T> reference in the definition of Node, you’re able to have parent nodes point to child nodes and vice versa without creating a reference cycle and memory leaks.

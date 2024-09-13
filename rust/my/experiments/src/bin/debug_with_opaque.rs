@@ -6,9 +6,7 @@ fn main() {
         msg: String,
     }
 
-    let some_regular_struct = SomeRegularStruct {
-        msg: "my small msg".to_owned(),
-    };
+    let some_regular_struct = SomeRegularStruct { msg: "my small msg".to_owned() };
 
     dbg!(&some_regular_struct);
 
@@ -19,9 +17,7 @@ fn main() {
         boxed: Box<SomeRegularStruct>,
     }
 
-    let struct_with_box = StructWithBox {
-        boxed: Box::new(some_regular_struct.clone()),
-    };
+    let struct_with_box = StructWithBox { boxed: Box::new(some_regular_struct.clone()) };
 
     dbg!(&struct_with_box);
 
@@ -32,9 +28,7 @@ fn main() {
         arced: Arc<SomeRegularStruct>,
     }
 
-    let struct_with_arc = StructWithArc {
-        arced: Arc::new(some_regular_struct),
-    };
+    let struct_with_arc = StructWithArc { arced: Arc::new(some_regular_struct) };
 
     dbg!(&struct_with_arc);
 
@@ -45,9 +39,7 @@ fn main() {
         arced: Arc<StructWithBox>,
     }
 
-    let struct_with_arc_with_box = StructWithArcWithBox {
-        arced: Arc::new(struct_with_box),
-    };
+    let struct_with_arc_with_box = StructWithArcWithBox { arced: Arc::new(struct_with_box) };
 
     dbg!(&struct_with_arc_with_box);
 
@@ -64,9 +56,8 @@ fn main() {
         anyhow_err: anyhow::Error,
     }
 
-    let struct_with_anyhow_error = StructWithAnyhowError {
-        anyhow_err: anyhow::anyhow!(struct_with_arc_with_box.clone()),
-    };
+    let struct_with_anyhow_error =
+        StructWithAnyhowError { anyhow_err: anyhow::anyhow!(struct_with_arc_with_box.clone()) };
 
     dbg!(&struct_with_anyhow_error);
 
@@ -82,9 +73,8 @@ fn main() {
         eyre_report: color_eyre::Report,
     }
 
-    let struct_with_eyre_report = StructWithEyreReport {
-        eyre_report: color_eyre::eyre::eyre!(struct_with_arc_with_box),
-    };
+    let struct_with_eyre_report =
+        StructWithEyreReport { eyre_report: color_eyre::eyre::eyre!(struct_with_arc_with_box) };
 
     dbg!(&struct_with_eyre_report);
 

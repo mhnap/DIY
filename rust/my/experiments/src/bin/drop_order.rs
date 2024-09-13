@@ -150,11 +150,7 @@ fn structs() {
     }
 
     // struct fields are dropped in the same order as declared in the struct (source-code-wise, not memory-layout-wise).
-    let s = SomeStruct {
-        b: Token("b"),
-        a: Token("a"),
-        c: Token("c"),
-    };
+    let s = SomeStruct { b: Token("b"), a: Token("a"), c: Token("c") };
 }
 
 macro_rules! section {

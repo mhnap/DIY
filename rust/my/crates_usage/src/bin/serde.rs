@@ -256,9 +256,7 @@ fn main() {
 
     let vec = vec![
         MyEnum::VariantOne(42),
-        MyEnum::VariantTwo {
-            name: "Mike".to_string(),
-        },
+        MyEnum::VariantTwo { name: "Mike".to_string() },
         MyEnum::VariantThree,
     ];
     dbg!(serde_json::to_string(&vec));
@@ -276,9 +274,7 @@ fn main() {
 
     let vec = vec![
         MyEnum2::VariantOne(42),
-        MyEnum2::VariantTwo {
-            name: "Mike".to_string(),
-        },
+        MyEnum2::VariantTwo { name: "Mike".to_string() },
         MyEnum2::VariantThree,
     ];
     dbg!(serde_json::to_string(&vec));

@@ -17,10 +17,7 @@ pub struct Potato {
 
 impl Potato {
     pub fn new(weight: u32) -> Self {
-        Potato {
-            weight,
-            kind: "homemade".into(),
-        }
+        Potato { weight, kind: "homemade".into() }
     }
 }
 

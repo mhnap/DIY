@@ -7,10 +7,7 @@ fn main() {
         }
         let width = 30;
         let height = 50;
-        println!(
-            "The area of the rectangle is {} square pixels.",
-            area(width, height)
-        );
+        println!("The area of the rectangle is {} square pixels.", area(width, height));
     }
 
     // With tuple
@@ -19,10 +16,7 @@ fn main() {
             dimensions.0 * dimensions.1
         }
         let rectangle = (30, 50);
-        println!(
-            "The area of the rectangle is {} square pixels.",
-            area(rectangle)
-        );
+        println!("The area of the rectangle is {} square pixels.", area(rectangle));
     }
 
     // With struct
@@ -34,14 +28,8 @@ fn main() {
         fn area(rectangle: &Rectangle) -> u32 {
             rectangle.width * rectangle.height
         }
-        let rectangle = Rectangle {
-            width: 30,
-            height: 50,
-        };
-        println!(
-            "The area of the rectangle is {} square pixels.",
-            area(&rectangle)
-        );
+        let rectangle = Rectangle { width: 30, height: 50 };
+        println!("The area of the rectangle is {} square pixels.", area(&rectangle));
     }
 
     // Methods are similar to functions: we declare them with the fn keyword and a name, they can have parameters and a return value, and they contain some code that’s run when the method is called from somewhere else.
@@ -63,44 +51,23 @@ fn main() {
                 self.width * self.height
             }
         }
-        let rectangle = Rectangle {
-            width: 30,
-            height: 50,
-        };
-        println!(
-            "The area of the rectangle is {} square pixels.",
-            rectangle.area()
-        );
+        let rectangle = Rectangle { width: 30, height: 50 };
+        println!("The area of the rectangle is {} square pixels.", rectangle.area());
 
         //
 
         // Rust doesn’t have an equivalent to the -> operator; instead, Rust has a feature called automatic referencing and dereferencing.
         // Calling methods is one of the few places in Rust that has this behavior.
         let rec_ref = &rectangle;
-        println!(
-            "The area of the rectangle is {} square pixels.",
-            rec_ref.area()
-        );
+        println!("The area of the rectangle is {} square pixels.", rec_ref.area());
         // The same as
-        println!(
-            "The area of the rectangle is {} square pixels.",
-            (*rec_ref).area()
-        );
+        println!("The area of the rectangle is {} square pixels.", (*rec_ref).area());
         // And the same as
-        println!(
-            "The area of the rectangle is {} square pixels.",
-            (&rectangle).area()
-        );
+        println!("The area of the rectangle is {} square pixels.", (&rectangle).area());
         // And as
-        println!(
-            "The area of the rectangle is {} square pixels.",
-            (*(&rectangle)).area()
-        );
+        println!("The area of the rectangle is {} square pixels.", (*(&rectangle)).area());
         // Can be called on instance as associated function
-        println!(
-            "The area of the rectangle is {} square pixels.",
-            Rectangle::area(&rectangle)
-        );
+        println!("The area of the rectangle is {} square pixels.", Rectangle::area(&rectangle));
 
         //
 
@@ -117,18 +84,9 @@ fn main() {
                 self.width > other.width && self.height > other.height
             }
         }
-        let rect1 = Rectangle {
-            width: 30,
-            height: 50,
-        };
-        let rect2 = Rectangle {
-            width: 10,
-            height: 40,
-        };
-        let rect3 = Rectangle {
-            width: 60,
-            height: 45,
-        };
+        let rect1 = Rectangle { width: 30, height: 50 };
+        let rect2 = Rectangle { width: 10, height: 40 };
+        let rect3 = Rectangle { width: 60, height: 45 };
         println!("Can rect1 hold rect2? {}", rect1.can_hold(&rect2));
         println!("Can rect1 hold rect3? {}", rect1.can_hold(&rect3));
 
@@ -139,10 +97,7 @@ fn main() {
         // Associated functions that aren’t methods are often used for constructors that will return a new instance of the struct.
         impl Rectangle {
             fn square(size: u32) -> Self {
-                Self {
-                    width: size,
-                    height: size,
-                }
+                Self { width: size, height: size }
             }
         }
         let sq = Rectangle::square(3);

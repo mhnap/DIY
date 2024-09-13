@@ -37,15 +37,9 @@ fn main() {
             kind: IpAddrKind,
             address: String,
         }
-        let home = IpAddr {
-            kind: IpAddrKind::V4,
-            address: String::from("127.0.0.1"),
-        };
+        let home = IpAddr { kind: IpAddrKind::V4, address: String::from("127.0.0.1") };
         dbg!(&home, size_of_val(&home));
-        let loopback = IpAddr {
-            kind: IpAddrKind::V6,
-            address: String::from("::1"),
-        };
+        let loopback = IpAddr { kind: IpAddrKind::V6, address: String::from("::1") };
         dbg!(&loopback, size_of_val(&loopback));
     }
 

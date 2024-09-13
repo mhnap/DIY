@@ -9,17 +9,9 @@ macro_rules! dbg_path {
 macro_rules! compare_paths {
     ($path1:ident, $path2:ident) => {
         if $path1 == $path2 {
-            print!(
-                "'{}' is equal to '{}'",
-                stringify!($path1),
-                stringify!($path2)
-            );
+            print!("'{}' is equal to '{}'", stringify!($path1), stringify!($path2));
         } else {
-            print!(
-                "'{}' is not equal to '{}'",
-                stringify!($path1),
-                stringify!($path2)
-            );
+            print!("'{}' is not equal to '{}'", stringify!($path1), stringify!($path2));
         }
 
         if $path1.to_string_lossy() == $path2.to_string_lossy() {
