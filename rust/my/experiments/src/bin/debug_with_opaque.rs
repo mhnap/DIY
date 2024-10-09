@@ -80,6 +80,49 @@ fn main() {
 
     // But regular `Debug` is different.
     dbg!(format!("{struct_with_eyre_report:?}"));
+
+    //
+
+    /// Opaque error wrapper used for better reporting via `Debug` impl.
+    /// It includes [`std::backtrace::Backtrace`] and [`std::panic::Location`].
+    ///
+    /// It is better than to use [`anyhow`] or [`color_eyre`] instead,
+    /// as they don't print backtrace nor location in the `Debug` alternate impl.
+    /// Also this approach allows to see nested opaque error info (backtrace/location) in the `Debug` impl
+    /// which [`anyhow`]/[`color_eyre`] won't show because they show only current error info (backtrace/location).
+    #[derive(Debug)]
+    pub struct Opaque {
+        error: Box<dyn std::error::Error + Send + Sync>,
+        #[expect(dead_code, reason = "used only in the `Debug` impl")]
+        backtrace: std::backtrace::Backtrace,
+        #[expect(dead_code, reason = "used only in the `Debug` impl")]
+        location: std::panic::Location<'static>,
+    }
+
+    impl std::fmt::Display for Opaque {
+        fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+            std::fmt::Display::fmt(&self.error, f)
+        }
+    }
+
+    impl std::ops::Deref for Opaque {
+        type Target = dyn std::error::Error;
+
+        fn deref(&self) -> &Self::Target {
+            self.error.as_ref()
+        }
+    }
+
+    impl<E: std::error::Error + Send + Sync + 'static> From<E> for Opaque {
+        #[track_caller]
+        fn from(value: E) -> Self {
+            Self {
+                error: value.into(),
+                backtrace: std::backtrace::Backtrace::capture(),
+                location: *std::panic::Location::caller(),
+            }
+        }
+    }
 }
 
 // [my/experiments/src/bin/debug_with_opaque.rs:13:5] &some_regular_struct = SomeRegularStruct {
