@@ -1,4 +1,10 @@
 {
+	"accessibility.signals.taskCompleted": {
+		"sound": "on"
+	},
+	"accessibility.signals.taskFailed": {
+		"sound": "on"
+	},
 	"diffEditor.hideUnchangedRegions.enabled": true,
 	"diffEditor.ignoreTrimWhitespace": false,
 	"diffEditor.renderSideBySide": false,
