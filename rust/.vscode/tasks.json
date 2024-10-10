@@ -3,36 +3,24 @@
 	"version": "2.0.0",
 	"tasks": [
 		{
-			"label": "cargo build",
+			"label": "cargo check",
 			"type": "cargo",
-			"command": "lbuild",
-			"problemMatcher": [
-				"$rustc"
-			],
+			"command": "lcheck",
 			"group": {
 				"kind": "build",
+				"isDefault": true
 			},
-			"dependsOn": [
-				"clear terminal"
-			],
 			"env": {
 				"CARGO_MSG_LIMIT": "1"
 			}
 		},
 		{
-			"label": "cargo check",
+			"label": "cargo build",
 			"type": "cargo",
-			"command": "lcheck",
-			"problemMatcher": [
-				"$rustc"
-			],
+			"command": "lbuild",
 			"group": {
-				"kind": "build",
-				"isDefault": true
+				"kind": "build"
 			},
-			"dependsOn": [
-				"clear terminal"
-			],
 			"env": {
 				"CARGO_MSG_LIMIT": "1"
 			}
@@ -41,15 +29,9 @@
 			"label": "cargo clippy",
 			"type": "cargo",
 			"command": "lclippy",
-			"problemMatcher": [
-				"$rustc"
-			],
 			"group": {
-				"kind": "build",
+				"kind": "build"
 			},
-			"dependsOn": [
-				"clear terminal"
-			],
 			"env": {
 				"CARGO_MSG_LIMIT": "1"
 			}
@@ -58,21 +40,9 @@
 			"label": "cargo fmt",
 			"type": "cargo",
 			"command": "fmt",
-			"problemMatcher": [
-				"$rustc"
-			],
 			"group": {
-				"kind": "build",
+				"kind": "build"
 			},
-			"dependsOn": [
-				"clear terminal"
-			]
-		},
-		{
-			"label": "clear terminal",
-			"type": "shell",
-			"command": "clear",
-			"group": "build"
 		},
 	]
 }
