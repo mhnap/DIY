@@ -1,5 +1,11 @@
 [workspace]
-members = ["my/*", "others/books/*", "others/quizzes/*", "others/blogs/*"]
+members = [
+    "my/*",
+    "others/books/*",
+    "others/quizzes/*",
+    "others/blogs/*",
+    "others/tutorials/*",
+]
 resolver = "2"
 
 [profile.dev]
