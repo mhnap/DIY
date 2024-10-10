@@ -1,20 +1,6 @@
 #![feature(error_generic_member_access)]
-#![feature(error_iter)]
 
-macro_rules! print_err {
-    ($err:expr) => {
-        eprintln!("----- {} at {} -----", stringify!($err), line!());
-        eprintln!("Display:\n{}", $err);
-        eprintln!("Display alternate:\n{:#}", $err);
-        eprintln!("Debug:\n{:?}", $err);
-        eprintln!("Debug alternate:\n{:#?}", $err);
-        let as_dyn: &dyn std::error::Error = &$err;
-        for source in as_dyn.sources().skip(1) {
-            eprintln!("Caused by: {source}");
-        }
-        eprintln!("----------------------");
-    };
-}
+use my_practices::print_err;
 
 fn main() {
     /// Needs manual [`std::fmt::Display`] and [`std::error::Error`] implementations.

@@ -1,15 +1,6 @@
 use color_eyre::eyre::Context;
-
-macro_rules! print_err {
-    ($err:expr) => {
-        eprintln!("----- {} at {}:{}:{} -----", stringify!($err), file!(), line!(), column!());
-        eprintln!("Display:\n{}", $err);
-        eprintln!("Display alternate:\n{:#}", $err);
-        eprintln!("Debug:\n{:?}", $err);
-        eprintln!("Debug alternate:\n{:#?}", $err);
-        eprintln!("----------------------");
-    };
-}
+use my_practices::print_err;
+use std::ops::Deref;
 
 fn main() {
     // The heart of this crate is its ability to swap out the Handler type to change what information is carried alongside errors and how the end report is formatted.
@@ -33,7 +24,7 @@ fn main() {
     match res {
         Ok(buf) => println!("We read env var: {buf:?}"),
         Err(err) => {
-            print_err!(err);
+            print_err!(err.deref());
         }
     }
 
@@ -46,7 +37,7 @@ fn main() {
     match res {
         Ok(buf) => println!("We read env var: {buf:?}"),
         Err(err) => {
-            print_err!(err);
+            print_err!(err.deref());
         }
     }
 

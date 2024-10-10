@@ -1,37 +1,8 @@
 #![feature(error_generic_member_access)]
 
 use anyhow::Context;
-
-macro_rules! print_anyhow {
-    ($err:expr) => {
-        eprintln!("----- {} at {} -----", stringify!($err), line!());
-        eprintln!("Display:\n{}", $err);
-        eprintln!("Display alternate:\n{:#}", $err);
-        eprintln!("Debug:\n{:?}", $err);
-        eprintln!("Debug alternate:\n{:#?}", $err);
-        eprintln!("----------------------");
-    };
-}
-
-macro_rules! print_err {
-    ($err:expr) => {
-        eprintln!("----- {} at {} -----", stringify!($err), line!());
-        eprintln!("Display:\n{}", $err);
-        eprintln!("Display alternate:\n{:#}", $err);
-        eprintln!("Debug:\n{:?}", $err);
-        eprintln!("Debug alternate:\n{:#?}", $err);
-        error_chain(&$err);
-        eprintln!("----------------------");
-    };
-}
-
-fn error_chain(e: &impl std::error::Error) {
-    let mut current = e.source();
-    while let Some(cause) = current {
-        eprintln!("Caused by: {cause}, dbg: {cause:?}");
-        current = cause.source();
-    }
-}
+use my_practices::print_err;
+use std::ops::Deref;
 
 fn main() {
     // Use Result<T, anyhow::Error>, or equivalently anyhow::Result<T>, as the return type of any fallible function.
@@ -47,7 +18,7 @@ fn main() {
     match res {
         Ok(buf) => println!("We read env var: {buf:?}"),
         Err(err) => {
-            print_anyhow!(err);
+            print_err!(err.deref());
         }
     }
 
@@ -60,7 +31,7 @@ fn main() {
     match res {
         Ok(buf) => println!("We read env var: {buf:?}"),
         Err(err) => {
-            print_anyhow!(err);
+            print_err!(err.deref());
         }
     }
 

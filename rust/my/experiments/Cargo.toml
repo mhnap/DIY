@@ -8,3 +8,4 @@ chrono = "0.4"
 anyhow = "1.0"
 thiserror = "1.0"
 color-eyre = "0.6"
+my_practices = { workspace = true }

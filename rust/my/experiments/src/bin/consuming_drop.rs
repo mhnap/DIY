@@ -12,11 +12,11 @@ fn main() {
         foo;
     }
 
-    impl Drop for Foo {
-        fn drop(self) {
-            do_something(self);
-        }
-    }
+    // impl Drop for Foo {
+    //     fn drop(self) {
+    //         do_something(self);
+    //     }
+    // }
 
     let foo = Foo {};
 }

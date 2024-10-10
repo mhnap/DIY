@@ -8,3 +8,6 @@ debug = 0
 # (since https://github.com/rust-lang/cargo/pull/13257),
 # but still add here explicitly to be more readable.
 strip = "debuginfo"
+
+[workspace.dependencies]
+my_practices = { path = "my/practices" }

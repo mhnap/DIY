@@ -13,10 +13,11 @@ fn main() {
     let mutex = Mutex::new(A { val: Rc::new(5) });
     let target = Arc::new(mutex);
 
-    let t = thread::spawn(move || {
-        target.lock();
-        // do something...
-    });
+    // let t = thread::spawn(move || {
+    //     target.lock();
+    //     // do something...
+    // });
+    //
     // error[E0277]: `Rc<u32>` cannot be sent between threads safely
     //    --> src/experiments/rc_in_mutex.rs:13:27
     //     |
@@ -51,5 +52,5 @@ fn main() {
     // 683 |     F: Send + 'static,
     //     |        ^^^^ required by this bound in `spawn`
 
-    t.join().unwrap();
+    // t.join().unwrap();
 }

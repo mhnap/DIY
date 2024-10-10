@@ -33,9 +33,9 @@ async fn main() {
         let res = &res;
         async move {
             for _ in 0..5 {
-                let mut guard = res.lock().unwrap();
+                // let mut guard = res.lock().unwrap();
                 sleep(Duration::from_millis(10)).await;
-                guard.push(name);
+                // guard.push(name);
             }
         }
     }))

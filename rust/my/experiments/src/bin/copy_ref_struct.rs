@@ -34,6 +34,26 @@ fn main() {
     let a = A(1);
     let r1 = Ref { r: &a };
     let r2 = r1;
-    println!("{}", r1.r.0);
-    println!("{}", r2.r.0);
+    // println!("{}", r1.r.0);
+    // println!("{}", r2.r.0);
+    //
+    // error[E0382]: borrow of moved value: `r1`
+    //   --> my/experiments/src/bin/copy_ref_struct.rs:37:20
+    //    |
+    // 35 |     let r1 = Ref { r: &a };
+    //    |         -- move occurs because `r1` has type `Ref<'_, A>`, which does not implement the `Copy` trait
+    // 36 |     let r2 = r1;
+    //    |              -- value moved here
+    // 37 |     println!("{}", r1.r.0);
+    //    |                    ^^^^^^ value borrowed here after move
+    //    |
+    // note: if `Ref<'_, A>` implemented `Clone`, you could clone the value
+    //   --> my/experiments/src/bin/copy_ref_struct.rs:15:1
+    //    |
+    // 15 | struct Ref<'a, T> {
+    //    | ^^^^^^^^^^^^^^^^^ consider implementing `Clone` for this type
+    // ...
+    // 36 |     let r2 = r1;
+    //    |              -- you could clone this value
+    //    = note: this error originates in the macro `$crate::format_args_nl` which comes from the expansion of the macro `println` (in Nightly builds, run with -Z macro-backtrace for more info)
 }

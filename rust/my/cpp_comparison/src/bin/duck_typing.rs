@@ -5,9 +5,15 @@ fn main() {
     fn largest<T>(list: &[T]) -> &T {
         let mut largest = &list[0];
         for item in list {
-            if item.larger(largest) {
-                largest = item;
-            }
+            // if item.larger(largest) {
+            //     largest = item;
+            // }
+            //
+            // error[E0599]: no method named `larger` found for reference `&T` in the current scope
+            //  --> my/cpp_comparison/src/bin/duck_typing.rs:8:21
+            //   |
+            // 8 |             if item.larger(largest) {
+            //   |                     ^^^^^^ method not found in `&T`
         }
         largest
     }
