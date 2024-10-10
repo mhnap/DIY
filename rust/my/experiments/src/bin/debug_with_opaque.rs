@@ -1,4 +1,22 @@
-use std::sync::Arc;
+macro_rules! print_err {
+    ($err:expr) => {
+        eprintln!("----- {} at {}:{}:{} -----", stringify!($err), file!(), line!(), column!());
+        eprintln!("Display:\n{}", $err);
+        eprintln!("Display alternate:\n{:#}", $err);
+        eprintln!("Debug:\n{:?}", $err);
+        eprintln!("Debug alternate:\n{:#?}", $err);
+        error_chain(&$err);
+        eprintln!("------------------------------------------------------------------");
+    };
+}
+
+fn error_chain(e: &impl std::error::Error) {
+    let mut current = e.source();
+    while let Some(cause) = current {
+        eprintln!("Caused by: {cause}, dbg: {cause:?}");
+        current = cause.source();
+    }
+}
 
 fn main() {
     #[derive(Debug, Clone)]
@@ -25,10 +43,10 @@ fn main() {
 
     #[derive(Debug)]
     struct StructWithArc {
-        arced: Arc<SomeRegularStruct>,
+        arced: std::sync::Arc<SomeRegularStruct>,
     }
 
-    let struct_with_arc = StructWithArc { arced: Arc::new(some_regular_struct) };
+    let struct_with_arc = StructWithArc { arced: std::sync::Arc::new(some_regular_struct) };
 
     dbg!(&struct_with_arc);
 
@@ -36,10 +54,11 @@ fn main() {
 
     #[derive(Debug, Clone)]
     struct StructWithArcWithBox {
-        arced: Arc<StructWithBox>,
+        arced: std::sync::Arc<StructWithBox>,
     }
 
-    let struct_with_arc_with_box = StructWithArcWithBox { arced: Arc::new(struct_with_box) };
+    let struct_with_arc_with_box =
+        StructWithArcWithBox { arced: std::sync::Arc::new(struct_with_box) };
 
     dbg!(&struct_with_arc_with_box);
 
@@ -97,6 +116,8 @@ fn main() {
         backtrace: std::backtrace::Backtrace,
         #[expect(dead_code, reason = "used only in the `Debug` impl")]
         location: std::panic::Location<'static>,
+        #[expect(dead_code, reason = "used only in the `Debug` impl")]
+        type_name: &'static str,
     }
 
     impl std::fmt::Display for Opaque {
@@ -105,6 +126,7 @@ fn main() {
         }
     }
 
+    /// Used inside [`thiserror`].
     impl std::ops::Deref for Opaque {
         type Target = dyn std::error::Error;
 
@@ -120,32 +142,76 @@ fn main() {
                 error: value.into(),
                 backtrace: std::backtrace::Backtrace::capture(),
                 location: *std::panic::Location::caller(),
+                type_name: std::any::type_name::<E>(),
             }
         }
     }
+
+    #[derive(Debug, thiserror::Error)]
+    enum MyError1 {
+        #[error("I/O")]
+        Io(#[source] std::io::Error),
+    }
+
+    let error = MyError1::Io(std::io::Error::new(std::io::ErrorKind::Other, "other error"));
+    print_err!(error);
+
+    let error: Opaque = error.into();
+    // [`Opaque`] itself doesn't implement [`std::error::Error`].
+    // print_err!(error);
+    //
+    // error[E0277]: the trait bound `Opaque: std::error::Error` is not satisfied
+    //    --> my/experiments/src/bin/debug_with_opaque.rs:11:21
+    //     |
+    // 11  |         error_chain(&$err);
+    //     |         ----------- ^^^^^ the trait `std::error::Error` is not implemented for `Opaque`
+    //     |         |
+    //     |         required by a bound introduced by this call
+    // ...
+    // 163 |     print_err!(error);
+    //     |     ----------------- in this macro invocation
+
+    #[derive(Debug, thiserror::Error)]
+    enum MyError2 {
+        #[error(transparent)]
+        Opaque(Opaque),
+
+        #[error("Another error")]
+        Another,
+    }
+
+    let my_error = MyError2::Another;
+    print_err!(my_error);
+
+    // But together with [`thiserror`] it "can" because of [`Deref`] impl.
+    let my_error = MyError2::Opaque(error);
+    print_err!(my_error);
+
+    // But worth noting [`Opaque`] size much bigger than [`anyhow::Error`]
+    dbg!(size_of::<Opaque>()); // 104
 }
 
-// [my/experiments/src/bin/debug_with_opaque.rs:13:5] &some_regular_struct = SomeRegularStruct {
+// [my/experiments/src/bin/debug_with_opaque.rs:32:5] &some_regular_struct = SomeRegularStruct {
 //     msg: "my small msg",
 // }
-// [my/experiments/src/bin/debug_with_opaque.rs:26:5] &struct_with_box = StructWithBox {
+// [my/experiments/src/bin/debug_with_opaque.rs:43:5] &struct_with_box = StructWithBox {
 //     boxed: SomeRegularStruct {
 //         msg: "my small msg",
 //     },
 // }
-// [my/experiments/src/bin/debug_with_opaque.rs:39:5] &struct_with_arc = StructWithArc {
+// [my/experiments/src/bin/debug_with_opaque.rs:54:5] &struct_with_arc = StructWithArc {
 //     arced: SomeRegularStruct {
 //         msg: "my small msg",
 //     },
 // }
-// [my/experiments/src/bin/debug_with_opaque.rs:52:5] &struct_with_arc_with_box = StructWithArcWithBox {
+// [my/experiments/src/bin/debug_with_opaque.rs:65:5] &struct_with_arc_with_box = StructWithArcWithBox {
 //     arced: StructWithBox {
 //         boxed: SomeRegularStruct {
 //             msg: "my small msg",
 //         },
 //     },
 // }
-// [my/experiments/src/bin/debug_with_opaque.rs:71:5] &struct_with_anyhow_error = StructWithAnyhowError {
+// [my/experiments/src/bin/debug_with_opaque.rs:83:5] &struct_with_anyhow_error = StructWithAnyhowError {
 //     anyhow_err: StructWithArcWithBox {
 //         arced: StructWithBox {
 //             boxed: SomeRegularStruct {
@@ -154,8 +220,8 @@ fn main() {
 //         },
 //     },
 // }
-// [my/experiments/src/bin/debug_with_opaque.rs:74:5] format!("{struct_with_anyhow_error:?}") = "StructWithAnyhowError { anyhow_err: msg is my small msg\n\nStack backtrace:\n   0: anyhow::kind::Adhoc::new\n             at /home/mhnap/.cargo/registry/src/index.crates.io-6f17d22bba15001f/anyhow-1.0.86/src/backtrace.rs:27:14\n   1: debug_with_opaque::main\n             at ./my/experiments/src/bin/debug_with_opaque.rs:68:21\n   2: core::ops::function::FnOnce::call_once\n             at /rustc/051478957371ee0084a7c0913941d2a8c4757bb9/library/core/src/ops/function.rs:250:5\n   3: std::sys_common::backtrace::__rust_begin_short_backtrace\n             at /rustc/051478957371ee0084a7c0913941d2a8c4757bb9/library/std/src/sys_common/backtrace.rs:155:18\n   4: std::rt::lang_start::{{closure}}\n             at /rustc/051478957371ee0084a7c0913941d2a8c4757bb9/library/std/src/rt.rs:159:18\n   5: core::ops::function::impls::<impl core::ops::function::FnOnce<A> for &F>::call_once\n             at /rustc/051478957371ee0084a7c0913941d2a8c4757bb9/library/core/src/ops/function.rs:284:13\n   6: std::panicking::try::do_call\n             at /rustc/051478957371ee0084a7c0913941d2a8c4757bb9/library/std/src/panicking.rs:559:40\n   7: std::panicking::try\n             at /rustc/051478957371ee0084a7c0913941d2a8c4757bb9/library/std/src/panicking.rs:523:19\n   8: std::panic::catch_unwind\n             at /rustc/051478957371ee0084a7c0913941d2a8c4757bb9/library/std/src/panic.rs:149:14\n   9: std::rt::lang_start_internal::{{closure}}\n             at /rustc/051478957371ee0084a7c0913941d2a8c4757bb9/library/std/src/rt.rs:141:48\n  10: std::panicking::try::do_call\n             at /rustc/051478957371ee0084a7c0913941d2a8c4757bb9/library/std/src/panicking.rs:559:40\n  11: std::panicking::try\n             at /rustc/051478957371ee0084a7c0913941d2a8c4757bb9/library/std/src/panicking.rs:523:19\n  12: std::panic::catch_unwind\n             at /rustc/051478957371ee0084a7c0913941d2a8c4757bb9/library/std/src/panic.rs:149:14\n  13: std::rt::lang_start_internal\n             at /rustc/051478957371ee0084a7c0913941d2a8c4757bb9/library/std/src/rt.rs:141:20\n  14: std::rt::lang_start\n             at /rustc/051478957371ee0084a7c0913941d2a8c4757bb9/library/std/src/rt.rs:158:17\n  15: main\n  16: __libc_start_call_main\n             at ./csu/../sysdeps/nptl/libc_start_call_main.h:58:16\n  17: __libc_start_main_impl\n             at ./csu/../csu/libc-start.c:392:3\n  18: _start }"
-// [my/experiments/src/bin/debug_with_opaque.rs:89:5] &struct_with_eyre_report = StructWithEyreReport {
+// [my/experiments/src/bin/debug_with_opaque.rs:86:5] format!("{struct_with_anyhow_error:?}") = "StructWithAnyhowError { anyhow_err: msg is my small msg }"
+// [my/experiments/src/bin/debug_with_opaque.rs:100:5] &struct_with_eyre_report = StructWithEyreReport {
 //     eyre_report: StructWithArcWithBox {
 //         arced: StructWithBox {
 //             boxed: SomeRegularStruct {
@@ -164,4 +230,58 @@ fn main() {
 //         },
 //     },
 // }
-// [my/experiments/src/bin/debug_with_opaque.rs:92:5] format!("{struct_with_eyre_report:?}") = "StructWithEyreReport { eyre_report: \n   0: \u{1b}[91mmsg is my small msg\u{1b}[0m\n\nLocation:\n   \u{1b}[35mmy/experiments/src/bin/debug_with_opaque.rs\u{1b}[0m:\u{1b}[35m86\u{1b}[0m\n\n  ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ BACKTRACE ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n  \u{1b}[96m                              ⋮ 5 frames hidden ⋮                               \u{1b}[0m\n   6: \u{1b}[91mdebug_with_opaque::main\u{1b}[0m\u{1b}[90m::he07f3ad7c74cc731\u{1b}[0m\n      at \u{1b}[35m/home/mhnap/projects/DIY/rust/my/experiments/src/bin/debug_with_opaque.rs\u{1b}[0m:\u{1b}[35m86\u{1b}[0m\n   7: \u{1b}[32mcore::ops::function::FnOnce::call_once\u{1b}[0m\u{1b}[90m::hede3002440a8d65d\u{1b}[0m\n      at \u{1b}[35m/rustc/051478957371ee0084a7c0913941d2a8c4757bb9/library/core/src/ops/function.rs\u{1b}[0m:\u{1b}[35m250\u{1b}[0m\n  \u{1b}[96m                              ⋮ 16 frames hidden ⋮                              \u{1b}[0m\n\nRun with COLORBT_SHOW_HIDDEN=1 environment variable to disable frame filtering.\nRun with RUST_BACKTRACE=full to include source snippets. }"
+// [my/experiments/src/bin/debug_with_opaque.rs:103:5] format!("{struct_with_eyre_report:?}") = "StructWithEyreReport { eyre_report: \n   0: \u{1b}[91mmsg is my small msg\u{1b}[0m\n\nLocation:\n   \u{1b}[35mmy/experiments/src/bin/debug_with_opaque.rs\u{1b}[0m:\u{1b}[35m98\u{1b}[0m\n\nBacktrace omitted. Run with RUST_BACKTRACE=1 environment variable to display it.\nRun with RUST_BACKTRACE=full to include source snippets. }"
+// ----- error at my/experiments/src/bin/debug_with_opaque.rs:159:5 -----
+// Display:
+// I/O
+// Display alternate:
+// I/O
+// Debug:
+// Io(Custom { kind: Other, error: "other error" })
+// Debug alternate:
+// Io(
+//     Custom {
+//         kind: Other,
+//         error: "other error",
+//     },
+// )
+// Caused by: other error, dbg: Custom { kind: Other, error: "other error" }
+// ------------------------------------------------------------------
+// ----- my_error at my/experiments/src/bin/debug_with_opaque.rs:186:5 -----
+// Display:
+// Another error
+// Display alternate:
+// Another error
+// Debug:
+// Another
+// Debug alternate:
+// Another
+// ------------------------------------------------------------------
+// ----- my_error at my/experiments/src/bin/debug_with_opaque.rs:190:5 -----
+// Display:
+// I/O
+// Display alternate:
+// I/O
+// Debug:
+// Opaque(Opaque { error: Io(Custom { kind: Other, error: "other error" }), backtrace: <disabled>, location: Location { file: "my/experiments/src/bin/debug_with_opaque.rs", line: 161, col: 31 }, type_name: "debug_with_opaque::main::MyError1" })
+// Debug alternate:
+// Opaque(
+//     Opaque {
+//         error: Io(
+//             Custom {
+//                 kind: Other,
+//                 error: "other error",
+//             },
+//         ),
+//         backtrace: <disabled>,
+//         location: Location {
+//             file: "my/experiments/src/bin/debug_with_opaque.rs",
+//             line: 161,
+//             col: 31,
+//         },
+//         type_name: "debug_with_opaque::main::MyError1",
+//     },
+// )
+// Caused by: other error, dbg: Custom { kind: Other, error: "other error" }
+// ------------------------------------------------------------------
+// [my/experiments/src/bin/debug_with_opaque.rs:191:5] size_of::<Opaque>() = 104
