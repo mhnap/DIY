@@ -26,3 +26,7 @@ configparser = "3.1"
 serde_ini = "0.2"
 derive_more = { version = "1.0", features = ["error", "display", "from"] }
 my_practices = { workspace = true }
+prost = "0.13.3"
+
+[build-dependencies]
+prost-build = "0.13.3"
