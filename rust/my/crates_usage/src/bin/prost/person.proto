@@ -4,6 +4,8 @@
 // [libprotobuf WARNING google/protobuf/compiler/parser.cc:648] No syntax specified for the proto file: my/crates_usage/src/bin/prost/person.proto. Please use 'syntax = "proto2";' or 'syntax = "proto3";' to specify a syntax version. (Defaulted to proto2 syntax.)
 syntax = "proto3";
 
+package person;
+
 message Person {
   string name = 1;
   int32 id = 2;

@@ -1,5 +1,5 @@
 mod generated {
-    include!(concat!(env!("OUT_DIR"), "/_.rs"));
+    include!(concat!(env!("OUT_DIR"), "/person.rs"));
 }
 
 use crate::generated::Person;
