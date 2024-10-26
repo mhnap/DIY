@@ -29,8 +29,8 @@ async fn main() {
 
     // There is a deadlock here.
     let res: Mutex<String> = Default::default();
-    join_all("abc".chars().map(|name| {
-        let res = &res;
+    join_all("abc".chars().map(|_name| {
+        let _res = &res;
         async move {
             for _ in 0..5 {
                 // let mut guard = res.lock().unwrap();

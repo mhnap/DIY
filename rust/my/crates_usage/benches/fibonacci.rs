@@ -1,3 +1,5 @@
+// Run with `cargo bench -p my_crates_usage --bench fibonacci`.
+
 use criterion::{black_box, criterion_group, criterion_main, Criterion};
 
 fn bench_fibonacci(c: &mut Criterion) {
