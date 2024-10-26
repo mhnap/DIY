@@ -16,6 +16,7 @@ tracing = "0.1"
 tracing-subscriber = { version = "0.3", features = ["env-filter"] }
 console-subscriber = "0"
 tokio-metrics = "0"
+rayon = "1.10.0"
 bytes = "1.8.0"
 tokio-uring = { version = "0.5.0", features = ["bytes"] }
 
