@@ -2,7 +2,7 @@
 
 use anyhow::Context;
 use my_practices::print_err;
-use std::ops::Deref;
+use std::{error::Error, ops::Deref};
 
 fn main() {
     // Use Result<T, anyhow::Error>, or equivalently anyhow::Result<T>, as the return type of any fallible function.
