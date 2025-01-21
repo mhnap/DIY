@@ -44,6 +44,7 @@ tonic = "0.12.3"
 handlebars = "6.2.0"
 maplit = "1"
 expect-test = "1.5"
+bon = "3.3.2"
 
 [dev-dependencies]
 criterion = "0.5.1"
