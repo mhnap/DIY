@@ -1,5 +1,4 @@
 /rust/target/
-/rust/Cargo.lock
 /cpp/build/
 
 # Terraform plugins dir
