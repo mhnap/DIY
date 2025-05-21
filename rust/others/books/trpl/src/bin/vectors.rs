@@ -10,15 +10,26 @@ fn main() {
     // Creating empty vector.
     let v: Vec<i32> = Vec::new();
     dbg!(&v);
+    assert_eq!(v.capacity(), 0);
 
     // Creating vector with vec macro.
     let v = vec![1, 2, 3];
     dbg!(&v);
+    assert_eq!(v.capacity(), 3);
 
     // Updating mutable vector.
-    let mut v = Vec::new();
+    let mut v = Vec::with_capacity(1);
+    assert_eq!(v.capacity(), 1);
     v.push(4);
+    assert_eq!(v.capacity(), 1);
     v.push(5);
+    assert_eq!(v.capacity(), 4);
+    v.push(6);
+    assert_eq!(v.capacity(), 4);
+    v.remove(1);
+    assert_eq!(v.capacity(), 4);
+    v.shrink_to_fit();
+    assert_eq!(v.capacity(), 2);
     // The numbers we place inside are all of type i32, and Rust infers this from the data, so we don’t need the Vec<i32> annotation.
 
     // Get value via indexing.
