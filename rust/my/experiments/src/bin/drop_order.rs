@@ -75,6 +75,7 @@ fn exprs() {
     println!("after if let 1\n");
 
     // Even in else branch.
+    // Not true for 2024 edition.
     if let false = make_token("if let token 2").is_ok() {
         println!("if let body 2");
     } else {
