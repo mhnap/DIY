@@ -1,0 +1,11 @@
+{
+    "accessibility.signals.taskCompleted": {
+        "sound": "off"
+    },
+    "accessibility.signals.taskFailed": {
+        "sound": "off"
+    },
+    "rust-analyzer.checkOnSave": true,
+    "files.autoSaveDelay": 100,
+    "editor.inlayHints.enabled": "onUnlessPressed"
+}
