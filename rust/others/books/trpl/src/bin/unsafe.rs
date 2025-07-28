@@ -113,7 +113,7 @@ fn main() {
 
     // Functions declared within extern blocks are always unsafe to call from Rust code.
     // The reason is that other languages don’t enforce Rust’s rules and guarantees, and Rust can’t check them, so responsibility falls on the programmer to ensure safety.
-    extern "C" {
+    unsafe extern "C" {
         fn abs(input: i32) -> i32;
     }
     unsafe {
@@ -125,7 +125,7 @@ fn main() {
     // The "C" ABI is the most common and follows the C programming language’s ABI.
 
     // We can also use extern to create an interface that allows other languages to call Rust functions.
-    #[no_mangle]
+    #[unsafe(no_mangle)]
     pub extern "C" fn call_from_c() {
         println!("Just called a Rust function from C!");
     }
@@ -154,9 +154,7 @@ fn main() {
         }
     }
     add_to_count(3);
-    unsafe {
-        println!("COUNTER: {}", COUNTER);
-    }
+    println!("COUNTER: {}", unsafe { COUNTER });
 
     // This code compiles and prints COUNTER: 3 as we would expect because it’s single threaded.
     // Having multiple threads access COUNTER would likely result in data races.

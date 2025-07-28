@@ -28,14 +28,14 @@ pub fn hello_macro_derive(input: TokenStream) -> TokenStream {
 // Now that we have the code to turn the annotated Rust code from a TokenStream into a DeriveInput instance, let’s generate the code that implements the HelloMacro trait on the annotated type.
 fn impl_hello_macro(ast: &syn::DeriveInput) -> TokenStream {
     let name = &ast.ident;
-    let gen = quote! {
+    let generated = quote! {
         impl HelloMacro for #name {
             fn hello_macro() {
                 println!("Hello, Mike's Macro! My name is {}!", stringify!(#name));
             }
         }
     };
-    gen.into()
+    generated.into()
 }
 
 // The quote! macro lets us define the Rust code that we want to return.

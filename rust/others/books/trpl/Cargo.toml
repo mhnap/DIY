@@ -1,7 +1,7 @@
 [package]
 name = "books_trpl"
 version = "0.1.0"
-edition = "2021"
+edition = "2024"
 
 [dependencies]
 books_trpl_proc_macro = { path = "../trpl_proc_macro" }
