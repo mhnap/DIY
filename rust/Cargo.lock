@@ -253,6 +253,10 @@ name = "books_effective_rust"
 version = "0.1.0"
 
 [[package]]
+name = "books_nomicon"
+version = "0.1.0"
+
+[[package]]
 name = "books_trpl"
 version = "0.1.0"
 dependencies = [
