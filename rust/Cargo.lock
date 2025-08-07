@@ -1509,6 +1509,7 @@ dependencies = [
  "criterion",
  "futures",
  "glommio",
+ "pin-project",
  "rand",
  "rayon",
  "tokio",
