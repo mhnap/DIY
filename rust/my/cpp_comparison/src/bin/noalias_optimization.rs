@@ -36,6 +36,7 @@ fn main() {
 // More can be read here:
 // https://doc.rust-lang.org/nomicon/aliasing.html
 // https://llvm.org/docs/LangRef.html#noalias
+// https://stackoverflow.com/questions/57259126/why-does-the-rust-compiler-not-optimize-code-assuming-that-two-mutable-reference
 
 // Pros:
 // - gives more optimizations possibilities
