@@ -39,7 +39,8 @@ fn main() {
         let data: &dyn Derived = &Data;
         as_base(data);
         as_derived(data);
-        // as_dyn_base(data); // error[E0658]: cannot cast `dyn Derived` to `dyn Base`, trait upcasting coercion is experimental
+        // Works from [1.86.0](https://blog.rust-lang.org/2025/04/03/Rust-1.86.0/#trait-upcasting).
+        as_dyn_base(data); // (before) error[E0658]: cannot cast `dyn Derived` to `dyn Base`, trait upcasting coercion is experimental
         as_dyn_derived(data);
     }
 }

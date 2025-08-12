@@ -1,4 +1,6 @@
 // https://manishearth.github.io/blog/2017/01/10/rust-tidbits-box-is-special
+// https://micouy.github.io/rust-dereferencing
+// https://www.reddit.com/r/rust/comments/thvc2e/comment/i1a8zpw
 
 fn main() {
     {

@@ -2,6 +2,8 @@
 // https://users.rust-lang.org/t/solved-initialize-an-unsized-struct/88140
 // https://users.rust-lang.org/t/what-does-the-second-field-of-a-fat-pointer-of-struct-dyn-trait-point-to/65653
 // https://stackoverflow.com/questions/78395488/why-in-rust-struct-only-last-field-is-allowed-to-have-dynamically-sized-type
+// https://stackoverflow.com/questions/30938499/why-is-the-sized-bound-necessary-in-this-trait
+// https://www.reddit.com/r/rust/comments/7q3bz8/trait_object_with_clone
 
 struct MySuperSliceable<T: ?Sized> {
     info: u32,
