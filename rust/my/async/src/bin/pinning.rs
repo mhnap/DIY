@@ -1,6 +1,7 @@
 // https://fasterthanli.me/articles/pin-and-suffering
 // https://rust-lang.github.io/async-book/part-reference/pinning.html
 // https://blog.m-ou.se/super-let/#pin
+// https://github.com/rust-bootcamp/rustcamp_summer_2025_Ievgen_Gavrysh/pull/7
 
 use pin_project::pin_project;
 use std::{
@@ -42,6 +43,16 @@ async fn main() -> Result<(), tokio::io::Error> {
     let before = Instant::now();
     f.read_exact(&mut buf).await?;
     println!("Read {} bytes in {:?}", buf.len(), before.elapsed());
+
+    //
+
+    // `Box` implements `Unpin` unconditionally: <https://doc.rust-lang.org/std/boxed/struct.Box.html#impl-Unpin-for-Box%3CT,+A%3E>
+    let p = pin!(Box::new(async {}));
+    let _ = p.get_mut(); // OK
+
+    // But `Vec` implements `Unpin` conditionally: <https://doc.rust-lang.org/std/vec/struct.Vec.html#impl-Unpin-for-Vec%3CT,+A%3E>
+    let _p = pin!(Vec::from([async {}]));
+    // _p.get_mut(); // ERR
 
     Ok(())
 }
