@@ -100,24 +100,34 @@ fn main() {
     // closure that has a compatible call signature.
     {
         struct Holder<'a> {
-            func: &'a dyn Fn(usize) -> usize,
+            func: &'a mut dyn FnMut(usize) -> usize,
         }
 
         impl<'a> Holder<'a> {
-            fn new(func: &'a dyn Fn(usize) -> usize) -> Self {
+            fn new(func: &'a mut dyn FnMut(usize) -> usize) -> Self {
                 Self { func }
             }
         }
 
-        let mut holder = Holder { func: &|a| a + 1 };
+        let mut c1 = |a| a + 1;
+        let mut holder = Holder { func: &mut c1 };
         assert_eq!((holder.func)(42), 43);
 
         // Can reassign to another closure.
-        holder.func = &|a| a + 2;
+        let mut c2 = |a| a + 2;
+        holder.func = &mut c2;
         assert_eq!((holder.func)(42), 44);
 
-        let local_a = 2;
-        assert_eq!((Holder::new(&|a| a + local_a).func)(42), 44);
+        let mut local_a = 2;
+        assert_eq!(
+            (Holder::new(&mut |a| {
+                local_a += a;
+                local_a
+            })
+            .func)(42),
+            44
+        );
+        assert_eq!(local_a, 44);
     }
 
     // Using boxed trait object.
