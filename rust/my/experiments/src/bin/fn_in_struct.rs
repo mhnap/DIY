@@ -135,17 +135,18 @@ fn main() {
     // As with a reference, we can store any closure with a compatible signature.
     {
         struct Holder {
-            func: Box<dyn Fn(usize) -> usize>,
+            func: Box<dyn FnOnce(usize) -> usize>,
         }
 
         impl Holder {
-            fn new(func: Box<dyn Fn(usize) -> usize>) -> Self {
+            fn new(func: Box<dyn FnOnce(usize) -> usize>) -> Self {
                 Self { func }
             }
         }
 
         let mut holder = Holder { func: Box::new(|a| a + 1) };
         assert_eq!((holder.func)(42), 43);
+        // assert_eq!((holder.func)(42), 43);
 
         // Can reassign to another closure.
         holder.func = Box::new(|a| a + 2);

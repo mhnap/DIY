@@ -7,6 +7,7 @@ https://doc.rust-lang.org/reference/type-coercions.html#r-coerce.types.fn
 https://doc.rust-lang.org/std/primitive.fn.html
 https://doc.rust-lang.org/book/ch13-01-closures.html
 https://doc.rust-lang.org/reference/types/closure.html
+https://doc.rust-lang.org/reference/type-coercions.html#r-coerce.types.closure
 https://doc.rust-lang.org/std/ops/trait.Fn.html
 https://doc.rust-lang.org/std/ops/trait.FnMut.html
 https://doc.rust-lang.org/std/ops/trait.FnOnce.html
