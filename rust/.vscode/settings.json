@@ -7,5 +7,4 @@
     },
     "rust-analyzer.checkOnSave": true,
     "files.autoSaveDelay": 100,
-    "editor.inlayHints.enabled": "onUnlessPressed"
 }
