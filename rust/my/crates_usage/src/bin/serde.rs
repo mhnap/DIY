@@ -5,6 +5,7 @@ use serde::{Deserialize, Serialize};
 // The Serde ecosystem consists of data structures that know how to serialize and deserialize themselves along with data formats that know how to serialize and deserialize other things.
 // Serde provides the layer by which these two groups interact with each other, allowing any supported data structure to be serialized and deserialized using any supported data format.
 
+#[allow(unused)]
 fn main() {
     #[derive(Debug, Deserialize, Serialize)]
     struct MyData {
@@ -278,4 +279,40 @@ fn main() {
         MyEnum2::VariantThree,
     ];
     dbg!(serde_json::to_string(&vec));
+
+    //
+
+    use std::borrow::Cow;
+
+    #[derive(Deserialize, Debug)]
+    struct Msg1<'a> {
+        // Tell Serde this field may borrow from the input buffer
+        #[serde(borrow)]
+        text: Cow<'a, str>,
+    }
+
+    // Case 1: no escapes → can borrow directly (zero-copy)
+    let json1 = r#"{ "text": "hello world" }"#;
+    let m1: Msg1 = serde_json::from_str(json1).unwrap();
+    match &m1.text {
+        Cow::Borrowed(s) => println!("case 1: Borrowed: {}", s),
+        Cow::Owned(s) => println!("case 1: Owned:    {}", s),
+    }
+
+    // Case 2: contains an escaped quote → Serde must unescape,
+    // so it allocates and you get Cow::Owned
+    let json2 = r#"{ "text": "hello \"world\"" }"#;
+    let m1: Msg1 = serde_json::from_str(json2).unwrap();
+    match &m1.text {
+        Cow::Borrowed(s) => println!("case 2: Borrowed: {}", s),
+        Cow::Owned(s) => println!("case 2: Owned:    {}", s),
+    }
+
+    // But should be careful with not Cow borrowed str.
+    #[derive(Deserialize, Debug)]
+    struct Msg2<'a> {
+        text: &'a str,
+    }
+    let m2 = serde_json::from_str::<Msg2>(json2);
+    dbg!(m2);
 }

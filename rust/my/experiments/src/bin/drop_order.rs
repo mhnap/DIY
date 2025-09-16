@@ -11,6 +11,7 @@
 // https://fasterthanli.me/articles/a-rust-match-made-in-hell
 // https://github.com/rust-lang/rust/issues/93883
 // https://rust-lang.github.io/rust-clippy/master/#/significant_drop_in_scrutinee
+// https://doc.rust-lang.org/edition-guide/rust-2024/temporary-tail-expr-scope.html
 
 struct Token(&'static str);
 
