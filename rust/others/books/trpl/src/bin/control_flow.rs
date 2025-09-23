@@ -57,6 +57,17 @@ fn main() {
     }
     println!("End count = {count}");
 
+    // Also works for `for` loops.
+    let v = vec![1, 2, 3, 4, 5];
+    let mut res = vec![];
+    'next: for i in v {
+        if i == 2 {
+            continue 'next;
+        }
+        res.push(i);
+    }
+    assert_eq!(res, vec![1, 3, 4, 5]);
+
     // Regular while loop
     let mut number = 3;
     while number != 0 {

@@ -1,0 +1,11 @@
+# https://ibraheem.ca/posts/too-many-web-servers
+
+[package]
+name = "blogs_ibraheem"
+version = "0.1.0"
+edition = "2024"
+
+[dependencies]
+epoll = "4.4.0"
+signal-hook = "0.3.18"
+tokio = { version = "1.47.1", features = ["full"] }
