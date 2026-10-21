@@ -1,6 +1,13 @@
 [workspace]
 members = [
-    "my/*",
+    "my/algo",
+    "my/async",
+    "my/cpp_comparison",
+    "my/crates_usage",
+    "my/experiments",
+    "my/practices",
+    "my/rustcamp",
+    "my/perf/*",
     "others/books/*",
     "others/quizzes/*",
     "others/blogs/*",
