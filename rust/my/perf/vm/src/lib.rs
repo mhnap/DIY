@@ -30,23 +30,86 @@ pub const BEQZ: u8 = 0x08;
 /// overflow in debug builds.
 pub fn compute(memory: &mut [u8; 256]) {
     // Indices match the operand encoding (PC=0x00, r1=0x01, r2=0x02),
-    // so once you've decoded an operand byte, `registers[op as usize]` Just Works.
-    let registers: [u8; 3] = [8, 0, 0]; // PC, r1, r2
+    // so once you've decoded an operand byte, `regs[op as usize]` Just Works.
+    let mut regs: [u8; 3] = [8, 0, 0]; // PC, r1, r2
 
     // Keep looping, like a physical computer's clock.
     loop {
         // Fetch the next opcode.
-        let opcode = memory[registers[0] as usize];
+        let opcode = memory[regs[0] as usize];
+        regs[0] += 1;
 
         // Decode and execute.
         // For each non-halt instruction, advance the PC past it
         // (3 bytes for the basic ops).
         match opcode {
             HALT => return,
-            // LOAD => TODO
-            // STORE => TODO
-            // ADD => TODO
-            // SUB => TODO
+            LOAD => {
+                // Read register index from memory by PC.
+                let reg_idx = memory[regs[0] as usize];
+                regs[0] += 1;
+
+                // Read memory address from memory by PC.
+                let mem_addr = memory[regs[0] as usize];
+                regs[0] += 1;
+
+                // Read memory value by memory address.
+                let mem_val = memory[mem_addr as usize];
+
+                // Write memory value to register by index.
+                regs[reg_idx as usize] = mem_val;
+            }
+            STORE => {
+                // Read register index from memory by PC.
+                let reg_idx = memory[regs[0] as usize];
+                regs[0] += 1;
+
+                // Read memory address from memory by PC.
+                let mem_addr = memory[regs[0] as usize];
+                regs[0] += 1;
+
+                // Read register value by register index.
+                let reg_val = regs[reg_idx as usize];
+
+                // Write register value to memory by memory address.
+                memory[mem_addr as usize] = reg_val;
+            }
+            ADD => {
+                // Read destination register index from memory by PC.
+                let reg_dst_idx = memory[regs[0] as usize];
+                regs[0] += 1;
+
+                // Read source register index from memory by PC.
+                let reg_src_idx = memory[regs[0] as usize];
+                regs[0] += 1;
+
+                // Read destination register value by index.
+                let reg_dst_val = regs[reg_dst_idx as usize];
+
+                // Read source register value by index.
+                let reg_src_val = regs[reg_src_idx as usize];
+
+                // Add source to destination register.
+                regs[reg_dst_idx as usize] = reg_dst_val.wrapping_add(reg_src_val);
+            }
+            SUB => {
+                // Read destination register index from memory by PC.
+                let reg_dst_idx = memory[regs[0] as usize];
+                regs[0] += 1;
+
+                // Read source register index from memory by PC.
+                let reg_src_idx = memory[regs[0] as usize];
+                regs[0] += 1;
+
+                // Read destination register value by index.
+                let reg_dst_val = regs[reg_dst_idx as usize];
+
+                // Read source register value by index.
+                let reg_src_val = regs[reg_src_idx as usize];
+
+                // Subtract source from destination register.
+                regs[reg_dst_idx as usize] = reg_dst_val.wrapping_sub(reg_src_val);
+            }
             _ => panic!("unimplemented opcode: 0x{opcode:02x}"),
         }
     }
