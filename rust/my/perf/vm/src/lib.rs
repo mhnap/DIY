@@ -110,6 +110,55 @@ pub fn compute(memory: &mut [u8; 256]) {
                 // Subtract source from destination register.
                 regs[reg_dst_idx as usize] = reg_dst_val.wrapping_sub(reg_src_val);
             }
+            ADDI => {
+                // Read destination register index from memory by PC.
+                let reg_idx = memory[regs[0] as usize];
+                regs[0] += 1;
+
+                // Read immediate value from memory by PC.
+                let imm_val = memory[regs[0] as usize];
+                regs[0] += 1;
+
+                // Write value to register by index.
+                regs[reg_idx as usize] = regs[reg_idx as usize].wrapping_add(imm_val);
+            }
+            SUBI => {
+                // Read destination register index from memory by PC.
+                let reg_idx = memory[regs[0] as usize];
+                regs[0] += 1;
+
+                // Read immediate value from memory by PC.
+                let imm_val = memory[regs[0] as usize];
+                regs[0] += 1;
+
+                // Write value to register by index.
+                regs[reg_idx as usize] = regs[reg_idx as usize].wrapping_sub(imm_val);
+            }
+            JUMP => {
+                // Read jump address.
+                let jump = memory[regs[0] as usize];
+
+                // Jump by changing PC.
+                regs[0] = jump;
+            }
+            BEQZ => {
+                // Read register index from memory by PC.
+                let reg_idx = memory[regs[0] as usize];
+                regs[0] += 1;
+
+                // Read offset by PC.
+                let offset = memory[regs[0] as usize];
+                regs[0] += 1;
+
+                // Convert to signed.
+                let offset = offset as i8;
+
+                if regs[reg_idx as usize] == 0 {
+                    regs[0] = regs[0].wrapping_add_signed(offset);
+                } else {
+                    // Fall through.
+                }
+            }
             _ => panic!("unimplemented opcode: 0x{opcode:02x}"),
         }
     }
