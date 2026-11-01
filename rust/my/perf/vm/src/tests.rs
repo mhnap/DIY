@@ -133,8 +133,9 @@ halt",
 
 // Support a basic jump, ie skipping ahead to a particular location
 #[test]
+#[ignore = "stretch goal"]
 fn stretch_jump() {
-    run_stretch_test(
+    run_test(
         "
 load r1 1
 jump 16
@@ -146,8 +147,9 @@ halt",
 
 // Support a "branch if equal to zero" with relative offsets
 #[test]
+#[ignore = "stretch goal"]
 fn stretch_beqz() {
-    run_stretch_test(
+    run_test(
         "
 load r1 1
 load r2 2
@@ -164,8 +166,9 @@ halt",
 // Extra (from HW2_VM.pdf): backward branch with a negative offset.
 // beqz is at 0x14 with offset 249 (-7): taken -> 0x14 + 3 - 7 = 0x10 (the store).
 #[test]
+#[ignore = "stretch goal"]
 fn stretch_beqz_negative_offset() {
-    run_stretch_test(
+    run_test(
         "
 load r1 1
 load r2 2
@@ -183,8 +186,9 @@ halt",
 
 // Support adding immediate values
 #[test]
+#[ignore = "stretch goal"]
 fn stretch_addi() {
-    run_stretch_test(
+    run_test(
         "
 load r1 1
 addi r1 3
@@ -200,8 +204,9 @@ halt",
 
 // Calculate the sum of first n numbers (using subi to decrement loop index)
 #[test]
+#[ignore = "stretch goal"]
 fn stretch_sum_to_n() {
-    run_stretch_test(
+    run_test(
         "
 load r1 1
 beqz r1 8
@@ -212,14 +217,6 @@ store r2 0
 halt",
         &[c(0, 0, 0), c(1, 0, 1), c(5, 0, 15), c(10, 0, 55)],
     );
-}
-
-fn run_stretch_test(asm: &str, cases: &[VmCase]) {
-    if std::env::var("STRETCH").as_deref() != Ok("true") {
-        println!("Skipping stretch goal tests. Run `STRETCH=true cargo test` to include them.");
-        return;
-    }
-    run_test(asm, cases);
 }
 
 // Given some assembly code and test cases, construct a program
