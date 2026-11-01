@@ -16,6 +16,19 @@ fn halt() {
     run_test("halt", &[c(0, 0, 0)]);
 }
 
+// Extra (from HW2_VM.pdf): halt computes nothing, so cell 0 keeps its value.
+// run_test resets cell 0, so this test sets up memory itself.
+#[test]
+fn halt_keeps_output() {
+    let mut memory = [0u8; 256];
+    memory[0] = 42;
+    memory[8] = 0xff; // halt
+
+    compute(&mut memory);
+
+    assert_eq!(memory[0], 42, "halt must not change cell 0");
+}
+
 // Move a value from input to output
 #[test]
 fn load_store() {
@@ -85,6 +98,39 @@ halt",
     );
 }
 
+// Extra (from HW2_VM.pdf): registers and memory are separate spaces, r1 is not memory[1].
+// Every other test loads r1 from cell 1 and r2 from cell 2, so a VM that keeps
+// registers in memory[1..=2] passes them. Crossing the loads makes it diverge:
+// such a VM would copy cell 2 over cell 1 and then compute 0.
+#[test]
+fn registers_not_memory() {
+    run_test(
+        "
+load r1 2
+load r2 1
+sub r1 r2
+store r1 0
+halt",
+        &[
+            c(3, 10, 7),   // r1 := 10; r2 := 3;  10 - 3 = 7
+            c(10, 3, 249), // r1 := 3;  r2 := 10; (3 - 10) mod 256 = 249
+        ],
+    );
+}
+
+// Extra (from HW2_VM.pdf): both operands may name the same register
+#[test]
+fn same_register() {
+    run_test(
+        "
+load r1 1
+sub r1 r1
+store r1 0
+halt",
+        &[c(7, 0, 0), c(255, 0, 0)],
+    );
+}
+
 // Support a basic jump, ie skipping ahead to a particular location
 #[test]
 fn stretch_jump() {
@@ -111,6 +157,26 @@ halt",
         &[
             c(42, 0, 0),  // r2 is zero, so should branch over the store
             c(42, 1, 42), // r2 is nonzero, so should store back 42
+        ],
+    );
+}
+
+// Extra (from HW2_VM.pdf): backward branch with a negative offset.
+// beqz is at 0x14 with offset 249 (-7): taken -> 0x14 + 3 - 7 = 0x10 (the store).
+#[test]
+fn stretch_beqz_negative_offset() {
+    run_stretch_test(
+        "
+load r1 1
+load r2 2
+jump 20
+store r1 0
+halt
+beqz r2 249
+halt",
+        &[
+            c(42, 0, 42), // r2 is zero, so should branch back to the store
+            c(42, 1, 0),  // r2 is nonzero, so should fall through to halt
         ],
     );
 }
