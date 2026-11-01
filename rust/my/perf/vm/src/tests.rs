@@ -1,4 +1,4 @@
-use super::compute;
+use super::*;
 
 struct VmCase {
     x: u8,
@@ -22,7 +22,7 @@ fn halt() {
 fn halt_keeps_output() {
     let mut memory = [0u8; 256];
     memory[0] = 42;
-    memory[8] = 0xff; // halt
+    memory[8] = HALT;
 
     compute(&mut memory);
 
@@ -273,15 +273,15 @@ fn assemble(asm: &str) -> Vec<u8> {
     for line in asm.trim().lines() {
         let parts: Vec<&str> = line.split_whitespace().collect();
         match parts[0] {
-            "load" => mc.extend([0x01, reg(parts[1]), mem(parts[2])]),
-            "store" => mc.extend([0x02, reg(parts[1]), mem(parts[2])]),
-            "add" => mc.extend([0x03, reg(parts[1]), reg(parts[2])]),
-            "sub" => mc.extend([0x04, reg(parts[1]), reg(parts[2])]),
-            "addi" => mc.extend([0x05, reg(parts[1]), imm(parts[2])]),
-            "subi" => mc.extend([0x06, reg(parts[1]), imm(parts[2])]),
-            "jump" => mc.extend([0x07, imm(parts[1])]),
-            "beqz" => mc.extend([0x08, reg(parts[1]), imm(parts[2])]),
-            "halt" => mc.push(0xff),
+            "load" => mc.extend([LOAD, reg(parts[1]), mem(parts[2])]),
+            "store" => mc.extend([STORE, reg(parts[1]), mem(parts[2])]),
+            "add" => mc.extend([ADD, reg(parts[1]), reg(parts[2])]),
+            "sub" => mc.extend([SUB, reg(parts[1]), reg(parts[2])]),
+            "addi" => mc.extend([ADDI, reg(parts[1]), imm(parts[2])]),
+            "subi" => mc.extend([SUBI, reg(parts[1]), imm(parts[2])]),
+            "jump" => mc.extend([JUMP, imm(parts[1])]),
+            "beqz" => mc.extend([BEQZ, reg(parts[1]), imm(parts[2])]),
+            "halt" => mc.push(HALT),
             op => panic!("Invalid operation: {op}"),
         }
     }
