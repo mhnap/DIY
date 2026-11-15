@@ -1,0 +1,11 @@
+[package]
+name = "my_perf_practices"
+version = "0.1.0"
+edition = "2024"
+
+[dev-dependencies]
+divan = "0.1"
+
+[[bench]]
+name = "count_primes"
+harness = false
