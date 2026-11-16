@@ -9,3 +9,7 @@ divan = "0.1"
 [[bench]]
 name = "count_primes"
 harness = false
+
+[[bench]]
+name = "moving_average"
+harness = false
