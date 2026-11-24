@@ -13,3 +13,7 @@ harness = false
 [[bench]]
 name = "moving_average"
 harness = false
+
+[[bench]]
+name = "order_format"
+harness = false
