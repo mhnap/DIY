@@ -83,7 +83,7 @@ fn all_implementations_match_naive_on_long_stream() {
             let mut x: u32 = 12345; // tiny LCG, no extra dependency
             for step in 0..3000 {
                 x = x.wrapping_mul(1_103_515_245).wrapping_add(12345);
-                let v = (x >> 16) as i32 % 200_001 - 100_000; // -100_000..=100_000
+                let v = (x % 200_001) as i32 - 100_000; // -100_000..=100_000
                 seen.push(v);
                 assert_close(
                     stream(v),

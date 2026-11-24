@@ -21,11 +21,9 @@ macro_rules! bench_impl {
                         m
                     })
                     .bench_local_values(|mut m| {
-                        let mut last = 0.0;
                         for i in 0..CALLS {
-                            last = m.next(divan::black_box(i & 0xFF));
+                            divan::black_box(m.next(divan::black_box(i & 0xFF)));
                         }
-                        last
                     });
             }
         )+
